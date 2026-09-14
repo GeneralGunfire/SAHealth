@@ -1,0 +1,23 @@
+{
+  "name": "hprs-style-d-api",
+  "version": "0.1.0",
+  "description": "Standalone simulated source system API for Source D (HPRS-style national system, SQLite-backed). Independent of the main interop backend.",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "db:setup": "tsx src/setup.ts",
+    "db:migrate": "tsx src/migrate.ts"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.5.0",
+    "fastify": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.11",
+    "@types/node": "^22.9.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}

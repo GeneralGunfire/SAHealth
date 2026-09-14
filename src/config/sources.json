@@ -1,0 +1,44 @@
+{
+  "activeSources": [
+    {
+      "id": "clinic-a",
+      "connection": {
+        "kind": "http",
+        "baseUrl": "http://localhost:4001",
+        "apiKey": "clinic-a-dev-key-change-me"
+      }
+    },
+    {
+      "id": "hospital-b",
+      "connection": {
+        "kind": "http",
+        "baseUrl": "http://localhost:4002",
+        "apiKey": "hospital-b-dev-key-change-me"
+      }
+    },
+    {
+      "id": "dhis2-style-c",
+      "connection": {
+        "kind": "http",
+        "baseUrl": "http://localhost:4003",
+        "apiKey": "dhis2-style-c-dev-key-change-me"
+      }
+    },
+    {
+      "id": "hprs-style-d",
+      "connection": {
+        "kind": "http",
+        "baseUrl": "http://localhost:4004",
+        "apiKey": "hprs-style-d-dev-key-change-me"
+      }
+    },
+    {
+      "id": "pharmacy-e",
+      "connection": {
+        "kind": "http",
+        "baseUrl": "http://localhost:4005",
+        "apiKey": "pharmacy-e-dev-key-change-me"
+      }
+    }
+  ]
+}

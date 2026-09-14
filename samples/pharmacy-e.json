@@ -1,0 +1,46 @@
+{
+  "pat": {
+    "pid": "PHE-0042",
+    "sur": "Mokwena",
+    "gv": "Thabo",
+    "dob": "15-MAR-1979",
+    "sx": "M",
+    "cell": "0731234567",
+    "nid": "SYN-7903155800012"
+  },
+  "rx": [
+    {
+      "rxid": "RX-88291",
+      "pid": "PHE-0042",
+      "drugcd": "ATORVA20",
+      "drugnm": "Atorvastatin 20mg",
+      "qtydisp": 30,
+      "dayssup": 30,
+      "sig": "1 tab nocte",
+      "dtdisp": "03-FEB-2026",
+      "rxstat": "DISP"
+    },
+    {
+      "rxid": "RX-88295",
+      "pid": "PHE-0042",
+      "drugcd": null,
+      "drugnm": "Multivitamin (OTC, no code on file)",
+      "qtydisp": 1,
+      "dayssup": 30,
+      "sig": "1 daily",
+      "dtdisp": "03-FEB-2026",
+      "rxstat": "DISP"
+    },
+    {
+      "rxid": "RX-90110",
+      "pid": "PHE-0042",
+      "drugcd": "METFOR500",
+      "drugnm": "Metformin 500mg",
+      "qtydisp": 60,
+      "dayssup": 30,
+      "sig": "1 tab bd",
+      "dtdisp": "01-MAR-2026",
+      "rxstat": "CANC"
+    }
+  ]
+}
