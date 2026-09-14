@@ -1,0 +1,116 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+# Step 6: no Docker required locally or in this workflow — Postgres is a
+# GitHub Actions-native service container, and Source D's SQLite file needs
+# no service at all. Every step below (install, lint, typecheck, test) is
+# runnable on a developer's own machine the same way, just without the
+# service-container orchestration this file adds.
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      CONSENT_TOKEN_SIGNING_KEY: ci-test-signing-key-not-for-production
+      SA_ID_ENCRYPTION_KEY: ci-test-encryption-key-not-for-production
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Create source databases
+        run: |
+          for db in sa_health clinic_a hospital_b dhis2_style_c pharmacy_e; do
+            PGPASSWORD=postgres psql -h localhost -U postgres -c "CREATE DATABASE $db;"
+          done
+
+      - name: Install backend dependencies
+        run: npm ci
+
+      - name: Install source service dependencies
+        run: |
+          for dir in sources/clinic-a-api sources/hospital-b-api sources/dhis2-style-c sources/hprs-style-d sources/pharmacy-e-api; do
+            npm ci --prefix "$dir"
+          done
+
+      - name: Install sidecar dependencies
+        run: pip install -r sidecar-probabilistic-matching/requirements.txt
+
+      - name: Lint (backend)
+        run: npm run lint
+
+      - name: Lint (source services)
+        run: |
+          for dir in sources/clinic-a-api sources/hospital-b-api sources/dhis2-style-c sources/hprs-style-d sources/pharmacy-e-api; do
+            npm run lint --prefix "$dir"
+          done
+
+      - name: Type-check (backend)
+        run: npx tsc -p tsconfig.json --noEmit && npx tsc -p tsconfig.test.json --noEmit
+
+      - name: Type-check (source services)
+        run: |
+          for dir in sources/clinic-a-api sources/hospital-b-api sources/dhis2-style-c sources/hprs-style-d sources/pharmacy-e-api; do
+            npx tsc -p "$dir/tsconfig.json" --noEmit
+          done
+
+      - name: Run database migrations (backend + 4 Postgres sources)
+        run: |
+          npm run db:migrate
+          npm run db:migrate --prefix sources/clinic-a-api
+          npm run db:migrate --prefix sources/hospital-b-api
+          npm run db:migrate --prefix sources/dhis2-style-c
+          npm run db:migrate --prefix sources/pharmacy-e-api
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/sa_health
+
+      - name: Seed the 5 source databases (schema via migrations above; seed data here)
+        run: |
+          npm run db:setup --prefix sources/clinic-a-api
+          npm run db:setup --prefix sources/hospital-b-api
+          npm run db:setup --prefix sources/dhis2-style-c
+          npm run db:setup --prefix sources/hprs-style-d
+          npm run db:setup --prefix sources/pharmacy-e-api
+
+      - name: Start the 5 source services
+        run: |
+          (cd sources/clinic-a-api && npx tsx src/server.ts &)
+          (cd sources/hospital-b-api && npx tsx src/server.ts &)
+          (cd sources/dhis2-style-c && npx tsx src/server.ts &)
+          (cd sources/hprs-style-d && npx tsx src/server.ts &)
+          (cd sources/pharmacy-e-api && npx tsx src/server.ts &)
+          npx wait-on tcp:4001 tcp:4002 tcp:4003 tcp:4004 tcp:4005 --timeout 30000
+
+      - name: Start the probabilistic-matching sidecar
+        run: |
+          (cd sidecar-probabilistic-matching && python main.py &)
+          npx wait-on tcp:5001 --timeout 30000
+
+      - name: Run test suite
+        run: npm test
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/sa_health

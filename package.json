@@ -13,7 +13,8 @@
     "test:watch": "vitest",
     "db:migrate": "node-pg-migrate up -m migrations --no-check-order",
     "db:migrate:down": "node-pg-migrate down -m migrations --no-check-order",
-    "generate-adapter": "tsx scripts/generateAdapter.ts"
+    "generate-adapter": "tsx scripts/generateAdapter.ts",
+    "lint": "eslint src tests scripts"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^9.1.0",
@@ -28,11 +29,14 @@
     "zod": "^4.0.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.5",
     "@types/node": "^22.9.0",
     "@types/pg": "^8.11.10",
+    "eslint": "^9.39.5",
     "node-pg-migrate": "^9.0.0",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3",
+    "typescript-eslint": "^8.70.0",
     "vitest": "^2.1.4"
   }
 }

@@ -9,17 +9,21 @@
     "start": "node dist/server.js",
     "db:setup": "tsx src/setup.ts",
     "db:migrate": "node-pg-migrate up -m migrations --no-check-order",
-    "db:migrate:down": "node-pg-migrate down -m migrations --no-check-order"
+    "db:migrate:down": "node-pg-migrate down -m migrations --no-check-order",
+    "lint": "eslint src"
   },
   "dependencies": {
     "fastify": "^5.1.0",
     "pg": "^8.13.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.5",
     "@types/node": "^22.9.0",
     "@types/pg": "^8.11.10",
+    "eslint": "^9.39.5",
     "node-pg-migrate": "^9.0.0",
     "tsx": "^4.19.2",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.70.0"
   }
 }

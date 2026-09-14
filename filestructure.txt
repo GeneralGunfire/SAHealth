@@ -1,9 +1,13 @@
 |-- .env.example
+|-- .github
+    |-- workflows
+        |-- ci.yml
 |-- .gitignore
 |-- docs
     |-- ai-assisted-adapter-generation.md
     |-- data-governance.md
     |-- probabilistic-matching.md
+|-- eslint.config.js
 |-- migrations
     |-- 001_init.cjs
 |-- package-lock.json
@@ -22,6 +26,7 @@
 |-- sources
     |-- clinic-a-api
         |-- .env.example
+        |-- eslint.config.js
         |-- migrations
             |-- 001_init.cjs
         |-- package-lock.json
@@ -34,6 +39,7 @@
         |-- tsconfig.json
     |-- dhis2-style-c
         |-- .env.example
+        |-- eslint.config.js
         |-- migrations
             |-- 001_init.cjs
         |-- package-lock.json
@@ -46,6 +52,7 @@
         |-- tsconfig.json
     |-- hospital-b-api
         |-- .env.example
+        |-- eslint.config.js
         |-- migrations
             |-- 001_init.cjs
         |-- package-lock.json
@@ -58,6 +65,7 @@
         |-- tsconfig.json
     |-- hprs-style-d
         |-- .env.example
+        |-- eslint.config.js
         |-- hprs-style-d.sqlite
         |-- hprs-style-d.sqlite-shm
         |-- hprs-style-d.sqlite-wal
@@ -76,6 +84,7 @@
             |-- validation.ts
         |-- tsconfig.json
     |-- pharmacy-e-api
+        |-- eslint.config.js
         |-- migrations
             |-- 001_init.cjs
         |-- package-lock.json
