@@ -110,6 +110,13 @@ jobs:
           (cd sidecar-probabilistic-matching && python -m uvicorn main:app --host 0.0.0.0 --port 5001 &)
           npx wait-on tcp:5001 --timeout 60000
 
+      - name: Start the backend
+        run: |
+          npx tsx src/api/server.ts &
+          npx wait-on tcp:3010 --timeout 30000
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/sa_health
+
       - name: Run test suite
         run: npm test
         env:
