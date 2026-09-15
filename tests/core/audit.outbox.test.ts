@@ -39,7 +39,9 @@ describe("audit outbox pattern", () => {
   it("enqueues an event to the outbox immediately, without requiring audit_events to succeed", async () => {
     record(makeEvent());
     // enqueue() is fire-and-forget; give the local insert a moment to land.
-    await new Promise((r) => setTimeout(r, 100));
+    // 500ms rather than 100ms: a colder/slower CI runner's first DB round
+    // trip can take longer than a warm local dev connection pool.
+    await new Promise((r) => setTimeout(r, 500));
 
     const { rows } = await pool.query(
       `SELECT * FROM audit_outbox WHERE payload->>'patientId' = $1`,
@@ -51,7 +53,7 @@ describe("audit outbox pattern", () => {
 
   it("simulated transient audit_events unavailability: the outbox still captures the event, and it appears in audit_events once publishing succeeds", async () => {
     enqueue(makeEvent());
-    await new Promise((r) => setTimeout(r, 100));
+    await new Promise((r) => setTimeout(r, 500));
 
     const unpublished = await fetchUnpublished();
     const ourRow = unpublished.find((r) => r.payload.patientId === testPatientId);
