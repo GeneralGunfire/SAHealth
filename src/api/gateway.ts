@@ -1,6 +1,7 @@
 import Fastify from "fastify";
 import rateLimit from "@fastify/rate-limit";
 import httpProxy from "@fastify/http-proxy";
+import { installGracefulShutdown } from "../core/shutdown.js";
 
 // Step 3: fail-fast config validation. The gateway has no secrets of its
 // own (BACKEND_URL is derived from BACKEND_PORT, not a credential) — PORT
@@ -73,6 +74,11 @@ await gateway.register(httpProxy, {
   prefix: "/",
   rewritePrefix: "/",
 });
+
+// Graceful shutdown on SIGTERM/SIGINT: stop accepting new connections and
+// let proxied requests in flight finish (10s) before exiting. The gateway
+// owns no DB pool of its own, so there is no cleanup step here.
+installGracefulShutdown(gateway, { timeoutMs: 10_000 });
 
 const port = Number(process.env.PORT ?? 3000);
 

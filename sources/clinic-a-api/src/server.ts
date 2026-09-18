@@ -118,6 +118,39 @@ function formatDateTimeDDMMYYYY(date: Date): string {
   return `${dd}/${mm}/${yyyy} ${timePart}`;
 }
 
+// Graceful shutdown on SIGTERM/SIGINT. Each source is an independently
+// deployable package with no shared import path to the backend's
+// src/core/shutdown.ts, so the same small helper is inlined here (same
+// precedent as sendError above). Stop accepting new connections, let
+// in-flight requests finish (10s), close the pg pool, exit 0 — or exit 1 if
+// the drain timed out and had to be force-closed.
+let shuttingDown = false;
+for (const signal of ["SIGTERM", "SIGINT"] as const) {
+  process.on(signal, () => {
+    if (shuttingDown) return;
+    shuttingDown = true;
+    app.log.info(`Received ${signal}; shutting down gracefully.`);
+    const forceExit = setTimeout(() => {
+      app.log.error("Graceful shutdown timed out after 10000ms; force-closing.");
+      process.exit(1);
+    }, 10_000);
+    forceExit.unref();
+    void app
+      .close()
+      .then(() => pool.end())
+      .then(() => {
+        clearTimeout(forceExit);
+        app.log.info("Graceful shutdown complete.");
+        process.exit(0);
+      })
+      .catch((err) => {
+        clearTimeout(forceExit);
+        app.log.error(err, "Error during graceful shutdown.");
+        process.exit(1);
+      });
+  });
+}
+
 const port = Number(process.env.PORT ?? 4001);
 app
   .listen({ port, host: "0.0.0.0" })

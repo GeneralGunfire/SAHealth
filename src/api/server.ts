@@ -8,8 +8,10 @@ import { patientRoutes } from "./routes/patient.js";
 import { consentRoutes } from "./routes/consent.js";
 import { auditRoutes } from "./routes/audit.js";
 import { healthRoutes } from "./routes/health.js";
-import { startOutboxPublisher } from "../core/audit/outboxPublisher.js";
+import { startOutboxPublisher, stopOutboxPublisher } from "../core/audit/outboxPublisher.js";
 import { generateOpenApiDocument } from "./docs/openapi.js";
+import { installGracefulShutdown } from "../core/shutdown.js";
+import { pool } from "../db/pool.js";
 
 // Fastify's built-in logger is pino; configured here with a `service` field
 // and per-request `requestId` (Fastify's default reqId generator) so every
@@ -76,7 +78,20 @@ await app.register(auditRoutes);
 // so a graceful close doesn't leave an interval running against a closed pool.
 const outboxTimer = startOutboxPublisher();
 app.addHook("onClose", async () => {
-  clearInterval(outboxTimer);
+  // Stops the interval AND awaits any publish attempt already in progress,
+  // so the pool below is never closed out from under a half-finished publish.
+  await stopOutboxPublisher(outboxTimer);
+});
+
+// Graceful shutdown on SIGTERM/SIGINT: drain in-flight requests (10s), run
+// the onClose hook above, then close the DB pool. Exit 0 clean, 1 if the
+// drain had to be force-closed. Purely operational — no request-handling,
+// consent, audit or matching behaviour changes.
+installGracefulShutdown(app, {
+  timeoutMs: 10_000,
+  onCleanup: async () => {
+    await pool.end();
+  },
 });
 
 // Internal-only port: the gateway (src/api/gateway.ts) is the public-facing

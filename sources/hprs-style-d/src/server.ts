@@ -144,6 +144,38 @@ app.get("/patients/:hprsUuid", async (request, reply) => {
   });
 });
 
+// Graceful shutdown on SIGTERM/SIGINT — see clinic-a-api/src/server.ts for
+// why this small helper is inlined per source rather than shared. This
+// source is SQLite (better-sqlite3), not Postgres: the cleanup step closes
+// the single synchronous database handle, which also checkpoints the WAL,
+// instead of draining a connection pool.
+let shuttingDown = false;
+for (const signal of ["SIGTERM", "SIGINT"] as const) {
+  process.on(signal, () => {
+    if (shuttingDown) return;
+    shuttingDown = true;
+    app.log.info(`Received ${signal}; shutting down gracefully.`);
+    const forceExit = setTimeout(() => {
+      app.log.error("Graceful shutdown timed out after 10000ms; force-closing.");
+      process.exit(1);
+    }, 10_000);
+    forceExit.unref();
+    void app
+      .close()
+      .then(() => {
+        db.close();
+        clearTimeout(forceExit);
+        app.log.info("Graceful shutdown complete.");
+        process.exit(0);
+      })
+      .catch((err) => {
+        clearTimeout(forceExit);
+        app.log.error(err, "Error during graceful shutdown.");
+        process.exit(1);
+      });
+  });
+}
+
 const port = Number(process.env.PORT ?? 4004);
 app
   .listen({ port, host: "0.0.0.0" })
