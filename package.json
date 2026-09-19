@@ -14,6 +14,7 @@
     "db:migrate": "node-pg-migrate up -m migrations --no-check-order",
     "db:migrate:down": "node-pg-migrate down -m migrations --no-check-order",
     "generate-adapter": "tsx scripts/generateAdapter.ts",
+    "reset-demo": "tsx scripts/resetDemoData.ts",
     "lint": "eslint src tests scripts"
   },
   "dependencies": {

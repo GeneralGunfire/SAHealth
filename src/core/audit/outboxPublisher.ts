@@ -26,7 +26,7 @@ export function getOutboxPublisherLastSuccessfulRunAt(): string | null {
  * rather than lost.
  */
 export function startOutboxPublisher(intervalMs = 2000): NodeJS.Timeout {
-  return setInterval(async () => {
+  const tick = async (): Promise<void> => {
     let rows;
     try {
       rows = await fetchUnpublished();
@@ -53,5 +53,47 @@ export function startOutboxPublisher(intervalMs = 2000): NodeJS.Timeout {
         });
       }
     }
+  };
+
+  const timer = setInterval(() => {
+    // Track the in-flight tick so a graceful shutdown can await it rather
+    // than tearing the pool out from under a half-finished publish. Publish
+    // semantics are unchanged: a tick still never throws out of here, and a
+    // row that doesn't publish stays unpublished for the next tick.
+    inFlightTick = tick().finally(() => {
+      inFlightTick = null;
+    });
   }, intervalMs);
+
+  activeTimer = timer;
+  return timer;
+}
+
+/**
+ * Shutdown-only state (graceful shutdown). `inFlightTick` is the currently
+ * running tick's promise, if any. Read only by stopOutboxPublisher() — the
+ * publishing logic itself never branches on it, so this cannot change what
+ * or when anything publishes.
+ */
+let inFlightTick: Promise<void> | null = null;
+let activeTimer: NodeJS.Timeout | null = null;
+
+/**
+ * Stops the publisher's interval and waits for an in-progress publish attempt
+ * to finish, so a graceful shutdown doesn't close the DB pool mid-publish.
+ * Safe to call when the publisher was never started or is already stopped.
+ */
+export async function stopOutboxPublisher(timer?: NodeJS.Timeout): Promise<void> {
+  const toClear = timer ?? activeTimer;
+  if (toClear) {
+    clearInterval(toClear);
+  }
+  if (toClear === activeTimer) {
+    activeTimer = null;
+  }
+  if (inFlightTick) {
+    // A tick never rejects (every await inside is guarded), but catch anyway:
+    // shutdown must not fail because of a publish that was already tolerated.
+    await inFlightTick.catch(() => {});
+  }
 }

@@ -3,6 +3,22 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import path from "node:path";
 import type { SourceAdapter } from "../types/sourceAdapter.js";
 import { loadConfig } from "../config/loadConfig.js";
+import { withTransientRetry } from "../adapters/retry.js";
+
+/**
+ * Returns the adapter with its fetchPatient wrapped in transient-failure
+ * retry. Everything else about the adapter — id, displayName, translate — is
+ * passed through untouched, so the SourceAdapter contract is unchanged and
+ * the orchestrator cannot tell the difference except that a brief blip no
+ * longer surfaces as a failed source.
+ */
+function withRetryingFetch(adapter: SourceAdapter): SourceAdapter {
+  return {
+    ...adapter,
+    fetchPatient: (sourcePatientId: string) =>
+      withTransientRetry(adapter.id, () => adapter.fetchPatient(sourcePatientId)),
+  };
+}
 
 const ADAPTERS_DIR = fileURLToPath(new URL("../adapters/", import.meta.url));
 
@@ -39,7 +55,14 @@ export async function buildAdapterRegistry(): Promise<Map<string, SourceAdapter>
       throw new Error(`Adapter in folder "${entry.name}" declares id "${adapter.id}"; folder name and id must match.`);
     }
 
-    registry.set(adapter.id, adapter);
+    // Step 2: wrap fetchPatient with transient-failure retry (see
+    // src/adapters/retry.ts). Applied here, at the one place every adapter
+    // is loaded, so all five — and any adapter added later — get identical
+    // retry behaviour without each index.ts repeating it, and without the
+    // orchestrator's failure-isolation logic changing at all. translate()
+    // is deliberately NOT wrapped: it is pure, local, and cannot fail
+    // transiently.
+    registry.set(adapter.id, withRetryingFetch(adapter));
   }
 
   return registry;
