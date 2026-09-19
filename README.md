@@ -189,6 +189,12 @@ connections, let in-flight requests finish (10s budget), close their database
 connections, and exit 0 — or exit non-zero if the drain timed out. The backend also
 stops its outbox publisher and waits for any publish already in progress.
 
+**Windows caveat:** Node on Windows cannot reliably deliver a catchable `SIGTERM` or
+`SIGINT` to a running process's JS listeners. The shutdown handler logic above was
+verified directly instead (invoking the registered listener: a clean drain exits 0,
+a hung cleanup times out and exits 1) — real signal delivery is only exercised on
+POSIX, i.e. in CI (`ubuntu-latest`).
+
 ---
 
 ## Running the tests
