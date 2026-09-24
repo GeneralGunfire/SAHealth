@@ -4,10 +4,8 @@ import { ZodError } from "zod";
 import { sendError } from "./errors.js";
 import swagger from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
-import { patientRoutes } from "./routes/patient.js";
 import { consentRoutes } from "./routes/consent.js";
 import { auditRoutes } from "./routes/audit.js";
-import { healthRoutes } from "./routes/health.js";
 import { startOutboxPublisher, stopOutboxPublisher } from "../core/audit/outboxPublisher.js";
 import { generateOpenApiDocument } from "./docs/openapi.js";
 import { installGracefulShutdown } from "../core/shutdown.js";
@@ -68,8 +66,6 @@ app.setNotFoundHandler((_request, reply) => {
   return sendError(reply, 404, "not-found", "No route matches this request.");
 });
 
-await app.register(healthRoutes);
-await app.register(patientRoutes);
 await app.register(consentRoutes);
 await app.register(auditRoutes);
 

@@ -1,14 +1,7 @@
 import "./zodOpenApiSetup.js"; // must run before any .openapi() call below
 import { z } from "zod";
 import { OpenAPIRegistry, OpenApiGeneratorV31 } from "@asteasolutions/zod-to-openapi";
-import {
-  consentResourceTypeSchema,
-  consentTokenClaimsSchema,
-  canonicalPatientSchema,
-  canonicalEncounterSchema,
-  canonicalObservationSchema,
-  canonicalMedicationStatementSchema,
-} from "../../canonical/index.js";
+import { consentResourceTypeSchema, consentTokenClaimsSchema } from "../../canonical/index.js";
 
 /**
  * Builds the full OpenAPI 3.1 document for the backend's real routes, using
@@ -52,36 +45,6 @@ const sourceStatusSchema = z
       .openapi({ description: "Only set when queried is true and reachable is false." }),
   })
   .openapi("SourceStatus");
-
-const warningSchema = z
-  .object({
-    sourceId: z.string(),
-    sourceRecordId: z.string(),
-    message: z.string(),
-  })
-  .openapi("AdapterWarning");
-
-const orchestratorResultSchema = z
-  .object({
-    canonicalPatientId: z.string().nullable(),
-    patient: canonicalPatientSchema.nullable(),
-    encounters: z.array(canonicalEncounterSchema),
-    observations: z.array(canonicalObservationSchema),
-    medicationStatements: z.array(canonicalMedicationStatementSchema),
-    contributingSources: z.array(z.string()),
-    failedSources: z.array(z.object({ sourceId: z.string(), reason: z.string() })),
-    sourceStatus: z.array(sourceStatusSchema).openapi({
-      description:
-        "Every registered source is always listed here, whether or not it contributed — a caller can always confirm all five sources are accounted for without inferring anything from absence.",
-    }),
-    warnings: z.array(warningSchema),
-    matchingMode: z.enum(["deterministic", "probabilistic"]),
-    probabilisticMatch: z
-      .object({ candidateIds: z.array(z.string()), score: z.number() })
-      .nullable()
-      .openapi({ description: "Only set in probabilistic mode when the sidecar found a probable-match group." }),
-  })
-  .openapi("QueryResult");
 
 const errorResponseSchema = z
   .object({
@@ -132,44 +95,6 @@ registry.registerPath({
   },
 });
 
-// ---- GET /patients/:nationalId ----
-
-registry.registerPath({
-  method: "get",
-  path: "/patients/{nationalId}",
-  summary: "Query a patient's combined record across all five sources",
-  description:
-    "Runs the orchestrator: fetches from every registered source that has a mapping for this identifier, translates each into the canonical model, and combines the results. A source that errors or has no record is isolated and disclosed, never silently dropped — see `sourceStatus` and `warnings` in the response.",
-  tags: ["Query"],
-  security: [{ [bearerAuth.name]: [] }],
-  request: {
-    params: z.object({
-      nationalId: z.string().min(1).openapi({
-        example: "SYN-8801015800083",
-        description: "A synthetic national id (deterministic mode) or a probabilistic-matching demo key such as DEMO-PALESA-ZULU (probabilistic mode).",
-      }),
-    }),
-    query: z.object({
-      matching: z
-        .enum(["deterministic", "probabilistic"])
-        .default("deterministic")
-        .openapi({
-          description:
-            "deterministic (default): matches records only via a shared identifier, never guesses. probabilistic: routes matching through a separate Splink-based sidecar; fails clearly (502) if that sidecar is unreachable, rather than silently falling back.",
-        }),
-    }),
-  },
-  responses: {
-    200: { description: "Combined query result.", content: { "application/json": { schema: orchestratorResultSchema } } },
-    400: { description: "Invalid request (code: validation-failed).", content: { "application/json": { schema: errorResponseSchema } } },
-    401: { description: "Missing, invalid, or expired consent token (code: consent-rejected).", content: { "application/json": { schema: errorResponseSchema } } },
-    403: { description: "Token does not cover the requested patient or resource type(s) (code: consent-rejected).", content: { "application/json": { schema: errorResponseSchema } } },
-    404: { description: "No contributing source returned a valid record for this identifier (code: not-found).", content: { "application/json": { schema: errorResponseSchema } } },
-    429: { description: "Rate limited by the gateway (code: rate-limited).", content: { "application/json": { schema: errorResponseSchema } } },
-    502: { description: "Probabilistic matching requested but the sidecar is unreachable (code: source-unreachable).", content: { "application/json": { schema: errorResponseSchema } } },
-  },
-});
-
 // ---- GET /patients/:nationalId/audit-trail ----
 
 const auditTrailResponseSchema = z
@@ -216,55 +141,6 @@ registry.registerPath({
   },
 });
 
-// ---- GET /health, GET /healthz ----
-
-const healthSourceComponentSchema = z.object({
-  sourceId: z.string(),
-  reachable: z.boolean(),
-  responseTimeMs: z.number().nullable(),
-  reason: z.string().nullable(),
-});
-
-const healthzResponseSchema = z
-  .object({
-    status: z.literal("ok").openapi({
-      description: "Reports only that this endpoint answered — see `components` for actual per-dependency health. Never collapsed into a single healthy/unhealthy boolean.",
-    }),
-    timestamp: z.string().openapi({ format: "date-time" }),
-    components: z.object({
-      database: z.object({ reachable: z.boolean(), reason: z.string().nullable() }),
-      sources: z.array(healthSourceComponentSchema),
-      outboxPublisher: z.object({
-        lastSuccessfulRunAt: z.string().nullable().openapi({ description: "ISO-8601 timestamp of the outbox publisher's last successful poll tick, or null if it has never run yet." }),
-      }),
-      probabilisticMatchingSidecar: z.object({ reachable: z.boolean(), responseTimeMs: z.number().nullable(), reason: z.string().nullable() }),
-    }),
-  })
-  .openapi("HealthzResponse");
-
-registry.registerPath({
-  method: "get",
-  path: "/health",
-  summary: "Basic liveness check",
-  description: "Always returns immediately with no dependency checks — confirms only that this process is up. Poll this frequently.",
-  tags: ["Health"],
-  responses: {
-    200: { description: "Process is up.", content: { "application/json": { schema: z.object({ status: z.literal("ok") }) } } },
-  },
-});
-
-registry.registerPath({
-  method: "get",
-  path: "/healthz",
-  summary: "Deep readiness check across every real dependency",
-  description:
-    "Checks the backend's own Postgres DB, each of the five sources' reachability, the outbox publisher's last successful run, and the probabilistic-matching sidecar. Always returns 200 with a full per-component breakdown — a partial outage (e.g. 4 of 5 sources up) is never collapsed into a single boolean.",
-  tags: ["Health"],
-  responses: {
-    200: { description: "Per-component health breakdown.", content: { "application/json": { schema: healthzResponseSchema } } },
-  },
-});
-
 export function generateOpenApiDocument() {
   const generator = new OpenApiGeneratorV31(registry.definitions);
   return generator.generateDocument({
@@ -273,10 +149,10 @@ export function generateOpenApiDocument() {
       title: "SA Health Interoperability Platform — Backend API",
       version: "0.1.0",
       description:
-        "A prototype interoperability backend combining patient records across five independently-shaped simulated healthcare source systems (Clinic A, Hospital B, Source C/DHIS2-style, Source D/HPRS-style, Pharmacy E). " +
-        "No user accounts or registration exist — a consent token (see POST /consent/tokens) is the entire access-control model. " +
-        "Grade 10 Science Expo project; see Backend_Research.docx for the full research basis.",
+        "Retired pre-restart implementation: the source-querying pipeline (gateway, orchestrator, adapters, source services) has been removed pending a rebuild. " +
+        "This document currently covers only what remains — consent tokens and the audit trail. " +
+        "No user accounts or registration exist — a consent token (see POST /consent/tokens) is the entire access-control model.",
     },
-    servers: [{ description: "Via the gateway (rate-limited, public-facing)", url: "http://localhost:3000" }],
+    servers: [{ description: "Backend (internal)", url: "http://localhost:3010" }],
   });
 }
