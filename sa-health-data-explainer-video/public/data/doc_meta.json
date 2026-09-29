@@ -1,0 +1,23 @@
+{
+ "duration": 3599.67,
+ "segments": [
+  {
+   "part": "part1",
+   "from": 0.0,
+   "to": 1427.3,
+   "offset": 0.0
+  },
+  {
+   "part": "part2",
+   "from": 23.1,
+   "to": 1436.0,
+   "offset": 1427.24
+  },
+  {
+   "part": "part3",
+   "from": 208.6,
+   "to": 968.19,
+   "offset": 2840.08
+  }
+ ]
+}

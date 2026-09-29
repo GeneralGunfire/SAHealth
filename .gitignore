@@ -27,5 +27,24 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
+# Large media files
+*.mp4
+*.mov
+*.avi
+*.mp3
+*.wav
+*.m4a
+*.png
+*.jpg
+*.jpeg
+*.webp
+
+# Remotion render output
+sa-health-data-explainer-video/out/
+sa-health-data-explainer-video/node_modules/
+
+# Claude session scratch
+.claude/
+
 # Test/coverage output
 coverage/
