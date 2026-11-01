@@ -1,22 +1,27 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { BY_ID } from '../data/nodes'
 import { EDGES } from '../data/flows'
-import { LAYER_NAME, SECTOR, SRC } from '../data/meta'
+import { LAYER_NAME, LINK_LABEL, SECTOR } from '../data/meta'
 import { Icon } from './Icon'
-import { pairState, reasonFor } from '../views/Matrix'
+import { Conf, Soon, Sources, StatusTag } from './ui'
+import { RULE_TEXT, gapFinding, pairState, reasonFor } from '../views/gaps'
+import { useIsMobile } from '../hooks'
 
 export type DrawerTarget = { kind: 'node'; id: string } | { kind: 'pair'; a: string; b: string }
 
-const confClass = { confirmed: 'ok', likely: 'mid', uncertain: 'low' } as const
-
 export function Drawer({ target, onClose, onGo }: { target: DrawerTarget; onClose: () => void; onGo: (id: string) => void }) {
   const [level, setLevel] = useState<'simple' | 'tech'>('simple')
+  const mobile = useIsMobile()
+  const ref = useRef<HTMLElement>(null)
+  useEffect(() => { ref.current?.scrollTo({ top: 0 }) }, [target])
+  useEffect(() => { ref.current?.focus() }, [])
+  const from = mobile ? { y: '100%' } : { x: 40, opacity: 0 }
   return (
     <>
-      <motion.div className="scrim" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} />
-      <motion.aside className="drawer" initial={{ x: 460 }} animate={{ x: 0 }} exit={{ x: 460 }} transition={{ type: 'spring', stiffness: 360, damping: 38 }} aria-label="Details">
-        <button className="x" onClick={onClose} aria-label="Close">✕</button>
+      {mobile && <motion.div className="scrim" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} />}
+      <motion.aside ref={ref} tabIndex={-1} className="dossier" initial={from} animate={{ x: 0, y: 0, opacity: 1 }} exit={from} transition={{ type: 'spring', stiffness: 380, damping: 40 }} aria-label="Details">
+        <button className="dos-x" onClick={onClose} aria-label="Close details">Close <kbd>Esc</kbd></button>
         {target.kind === 'node' ? <NodeBody id={target.id} level={level} setLevel={setLevel} onGo={onGo} /> : <PairBody a={target.a} b={target.b} onGo={onGo} />}
       </motion.aside>
     </>
@@ -34,43 +39,56 @@ function NodeBody({ id, level, setLevel, onGo }: { id: string; level: 'simple' |
   const shown = facts.filter(([, v]) => v)
   return (
     <>
-      <div className="dh" style={{ ['--c' as string]: sec.color }}>
-        <span className="ico2"><Icon name={n.icon} size={28} /></span>
-        <div><h2>{n.name}</h2>{n.alias && <div className="alias">{n.alias}</div>}</div>
+      <div className="dos-kick"><code>SYSTEM · {n.id}</code></div>
+      <div className="dos-title" style={{ ['--c' as string]: sec.color }}>
+        <span className="dos-ico"><Icon name={n.icon} size={26} /></span>
+        <div><h2>{n.name}</h2>{n.alias && <div className="dos-alias">{n.alias}</div>}</div>
       </div>
-      <div className="badges">
-        <span className="badge c" style={{ ['--c' as string]: sec.color }}>{sec.name}</span>
-        <span className="badge">{LAYER_NAME[n.layer]}</span>
-        <span className="badge">{n.status}</span>
-        <span className={'badge ' + confClass[n.conf]} title="How sure we are of this description">{n.conf}</span>
-      </div>
-      <div className="seg" style={{ marginTop: 14 }}>
+      <dl className="dos-meta">
+        <div><dt>Layer</dt><dd>{LAYER_NAME[n.layer]}</dd></div>
+        <div><dt>Sector</dt><dd><i className="pip" style={{ background: sec.color }} />{sec.name}</dd></div>
+        <div><dt>Status</dt><dd><StatusTag status={n.status} /></dd></div>
+        <div><dt>Confidence</dt><dd><Conf conf={n.conf} /></dd></div>
+      </dl>
+
+      <div className="seg" role="group" aria-label="Level of detail">
         <button aria-pressed={level === 'simple'} onClick={() => setLevel('simple')}>Plain</button>
         <button aria-pressed={level === 'tech'} onClick={() => setLevel('tech')}>Technical</button>
       </div>
-      <p>{level === 'simple' ? n.summary : n.tech ?? n.summary}</p>
-      {level === 'tech' && !n.tech && <p style={{ color: 'var(--mute)', fontSize: 13 }}>No further technical detail has been published or found yet.</p>}
-      <h3>How connected is it?</h3>
-      <div className="iso">
-        <div><b>{count('live')}</b><span>live</span></div>
-        <div><b>{count('batch')}</b><span>regular batch</span></div>
-        <div><b>{count('manual')}</b><span>retyped or carried</span></div>
+      <p className="dos-lede">{level === 'simple' ? n.summary : n.tech ?? n.summary}</p>
+      {level === 'tech' && !n.tech && <p className="none-note">No further technical detail has been published or found yet.</p>}
+
+      {shown.length > 0 && (
+        <dl className="dos-facts">
+          {shown.map(([l, v]) => <div key={l} className={l.startsWith('Why') ? 'why' : ''}><dt>{l}</dt><dd>{v}</dd></div>)}
+        </dl>
+      )}
+
+      <h3>How connected is it</h3>
+      <div className="dos-links">
+        <div className="lc live"><b>{count('live')}</b><span>live</span></div>
+        <div className="lc batch"><b>{count('batch')}</b><span>regular batch</span></div>
+        <div className="lc manual"><b>{count('manual')}</b><span>retyped or carried</span></div>
       </div>
-      {shown.length > 0 && <h3>More about it</h3>}
-      {shown.map(([l, v]) => <details key={l}><summary>{l}</summary><div className="db">{v}</div></details>)}
-      <h3>Connects to</h3>
-      {cn.length === 0 && <p style={{ color: 'var(--mute)' }}>No connections found. This system is an island.</p>}
-      {cn.map((e) => { const o = BY_ID[e.a === id ? e.b : e.a]; return (
-        <button key={e.a + e.b} className="conn" onClick={() => onGo(o.id)}>
-          <span className={'lt ' + e.type} /><span>{o.name}<small>{e.what}</small></span><em>{e.type === 'manual' ? 'by hand' : e.type}</em>
-        </button>) })}
+      {cn.length === 0 && <p className="none-note">No connections found in the research. This system is an island.</p>}
+      <ul className="dos-conn">
+        {cn.map((e) => { const o = BY_ID[e.a === id ? e.b : e.a]; return (
+          <li key={e.a + e.b}>
+            <button onClick={() => onGo(o.id)}>
+              <i className={'lk lk-' + e.type} aria-hidden />
+              <span><b>{o.name}</b><small>{e.what}</small></span>
+              <em>{LINK_LABEL[e.type]}</em>
+            </button>
+          </li>) })}
+      </ul>
+
       <h3>In the simulation</h3>
       {n.sim
-        ? <div className="simbox">Modelled by <b className="mono">{n.sim[0]}</b><br /><span style={{ color: 'var(--mute)' }}>{n.sim[1] === 'R' ? "Rajen's PC" : "Partner's laptop"}</span></div>
-        : <div className="simbox none">No stand-in database yet.</div>}
+        ? <div className="dos-sim"><Soon>Simulation only</Soon><p>DEXA stand-in database <code>{n.sim[0]}</code> mimics this system. It sits on {n.sim[1] === 'R' ? "Rajen's PC" : "Partner's laptop"} and holds no real patient data. It is not connected to the real system.</p></div>
+        : <p className="none-note">No stand-in database yet.</p>}
+
       <h3>Sources</h3>
-      {n.src.length ? <ul className="srcs">{n.src.map((s) => SRC[s] && <li key={s}><a href={SRC[s].url} target="_blank" rel="noreferrer">{SRC[s].title}</a></li>)}</ul>
-        : <p style={{ color: 'var(--mute)', fontSize: 13 }}>No source recorded yet. This description is awaiting verification.</p>}
+      <Sources ids={n.src} />
     </>
   )
 }
@@ -80,17 +98,50 @@ function PairBody({ a, b, onGo }: { a: string; b: string; onGo: (id: string) => 
   const st = pairState(a, b)
   const e = EDGES.find((e) => (e.a === a && e.b === b) || (e.a === b && e.b === a))
   const r = reasonFor(A, B)
+  const f = gapFinding(A, B)
+  const whys = [A, B].filter((n) => n.why)
   return (
     <>
-      <div className="eyebrow" style={{ marginTop: 6 }}>Pair of systems</div>
-      <h2 style={{ marginTop: 8 }}>{A.name} ↔ {B.name}</h2>
-      <div className="reasonbox" style={{ marginTop: 18 }}>
-        {st === 'none'
-          ? <><b style={{ color: 'var(--red)' }}>Not connected.</b><p>Main reason: <b>{r.t}</b>.</p><p style={{ color: 'var(--mute)', fontSize: 13 }}>A fuller, sourced explanation of why these two systems do not exchange data arrives with the research pass.</p></>
-          : <><b>{st === 'live' ? 'Live link' : st === 'batch' ? 'Regular batch link' : 'Manual link'}.</b><p>{e!.what}.</p></>}
-      </div>
+      <div className="dos-kick"><code>PAIR · {a} ↔ {b}</code></div>
+      <h2 className="dos-pair">{A.name} <span>↔</span> {B.name}</h2>
+      {st === 'none' ? (
+        <>
+          <div className="dos-verdict none">
+            <b>No connection found</b>
+            <p>The research found no recorded exchange of data between these two systems.</p>
+          </div>
+          <dl className="dos-meta">
+            <div><dt>Main reason</dt><dd>{r.t}</dd></div>
+            <div><dt>Finding</dt><dd><Conf conf={f.conf} /></dd></div>
+          </dl>
+          <p className="dos-lede small">
+            <b>This category is an interpretation, not a sourced finding.</b> {RULE_TEXT[r.k]} {f.why}
+          </p>
+          {whys.length > 0 && <h3>What the system records say</h3>}
+          {whys.map((n) => (
+            <div className="dos-quote" key={n.id}>
+              <small>{n.name} · <Conf conf={n.conf} /></small>
+              <p>{n.why}</p>
+              <div className="dos-src">{n.src.map((s) => <code key={s}>{s}</code>)}</div>
+            </div>
+          ))}
+          {whys.length === 0 && <p className="none-note">Neither system has a written reason for staying disconnected yet.</p>}
+        </>
+      ) : (
+        <>
+          <div className={'dos-verdict ' + st}>
+            <b>{LINK_LABEL[st]}</b>
+            <p>{e!.what}.</p>
+          </div>
+          <dl className="dos-meta"><div><dt>Systems</dt><dd><Conf conf={f.conf} /> (lower of the two)</dd></div></dl>
+        </>
+      )}
       <h3>Open a system</h3>
-      {[A, B].map((n) => <button key={n.id} className="conn" onClick={() => onGo(n.id)}><span className="lt" />{n.name}</button>)}
+      <ul className="dos-conn">
+        {[A, B].map((n) => <li key={n.id}><button onClick={() => onGo(n.id)}><i className="lk" aria-hidden /><span><b>{n.name}</b><small>{n.alias ?? LAYER_NAME[n.layer]}</small></span><em>open</em></button></li>)}
+      </ul>
+      <h3>Sources</h3>
+      <Sources ids={[...new Set([...A.src, ...B.src])]} empty="Neither system has a source recorded yet." />
     </>
   )
 }

@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Icon } from './Icon'
+import { Brand } from './ui'
 import type { IconName } from '../types'
 
 const NAME = 'SAHealth'
 const LINE = 'is a project proudly worked on by DEXA.'
 const BODY = 'A map of how South African health data is stored, shared and, mostly, not shared: the real landscape today, and the simulation DEXA is building on top of it.'
+const reduce = typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches
 
 // when each piece starts typing (ms) and how fast (ms per character)
-const T = { name: [2400, 160], line: [4300, 62], body: [7000, 40] } as const
-const chars = (t: number, s: readonly [number, number], len: number) => Math.max(0, Math.min(len, Math.floor((t - s[0]) / s[1])))
+const T = { name: [300, 90], line: [1100, 26], body: [2200, 14] } as const
+const chars = (t: number, s: readonly [number, number], len: number) => (reduce ? len : Math.max(0, Math.min(len, Math.floor((t - s[0]) / s[1]))))
 
 /* ---------------- the click-through story ---------------- */
 interface Slide { kicker: string; title: string; text: string; visual: 'scatter' | 'split' | 'copies' | 'cost' | 'sim' | 'pages' }
@@ -23,41 +25,41 @@ const SLIDES: Slide[] = [
 ]
 
 function Visual({ kind }: { kind: Slide['visual'] }) {
-  const pop = (i: number) => ({ initial: { opacity: 0, scale: 0.4 }, animate: { opacity: 1, scale: 1 }, transition: { delay: 0.25 + i * 0.09, type: 'spring' as const, stiffness: 260, damping: 18 } })
-  const chip = (i: number, name: IconName, label: string, color = '#0b1b36') => (
-    <motion.div key={label} className="sv-chip" style={{ ['--c' as string]: color }} {...pop(i)}><span><Icon name={name} size={26} /></span><b>{label}</b></motion.div>
+  const pop = (i: number) => reduce ? {} : ({ initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { delay: 0.2 + i * 0.08, duration: 0.45, ease: [0.22, 1, 0.36, 1] as const } })
+  const chip = (i: number, name: IconName, label: string, tone = '') => (
+    <motion.div key={label} className={'fg-chip ' + tone} {...pop(i)}><span><Icon name={name} size={24} /></span><b>{label}</b></motion.div>
   )
-  if (kind === 'scatter') return <div className="sv-row">{[['person', 'Registry'], ['paper', 'Clinic folder'], ['db', 'Hospital system'], ['flask', 'Lab'], ['pill', 'Pharmacy'], ['receipt', 'Medical scheme']].map(([ic, l], i) => chip(i, ic as IconName, l, ['#2f5bff', '#0d9488', '#0d9488', '#0d9488', '#ea580c', '#ea580c'][i]))}</div>
+  if (kind === 'scatter') return <div className="fg-row">{[['person', 'Registry'], ['paper', 'Clinic folder'], ['db', 'Hospital system'], ['flask', 'Lab'], ['pill', 'Pharmacy'], ['receipt', 'Medical scheme']].map(([ic, l], i) => chip(i, ic as IconName, l))}</div>
   if (kind === 'split') return (
-    <div className="sv-bars">
-      <div><small>Rely mainly on the public sector</small><motion.i style={{ background: '#0d9488' }} initial={{ width: 0 }} animate={{ width: '85%' }} transition={{ delay: 0.3, duration: 1.1 }} /><b>about 5 in 6</b></div>
-      <div><small>Covered by a medical scheme</small><motion.i style={{ background: '#ea580c' }} initial={{ width: 0 }} animate={{ width: '15%' }} transition={{ delay: 0.6, duration: 1.1 }} /><b>9.17 million</b></div>
+    <div className="fg-bars">
+      <div><small>Rely mainly on the public sector</small><span><motion.i initial={{ width: reduce ? '85%' : 0 }} animate={{ width: '85%' }} transition={{ delay: 0.3, duration: 1 }} /></span><b>about 5 in 6</b></div>
+      <div><small>Covered by a medical scheme</small><span><motion.i className="alt" initial={{ width: reduce ? '15%' : 0 }} animate={{ width: '15%' }} transition={{ delay: 0.5, duration: 1 }} /></span><b>9.17 million</b></div>
     </div>)
   if (kind === 'copies') return (
-    <div className="sv-row">
-      {chip(0, 'flask', 'Result')}<motion.span className="sv-arrow" {...pop(1)}>→</motion.span>
-      {chip(2, 'paper', 'Paper folder', '#0d9488')}<motion.span className="sv-arrow" {...pop(3)}>→</motion.span>
-      {chip(4, 'db', 'Treatment register', '#0d9488')}<motion.span className="sv-arrow x" {...pop(5)}>×</motion.span>
-      {chip(6, 'db', 'Hospital system', '#0d9488')}
+    <div className="fg-row flow">
+      {chip(0, 'flask', 'Result')}<motion.span className="fg-arrow hand" {...pop(1)}>→</motion.span>
+      {chip(2, 'paper', 'Paper folder')}<motion.span className="fg-arrow hand" {...pop(3)}>→</motion.span>
+      {chip(4, 'db', 'Treatment register')}<motion.span className="fg-arrow stop" {...pop(5)}>⊣</motion.span>
+      {chip(6, 'db', 'Hospital system')}
     </div>)
-  if (kind === 'cost') return <div className="sv-row">{chip(0, 'flask', 'Repeated tests', '#dc2626')}{chip(1, 'paper', 'Missing history', '#dc2626')}{chip(2, 'registry', 'Retyping errors', '#dc2626')}</div>
+  if (kind === 'cost') return <div className="fg-row">{chip(0, 'flask', 'Repeated tests', 'warn')}{chip(1, 'paper', 'Missing history', 'warn')}{chip(2, 'registry', 'Retyping errors', 'warn')}</div>
   if (kind === 'sim') return (
-    <div className="sv-machines">
-      <motion.div {...pop(0)}><small>Machine 1</small>{[0, 1, 2].map((i) => <Icon key={i} name="db" size={28} />)}</motion.div>
-      <motion.span className="sv-arrow x" {...pop(2)}>×</motion.span>
-      <motion.div {...pop(3)}><small>Machine 2</small>{[0, 1].map((i) => <Icon key={i} name="db" size={28} />)}</motion.div>
+    <div className="fg-machines">
+      <motion.div {...pop(0)}><small>Machine 1</small>{[0, 1, 2].map((i) => <Icon key={i} name="db" size={26} />)}</motion.div>
+      <motion.span className="fg-arrow stop" {...pop(2)}>⊣</motion.span>
+      <motion.div {...pop(3)}><small>Machine 2</small>{[0, 1].map((i) => <Icon key={i} name="db" size={26} />)}</motion.div>
     </div>)
-  return <div className="sv-row">{['Landscape', 'Journeys', 'Provinces', 'Gaps', 'Simulation'].map((l, i) => <motion.div key={l} className="sv-page" {...pop(i)}>{l}</motion.div>)}</div>
+  return <div className="fg-row">{['Landscape', 'Journeys', 'Provinces', 'Gaps', 'Simulation'].map((l, i) => <motion.div key={l} className="fg-page" {...pop(i)}><code>{String(i + 1).padStart(2, '0')}</code>{l}</motion.div>)}</div>
 }
 
 function Story({ onDone }: { onDone: (tour: boolean) => void }) {
-  const [i, setI] = useState(Number(new URLSearchParams(location.search).get('story') || 0))
+  const [i, setI] = useState(Math.min(SLIDES.length - 1, Math.max(0, Number(new URLSearchParams(location.search).get('story') || 0))))
   const [dir, setDir] = useState(1)
   const last = i === SLIDES.length - 1
   const go = (n: number) => { if (n < 0 || n >= SLIDES.length) return; setDir(n > i ? 1 : -1); setI(n) }
   useEffect(() => {
     const k = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight' || e.key === 'Enter') { e.preventDefault(); if (last) onDone(true); else go(i + 1) }
+      if (e.key === 'ArrowRight' || e.key === 'Enter') { if ((e.target as HTMLElement).closest('button') && e.key === 'Enter') return; e.preventDefault(); if (last) onDone(true); else go(i + 1) }
       if (e.key === 'ArrowLeft') go(i - 1)
     }
     addEventListener('keydown', k); return () => removeEventListener('keydown', k)
@@ -65,25 +67,28 @@ function Story({ onDone }: { onDone: (tour: boolean) => void }) {
   const s = SLIDES[i]
   return (
     <div className="story">
-      <div className="story-top"><span>{i + 1} / {SLIDES.length}</span></div>
+      <div className="story-top"><Brand /><code>{String(i + 1).padStart(2, '0')} / {String(SLIDES.length).padStart(2, '0')}</code><button className="skip" onClick={() => onDone(false)}>Skip to the atlas</button></div>
       <div className="story-stage">
         <AnimatePresence mode="wait" custom={dir}>
-          <motion.div key={i} className="story-card" custom={dir}
-            initial={{ opacity: 0, x: dir * 70 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: dir * -70 }} transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}>
-            <div className="story-kicker">{s.kicker}</div>
-            <h2>{s.title}</h2>
-            <p>{s.text}</p>
-            <Visual kind={s.visual} />
+          <motion.div key={i} className="plate" custom={dir}
+            initial={{ opacity: 0, x: reduce ? 0 : dir * 40 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: reduce ? 0 : dir * -40 }} transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}>
+            <div className="plate-n" aria-hidden>{String(i + 1).padStart(2, '0')}</div>
+            <div className="plate-body">
+              <div className="plate-kick">{s.kicker}</div>
+              <h2>{s.title}</h2>
+              <p>{s.text}</p>
+            </div>
+            <div className="plate-fig"><Visual kind={s.visual} /></div>
           </motion.div>
         </AnimatePresence>
       </div>
       <div className="story-nav">
         <button className="btn" onClick={() => go(i - 1)} disabled={i === 0}>Back</button>
-        <div className="story-dots">{SLIDES.map((_, k) => <button key={k} className={k === i ? 'on' : k < i ? 'past' : ''} onClick={() => go(k)} aria-label={`Slide ${k + 1}`} />)}</div>
+        <div className="story-dots">{SLIDES.map((_, k) => <button key={k} className={k === i ? 'on' : k < i ? 'past' : ''} onClick={() => go(k)} aria-label={`Card ${k + 1}`} aria-current={k === i} />)}</div>
         {last ? (
           <div className="story-end">
-            <button className="btn" onClick={() => onDone(false)}>Go straight to the site</button>
-            <button className="btn primary" onClick={() => onDone(true)}>Take the 1-minute tour</button>
+            <button className="btn" onClick={() => onDone(false)}>Go straight to the atlas</button>
+            <button className="btn primary" onClick={() => onDone(true)}>Take the one-minute tour</button>
           </div>
         ) : <button className="btn primary" onClick={() => go(i + 1)}>Next</button>}
       </div>
@@ -91,7 +96,7 @@ function Story({ onDone }: { onDone: (tour: boolean) => void }) {
   )
 }
 
-/* ---------------- the intro: typed title, then the story ---------------- */
+/* ---------------- the intro: a cover, then the story ---------------- */
 export function Intro({ onDone }: { onDone: (tour: boolean) => void }) {
   const [phase, setPhase] = useState<'title' | 'story'>(new URLSearchParams(location.search).has('story') ? 'story' : 'title')
   const [t, setT] = useState(0)
@@ -102,45 +107,40 @@ export function Intro({ onDone }: { onDone: (tour: boolean) => void }) {
     const tick = (now: number) => {
       const el = now - t0
       setT(el)
-      if (el < 16000) raf = requestAnimationFrame(tick)
+      if (el < 6500) raf = requestAnimationFrame(tick)
     }
     raf = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(raf)
   }, [phase])
   useEffect(() => {
-    if (phase !== 'title') return
-    const k = (e: KeyboardEvent) => { if (e.key === 'Enter') setPhase('story'); if (e.key === 'Escape') onDone(false) }
+    const k = (e: KeyboardEvent) => {
+      if (phase === 'title' && e.key === 'Enter' && !(e.target as HTMLElement).closest('button')) setPhase('story')
+      if (e.key === 'Escape') onDone(false)
+    }
     addEventListener('keydown', k)
     return () => removeEventListener('keydown', k)
   }, [phase, onDone])
 
   const n1 = chars(t, T.name, NAME.length), n2 = chars(t, T.line, LINE.length), n3 = chars(t, T.body, BODY.length)
   const active = n3 > 0 && n3 < BODY.length ? 3 : n2 > 0 && n2 < LINE.length ? 2 : n1 < NAME.length && t >= T.name[0] ? 1 : 0
-  const done = n3 >= BODY.length
-  const caret = (i: number) => (active === i || (done && i === 3)) && <span className="caret" />
+  const caret = (i: number) => active === i && <span className="caret" />
 
   return (
-    <motion.div className="intro" initial={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
-      <button className="skip" onClick={() => onDone(false)}>Skip intro</button>
+    <motion.div className="intro" initial={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }} role="dialog" aria-label="Introduction">
       {phase === 'title' ? (
-        <div className="tstack">
-          <motion.img className="tlogo" src="/dexa-logo-navy.png" alt="DEXA"
-            initial={{ opacity: 0, y: 26, scale: 0.9, clipPath: 'inset(0 100% 0 0)', filter: 'blur(6px)' }}
-            animate={{ opacity: 1, y: 0, scale: 1, clipPath: 'inset(0 0% 0 0)', filter: 'blur(0px)' }}
-            transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }} />
-          <motion.div className="trule" initial={{ width: 0 }} animate={{ width: 150 }} transition={{ duration: 0.9, delay: 1.5, ease: [0.22, 1, 0.36, 1] }} />
-          <div className="tname" aria-label={NAME}>
-            {NAME.slice(0, n1).split('').map((c, i) => <span key={i} className={i >= 2 ? 'hl' : undefined}>{c}</span>)}{caret(1)}
+        <div className="cover">
+          <div className="cover-top"><Brand /><button className="skip" onClick={() => onDone(false)}>Skip intro</button></div>
+          <div className="cover-main">
+            <div className="cover-kick">An atlas of South African health information</div>
+            <h1 aria-label={NAME}>{NAME.slice(0, n1).split('').map((c, i) => <span key={i} className={i >= 2 ? 'hl' : undefined}>{c}</span>)}{caret(1)}</h1>
+            <p className="cover-line">{LINE.slice(0, n2)}{caret(2)}</p>
+            <p className="cover-body">{BODY.slice(0, n3)}{caret(3)}</p>
+            <div className="cover-cta">
+              <button className="btn primary big" onClick={() => setPhase('story')} autoFocus>Why this matters</button>
+              <button className="btn big" onClick={() => onDone(false)}>Enter the atlas</button>
+            </div>
           </div>
-          <div className="tline">{LINE.slice(0, n2)}{caret(2)}</div>
-          <div className="tline2">{BODY.slice(0, n3)}{caret(3)}</div>
-          <div className="tcta">
-            {done && (
-              <motion.button className="btn primary big" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} onClick={() => setPhase('story')} autoFocus>
-                Why this matters
-              </motion.button>
-            )}
-          </div>
+          <div className="cover-foot"><span>Describes what exists today.</span><span>Every claim carries a source and a confidence.</span><span>Anything DEXA will build is labelled <b>Coming soon</b>.</span></div>
         </div>
       ) : <Story onDone={onDone} />}
     </motion.div>

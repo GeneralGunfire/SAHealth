@@ -1,19 +1,26 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { BY_ID } from '../data/nodes'
-import { GROUPS, JOURNEYS } from '../data/flows'
-import { LAYER_NAME, SECTORS, SECTOR } from '../data/meta'
+import { EDGES, GROUPS, JOURNEYS } from '../data/flows'
+import { LAYER_NAME, LINK_COLOR, SECTORS, SECTOR } from '../data/meta'
 import { crv, qd, qpt, type Quad } from '../geom'
 import { Icon } from '../components/Icon'
-import type { Journey } from '../types'
+import { Conf } from '../components/ui'
+import { useIsMobile } from '../hooks'
+import type { Journey, JStep } from '../types'
 
 const LANE_H = 290
 const LEFT = 150
 const GAP = 205
 const EASE = [0.22, 1, 0.36, 1] as const
+const BREAK = '#C2371F'
+const INK = '#1F1D1B'
 const reduceMotion = typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches
 
 interface Props { jid: string; setJid: (id: string) => void; sel: string | null; onSelect: (id: string) => void }
+
+const KINDS = { live: 'Live link', batch: 'Regular batch', manual: 'Retyped or carried by hand', break: 'Data stops here' } as const
+const kcolor = (k: JStep['k']) => (k === 'break' ? BREAK : LINK_COLOR[k])
 
 function build(j: Journey) {
   const order: string[] = []
@@ -47,7 +54,18 @@ function headPts(q: Quad) {
   return `${q.p1[0]},${q.p1[1]} ${bx - uy * 10},${by + ux * 10} ${bx + uy * 10},${by - ux * 10}`
 }
 
+/** Why a step stops or moves the way it does, taken from the system records and the connection list. */
+function whyFor(st: JStep) {
+  const e = EDGES.find((x) => (x.a === st.f && x.b === st.t) || (x.a === st.t && x.b === st.f))
+  if (st.k === 'break') {
+    const n = [BY_ID[st.t], BY_ID[st.f]].find((x) => x.why)
+    return n ? { text: n.why!, from: n.name, conf: n.conf, src: n.src } : null
+  }
+  return e ? { text: e.what + '.', from: 'Connection record', conf: null, src: [] as string[] } : null
+}
+
 export function JourneyPlayer({ jid, setJid, sel, onSelect }: Props) {
+  const mobile = useIsMobile()
   const j = JOURNEYS.find((x) => x.id === jid)!
   const g = GROUPS[j.g]
   const n = j.steps.length
@@ -71,7 +89,7 @@ export function JourneyPlayer({ jid, setJid, sel, onSelect }: Props) {
     const ro = new ResizeObserver(([e]) => setDim({ w: e.contentRect.width, h: e.contentRect.height }))
     ro.observe(box.current)
     return () => ro.disconnect()
-  }, [])
+  }, [mobile])
 
   const dur = (i: number) => (i < 0 ? 3200 : i >= n ? 1e9 : 5200 + j.steps[i].p.length * 30)
   useEffect(() => {
@@ -94,18 +112,18 @@ export function JourneyPlayer({ jid, setJid, sel, onSelect }: Props) {
   }, [playing, idx, speed, jid])
 
   const go = (i: number) => { setIdx(Math.max(-1, Math.min(n, i))); setProg(0) }
+  const toggle = () => {
+    if (idx >= n) { go(-1); setPlaying(true) } else setPlaying((p) => !p)
+  }
   useEffect(() => {
     const k = (e: KeyboardEvent) => {
-      if ((e.target as HTMLElement).closest('input,select')) return
+      if ((e.target as HTMLElement).closest('input,select,textarea')) return
       if (e.key === 'ArrowRight') go(idx + 1)
       if (e.key === 'ArrowLeft') go(idx - 1)
       if (e.key === ' ' && !(e.target as HTMLElement).closest('button')) { e.preventDefault(); toggle() }
     }
     addEventListener('keydown', k); return () => removeEventListener('keydown', k)
   })
-  const toggle = () => {
-    if (idx >= n) { go(-1); setPlaying(true) } else setPlaying((p) => !p)
-  }
 
   const s = Math.min(dim.w / geo.W, dim.h / geo.H, 1.3)
   const ox = (dim.w - geo.W * s) / 2, oy = (dim.h - geo.H * s) / 2
@@ -118,64 +136,131 @@ export function JourneyPlayer({ jid, setJid, sel, onSelect }: Props) {
   j.steps.slice(0, Math.max(0, Math.min(idx + 1, n))).forEach((st) => { if (st.k === 'manual') { copies++; hand++ } else if (st.k === 'batch') copies++ })
   const q = step ? arrowQuad(geo.pos[step.f], geo.pos[step.t]) : null
   const mid = q ? qpt(q, 0.5) : null
-  const kinds = { live: 'Live link', batch: 'Regular batch', manual: 'Retyped or carried by hand', break: 'Data stops here' } as const
   const pk = q ? Array.from({ length: 16 }, (_, i) => qpt(q, i / 15)) : null
+  const sc = step ? kcolor(step.k) : INK
+  const why = step ? whyFor(step) : null
+  const pct = Math.min(100, (idx < 0 ? prog * 0 : idx >= n ? 1 : (idx + prog) / n) * 100)
+
+  const picker = mobile ? (
+    <div className="jp-pick">
+      <label htmlFor="jsel">Journey</label>
+      <select id="jsel" className="sel" value={jid} onChange={(e) => setJid(e.target.value)}>
+        {(Object.keys(GROUPS) as (keyof typeof GROUPS)[]).map((k) => (
+          <optgroup key={k} label={GROUPS[k].name}>{JOURNEYS.filter((x) => x.g === k).map((x) => <option key={x.id} value={x.id}>{x.title}</option>)}</optgroup>
+        ))}
+      </select>
+    </div>
+  ) : (
+    <aside className="jp-side">
+      <h4 className="jp-h">Thirteen journeys</h4>
+      {(Object.keys(GROUPS) as (keyof typeof GROUPS)[]).map((k) => (
+        <div className="jp-grp" key={k}>
+          <div className="jp-gh">{GROUPS[k].name}<small>{GROUPS[k].sub}</small></div>
+          {JOURNEYS.filter((x) => x.g === k).map((x) => (
+            <button key={x.id} className="jp-item" aria-pressed={x.id === jid} onClick={() => setJid(x.id)}>{x.title}</button>
+          ))}
+        </div>
+      ))}
+    </aside>
+  )
+
+  const narration = (
+    <div className="jp-cap">
+      <div className="jp-bar" aria-hidden><motion.i style={{ width: `${pct}%` }} /></div>
+      <AnimatePresence mode="wait">
+        <motion.div key={jid + idx} className="jp-text" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }} aria-live="polite">
+          {idx < 0 && <><div className="jkick">{g.name} journey</div><h3>{j.title}</h3><p>{j.intro}</p></>}
+          {step && <>
+            <div className="jkick">Step {idx + 1} of {n} · <span className={'kind k-' + step.k}><i />{KINDS[step.k]}</span></div>
+            <h3>{step.h}</h3><p>{step.p}</p>
+            <div className="jflow"><button onClick={() => onSelect(step.f)}>{BY_ID[step.f].name}</button><b>{step.k === 'break' ? '⊣' : '→'}</b><button onClick={() => onSelect(step.t)}>{BY_ID[step.t].name}</button></div>
+            <dl className="jtriad">
+              <div><dt>What moves</dt><dd>{step.k === 'break' ? 'Nothing moves on from here.' : step.lbl || '—'}</dd></div>
+              <div><dt>How</dt><dd>{KINDS[step.k]}</dd></div>
+              <div><dt>{step.k === 'break' ? 'Why it stops' : 'Connection record'}</dt>
+                <dd>{why ? <>{why.text}<small>{why.from}{why.conf && <> · <Conf conf={why.conf} /></>}{why.src.length > 0 && <> · {why.src.map((x) => <code key={x}>{x}</code>)}</>}</small></> : 'No written reason recorded for this step yet.'}</dd></div>
+            </dl></>}
+          {idx >= n && <><div className="jkick">The end of the journey</div>
+            <h3>{copies} copies of the data, {hand} retyped by hand</h3>
+            <p>{j.steps[n - 1].k === 'break' ? 'And then it stopped. ' : ''}Press replay to watch it again, or choose another journey.</p></>}
+        </motion.div>
+      </AnimatePresence>
+      <div className="counters"><div><b>{copies}</b><span>copies of the data</span></div><div><b>{hand}</b><span>retyped by hand</span></div></div>
+    </div>
+  )
+
+  const controls = (
+    <div className="jp-ctl" data-tour="jp-ctl" role="group" aria-label="Playback">
+      <button className="btn" onClick={() => go(-1)} title="Restart" aria-label="Restart">⏮</button>
+      <button className="btn" onClick={() => go(idx - 1)} disabled={idx < 0} title="Previous step" aria-label="Previous step">◀</button>
+      <button className="btn primary playb" onClick={toggle}>{idx >= n ? 'Replay' : playing ? 'Pause' : 'Play'}</button>
+      <button className="btn" onClick={() => go(idx + 1)} disabled={idx >= n} title="Next step" aria-label="Next step">▶</button>
+      <div className="dots">{j.steps.map((_, i) => <button key={i} className={i === idx ? 'on' : i < idx ? 'past' : ''} onClick={() => go(i)} aria-label={`Step ${i + 1}`} aria-current={i === idx} />)}</div>
+      <div className="seg" role="group" aria-label="Speed"><button aria-pressed={speed === 0.7} onClick={() => setSpeed(0.7)}>0.7×</button><button aria-pressed={speed === 1} onClick={() => setSpeed(1)}>1×</button><button aria-pressed={speed === 1.6} onClick={() => setSpeed(1.6)}>1.6×</button></div>
+    </div>
+  )
+
+  if (mobile) {
+    return (
+      <div className="jp jp-m">
+        {picker}
+        {narration}
+        {controls}
+        <ol className="jp-steps" data-tour="jp-chap">
+          {j.steps.map((st, i) => (
+            <li key={i} className={(i === idx ? 'on ' : i < idx ? 'past ' : '') + 'k-' + st.k}>
+              <button onClick={() => go(i)}>
+                <i>{i + 1}</i>
+                <span><b>{st.h}</b>
+                  <small>{BY_ID[st.f].name} {st.k === 'break' ? '⊣' : '→'} {BY_ID[st.t].name}</small>
+                  <em className={'kind k-' + st.k}><i />{KINDS[st.k]}{st.lbl && st.k !== 'break' ? ` · ${st.lbl}` : ''}</em></span>
+              </button>
+            </li>
+          ))}
+        </ol>
+      </div>
+    )
+  }
 
   return (
     <div className="jp">
-      <aside className="jp-side">
-        <div className="jgroups">
-          {(Object.keys(GROUPS) as (keyof typeof GROUPS)[]).map((k) => (
-            <button key={k} aria-pressed={j.g === k} onClick={() => setJid(JOURNEYS.find((x) => x.g === k)!.id)}>{GROUPS[k].name}</button>
-          ))}
-        </div>
-        <div className="jlist2">
-          {JOURNEYS.filter((x) => x.g === j.g).map((x) => (
-            <button key={x.id} aria-pressed={x.id === jid} onClick={() => setJid(x.id)}>{x.title}</button>
-          ))}
-        </div>
-        <h4 className="jp-h">Chapters</h4>
-        <ol className="jp-chapters" data-tour="jp-chap">
-          {j.steps.map((st, i) => (
-            <li key={i}><button className={i === idx ? 'on' : i < idx ? 'past' : ''} onClick={() => go(i)}><i>{i + 1}</i>{st.h}</button></li>
-          ))}
-        </ol>
-      </aside>
-
+      {picker}
       <section className="jp-main" style={{ ['--gc' as string]: g.color }}>
         <div className="jp-stage" ref={box}>
           <div className="jp-vp" style={{ width: geo.W, height: geo.H, transform: `translate(${ox}px, ${oy}px) scale(${s})` }}>
             {geo.lanes.map((l, i) => (
-              <div key={l.id} className="jp-lane" style={{ top: i * LANE_H, height: LANE_H, background: i % 2 ? '#f8fafd' : '#fff' }}>
+              <div key={l.id} className={'jp-lane' + (i % 2 ? ' alt' : '')} style={{ top: i * LANE_H, height: LANE_H }}>
                 <div className="jp-lanelabel" style={{ width: LEFT }}><i style={{ background: l.color }} /><b>{l.name}</b><small>{l.sub}</small></div>
               </div>
             ))}
             <svg className="jp-svg" width={geo.W} height={geo.H}>
               {/* earlier steps: a quiet trail */}
               {j.steps.slice(0, Math.max(0, idx)).map((st, i) => st.k === 'break' ? null : (
-                <path key={'t' + i} d={qd(arrowQuad(geo.pos[st.f], geo.pos[st.t]))} fill="none" stroke="#c9d3e6" strokeWidth={3} strokeLinecap="round" />
+                <path key={'t' + i} d={qd(arrowQuad(geo.pos[st.f], geo.pos[st.t]))} fill="none" stroke={kcolor(st.k)} strokeOpacity={0.35} strokeWidth={3} strokeLinecap="round" />
               ))}
               {step && q && (
                 <g key={jid + idx}>
-                  <motion.path d={qd(q)} fill="none" strokeLinecap="round" strokeWidth={5}
-                    stroke={step.k === 'break' ? '#dc2626' : '#0b1b36'}
+                  <motion.path d={qd(q)} fill="none" strokeLinecap="round" strokeWidth={5} stroke={sc}
                     strokeDasharray={step.k === 'break' ? '9 10' : step.k === 'batch' ? '16 10' : step.k === 'manual' ? '2 13' : undefined}
                     initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.3 / speed, ease: EASE, delay: 0.25 }} />
                   {step.k !== 'break' && (
-                    <motion.polygon points={headPts(q)} fill="#0b1b36" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: (1.45 / speed) }} />
+                    <motion.polygon points={headPts(q)} fill={sc} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: (1.45 / speed) }} />
                   )}
                   {step.k === 'break' && mid && (
-                    <motion.text x={mid[0]} y={mid[1]} fill="#dc2626" fontSize={56} fontWeight={800} textAnchor="middle" dominantBaseline="central"
-                      initial={{ opacity: 0, scale: 0.4 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 1.2 / speed, type: 'spring', stiffness: 300, damping: 14 }} style={{ transformOrigin: `${mid[0]}px ${mid[1]}px` }}>×</motion.text>
+                    <motion.g initial={{ opacity: 0, scale: 0.4 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 1.2 / speed, type: 'spring', stiffness: 300, damping: 16 }} style={{ transformOrigin: `${mid[0]}px ${mid[1]}px` }}>
+                      <circle cx={mid[0]} cy={mid[1]} r={24} fill="#F3EFE7" stroke={BREAK} strokeWidth={3} />
+                      <path d={`M${mid[0] - 9},${mid[1] - 9} L${mid[0] + 9},${mid[1] + 9} M${mid[0] + 9},${mid[1] - 9} L${mid[0] - 9},${mid[1] + 9}`} stroke={BREAK} strokeWidth={4} strokeLinecap="round" />
+                      <text x={mid[0]} y={mid[1] + 46} fill={BREAK} fontSize={15} fontWeight={700} textAnchor="middle" fontFamily="IBM Plex Mono, monospace" letterSpacing="1.5">STOPS HERE</text>
+                    </motion.g>
                   )}
                   {step.k !== 'break' && step.lbl && mid && (
                     <motion.g initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9 / speed }}>
-                      <rect x={mid[0] - (step.lbl.length * 5 + 16)} y={mid[1] - 46} width={step.lbl.length * 10 + 32} height={32} rx={16} fill="#fff" stroke="#0b1b36" strokeWidth={1.5} />
-                      <text x={mid[0]} y={mid[1] - 30} fill="#0b1b36" fontSize={16} fontWeight={700} textAnchor="middle" dominantBaseline="central">{step.lbl}</text>
+                      <rect x={mid[0] - (step.lbl.length * 5 + 16)} y={mid[1] - 46} width={step.lbl.length * 10 + 32} height={30} rx={2} fill="#F3EFE7" stroke={sc} strokeWidth={1.6} />
+                      <text x={mid[0]} y={mid[1] - 31} fill={INK} fontSize={15} fontWeight={600} textAnchor="middle" dominantBaseline="central" fontFamily="IBM Plex Mono, monospace">{step.lbl}</text>
                     </motion.g>
                   )}
                   {pk && step.k !== 'break' && (
-                    <motion.circle r={11} fill="#2f5bff" stroke="#fff" strokeWidth={3}
+                    <motion.circle r={10} fill={sc} stroke="#F3EFE7" strokeWidth={3}
                       initial={{ cx: pk[0][0], cy: pk[0][1], opacity: 0 }}
                       animate={{ cx: pk.map((p) => p[0]), cy: pk.map((p) => p[1]), opacity: [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0] }}
                       transition={{ duration: 1.5 / speed, ease: 'easeInOut', delay: 0.25 }} />
@@ -187,12 +272,13 @@ export function JourneyPlayer({ jid, setJid, sel, onSelect }: Props) {
               const nd = BY_ID[id], p = geo.pos[id]
               const on = shown.has(id), active = !!step && (step.f === id || step.t === id)
               const ghost = idx < 0 || (!on && idx < n)
+              const num = on ? geo.order.indexOf(id) + 1 : 0
               return (
-                <motion.button key={jid + id} className={'jp-node' + (active ? ' active' : '') + (sel === id ? ' sel' : '')}
+                <motion.button key={jid + id} className={'jn st-' + nd.status + (active ? ' active' : '') + (sel === id ? ' sel' : '')}
                   style={{ left: p.x - 110, top: p.y - 50, ['--c' as string]: SECTOR[nd.sector].color }}
-                  initial={false} animate={{ opacity: on ? 1 : ghost ? 0.2 : 0, scale: on ? 1 : 0.86 }} transition={{ duration: 0.5, ease: EASE }}
+                  initial={false} animate={{ opacity: on ? 1 : ghost ? 0.2 : 0, scale: on ? 1 : 0.9 }} transition={{ duration: 0.5, ease: EASE }}
                   onClick={() => onSelect(id)} aria-label={nd.name}>
-                  <span className="ico"><Icon name={nd.icon} size={36} /></span>
+                  <span className="jn-tile"><Icon name={nd.icon} size={32} />{num > 0 && <span className="stepn">{num}</span>}</span>
                   <b>{nd.name}</b>
                   {nd.alias && <i>{nd.alias}</i>}
                   <em>{LAYER_NAME[nd.layer]}</em>
@@ -201,35 +287,15 @@ export function JourneyPlayer({ jid, setJid, sel, onSelect }: Props) {
             })}
           </div>
         </div>
-
-        <div className="jp-cap">
-          <div className="jp-bar"><motion.i style={{ width: `${Math.min(100, (idx < 0 ? prog : idx >= n ? 1 : (idx + prog) / n) * 100)}%` }} /></div>
-          <AnimatePresence mode="wait">
-            <motion.div key={jid + idx} className="jp-text" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.35 }}>
-              {idx < 0 && <><div className="jkick">{g.name} journey</div><h3>{j.title}</h3><p>{j.intro}</p></>}
-              {step && <>
-                <div className="jkick">Step {idx + 1} of {n} · <span className={'kind k-' + step.k}>{kinds[step.k]}</span></div>
-                <h3>{step.h}</h3><p>{step.p}</p>
-                <div className="jflow">{BY_ID[step.f].name} <b>→</b> {BY_ID[step.t].name}</div></>}
-              {idx >= n && <><div className="jkick">The end of the journey</div>
-                <h3>{copies} copies of the data, {hand} retyped by hand</h3>
-                <p>{j.steps[n - 1].k === 'break' ? 'And then it stopped. ' : ''}Press replay to watch it again, or choose another journey.</p></>}
-            </motion.div>
-          </AnimatePresence>
-          <div className="jp-side2">
-            <div className="counters"><div><b>{copies}</b><span>copies of the data</span></div><div><b>{hand}</b><span>retyped by hand</span></div></div>
-          </div>
-        </div>
-
-        <div className="jp-ctl" data-tour="jp-ctl">
-          <button className="btn" onClick={() => go(-1)} title="Restart">⏮</button>
-          <button className="btn" onClick={() => go(idx - 1)} disabled={idx < 0} title="Previous step">◀</button>
-          <button className="btn primary playb" onClick={toggle}>{idx >= n ? 'Replay' : playing ? 'Pause' : 'Play'}</button>
-          <button className="btn" onClick={() => go(idx + 1)} disabled={idx >= n} title="Next step">▶</button>
-          <div className="dots">{j.steps.map((_, i) => <button key={i} className={i === idx ? 'on' : i < idx ? 'past' : ''} onClick={() => go(i)} aria-label={`Step ${i + 1}`} />)}</div>
-          <div className="seg"><button aria-pressed={speed === 0.7} onClick={() => setSpeed(0.7)}>0.7×</button><button aria-pressed={speed === 1} onClick={() => setSpeed(1)}>1×</button><button aria-pressed={speed === 1.6} onClick={() => setSpeed(1.6)}>1.6×</button></div>
-        </div>
+        {narration}
+        {controls}
       </section>
+      <ol className="jp-chapters" data-tour="jp-chap" aria-label="Chapters">
+        <h4 className="jp-h">Chapters</h4>
+        {j.steps.map((st, i) => (
+          <li key={i}><button className={(i === idx ? 'on' : i < idx ? 'past' : '') + ' k-' + st.k} onClick={() => go(i)}><i>{i + 1}</i>{st.h}</button></li>
+        ))}
+      </ol>
     </div>
   )
 }

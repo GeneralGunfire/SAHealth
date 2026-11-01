@@ -4,15 +4,15 @@ import { motion } from 'framer-motion'
 export interface TourStep { view: string; target?: string; title: string; text: string }
 
 export const TOUR: TourStep[] = [
-  { view: 'landscape', target: 'nav', title: 'Five pages, one landscape', text: 'These tabs move you between the map, step-by-step journeys, provinces, gaps and the simulation. Each page opens with a short introduction, and “About this page” brings it back.' },
+  { view: 'landscape', target: 'nav', title: 'Five views, one landscape', text: 'These move you between the map, step-by-step journeys, provinces, gaps and the simulation. Each opens with a short note you can hide.' },
   { view: 'landscape', target: 'zoomto', title: 'Zoom to a chapter', text: 'Jump to a part of the map: care delivery, registries, labs and medicines, or money and standards. Everything else fades back so you always know where you are.' },
-  { view: 'landscape', target: 'plane', title: 'Explore the map', text: 'Drag to move and scroll to zoom. Hover an icon for a one-line description and to light up its connections. Click an icon to open its full record, with sources and a confidence rating.' },
+  { view: 'landscape', target: 'plane', title: 'Explore the map', text: 'Drag to move and scroll to zoom. Hover a system for a one-line description and to light up its connections. Click it to open its full record, with sources and a confidence rating.' },
   { view: 'landscape', target: 'rail', title: 'Layers on the left', text: 'Each row is something a system does: identity, registries, clinics, hospitals and so on. Click a layer name to zoom straight to it.' },
-  { view: 'landscape', target: 'key', title: 'The key', text: 'Open the key any time to see what every icon, line style and colour means.' },
-  { view: 'journey', target: 'jp-ctl', title: 'Journeys play like a short film', text: 'Choose a journey on the left and it plays by itself. Pause, step forward and back, or change the speed. Arrows show which way the data moves, and a red cross shows where it stops.' },
-  { view: 'journey', target: 'jp-chap', title: 'Jump to any chapter', text: 'Every journey is split into chapters. Click one to skip straight to that moment.' },
-  { view: 'provinces', target: 'prov-grid', title: 'Nine provinces, nine answers', text: 'Each card shows the hospital and clinic systems a province runs, how far the patient registry is used, and the sources. Use “Add to comparison” on two cards to see them side by side.' },
-  { view: 'matrix', target: 'gaps-stats', title: 'What is not connected', text: 'Every square in the grid below is a pair of systems. The colours say why a pair is not connected. Click a reason to focus on it.' },
+  { view: 'landscape', target: 'key', title: 'The key', text: 'Open the key any time to see what every symbol, line style and tag means.' },
+  { view: 'journey', target: 'jp-ctl', title: 'Journeys play like a short film', text: 'Choose a journey and it plays by itself. Pause, step forward and back, or change the speed. Arrows show which way the data moves; a cut mark shows where it stops.' },
+  { view: 'journey', target: 'jp-chap', title: 'Jump to any chapter', text: 'Every journey is split into chapters. Choose one to skip straight to that moment.' },
+  { view: 'provinces', target: 'prov-grid', title: 'Nine provinces, nine answers', text: 'The map can be coloured by hospital records, clinic beta sites, data centres or the patient registry. Choose a province to read its record and sources, and add up to three to the comparison.' },
+  { view: 'matrix', target: 'gaps-stats', title: 'What is not connected', text: 'Every square in the grid below is a pair of systems. The letters say why a pair is not connected, and the edge shows how firm the finding is. Choose a reason to focus on it.' },
   { view: 'landscape', title: 'You are ready', text: 'Start with the map, then follow a journey. You can replay this tour from the header at any time.' },
 ]
 
@@ -26,7 +26,9 @@ export function Tour({ onClose, setView }: { onClose: () => void; setView: (v: s
   useEffect(() => {
     const find = () => {
       const el = step.target ? document.querySelector(`[data-tour="${step.target}"]`) : null
-      setRect(el ? el.getBoundingClientRect() : null)
+      if (el && step.target !== 'nav') el.scrollIntoView({ block: 'center', behavior: 'instant' as ScrollBehavior })
+      const r = el ? el.getBoundingClientRect() : null
+      setRect(r && r.width > 0 && r.height > 0 ? r : null)
     }
     const t1 = setTimeout(find, 700)
     const t2 = setTimeout(find, 1500)
@@ -43,7 +45,7 @@ export function Tour({ onClose, setView }: { onClose: () => void; setView: (v: s
   }, [last, onClose])
 
   const pad = 8
-  const W = 360
+  const W = Math.min(360, innerWidth - 32)
   let left = (innerWidth - W) / 2, top = innerHeight / 2 - 120
   if (rect) {
     const below = rect.bottom + 16 + 210 < innerHeight

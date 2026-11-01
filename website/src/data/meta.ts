@@ -16,11 +16,11 @@ export const LAYERS: { id: LayerId; name: string }[] = [
 export const LAYER_NAME = Object.fromEntries(LAYERS.map((l) => [l.id, l.name])) as Record<LayerId, string>
 
 export const SECTORS: { id: SectorId; name: string; sub: string; color: string }[] = [
-  { id: 'public', name: 'Public', sub: 'provincial health', color: '#0D9488' },
-  { id: 'other', name: 'Other state', sub: 'municipal · military · prisons', color: '#8B5CF6' },
-  { id: 'shared', name: 'National / shared', sub: 'run for everyone', color: '#2F5BFF' },
-  { id: 'private', name: 'Private', sub: 'practices · hospitals · insurers', color: '#EA580C' },
-  { id: 'ngo', name: 'NGO & donor', sub: 'programme partners', color: '#65A30D' },
+  { id: 'public', name: 'Public', sub: 'provincial health', color: '#475D70' },
+  { id: 'other', name: 'Other state', sub: 'municipal · military · prisons', color: '#7D6892' },
+  { id: 'shared', name: 'National / shared', sub: 'run for everyone', color: '#3D3A36' },
+  { id: 'private', name: 'Private', sub: 'practices · hospitals · insurers', color: '#B4573B' },
+  { id: 'ngo', name: 'NGO & donor', sub: 'programme partners', color: '#B27D8E' },
 ]
 export const SECTOR = Object.fromEntries(SECTORS.map((s) => [s.id, s])) as Record<SectorId, (typeof SECTORS)[number]>
 
@@ -29,7 +29,7 @@ export const ICON_LABEL: Record<IconName, string> = {
   flask: 'Laboratory', pill: 'Medicines', cross: 'Emergency care', drop: 'Blood service', receipt: 'Claims & payment',
   hub: 'Exchange / integration', braces: 'Standard or code set', image: 'Imaging', chart: 'Reporting totals',
 }
-export const LINK_COLOR: Record<LinkType, string> = { live: '#2F5BFF', batch: '#7C9BFF', manual: '#C08A1E' }
+export const LINK_COLOR: Record<LinkType, string> = { live: '#2E7D4F', batch: '#2F5FB0', manual: '#C98A12' }
 export const LINK_LABEL: Record<LinkType, string> = { live: 'Live link', batch: 'Regular batch', manual: 'Retyped or carried by hand' }
 
 export const PROVINCES = ['Eastern Cape', 'Free State', 'Gauteng', 'KwaZulu-Natal', 'Limpopo', 'Mpumalanga', 'North West', 'Northern Cape', 'Western Cape']

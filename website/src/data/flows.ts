@@ -51,9 +51,9 @@ export const EDGES: Edge[] = [
 const S = (f: string, t: string, k: Journey['steps'][number]['k'], h: string, p: string, lbl = '') => ({ f, t, k, h, p, lbl })
 
 export const GROUPS = {
-  public: { name: 'Public', sub: 'clinics & hospitals', color: '#0D9488' },
-  private: { name: 'Private', sub: 'practices & hospital groups', color: '#EA580C' },
-  cross: { name: 'Across both', sub: 'public and private', color: '#2F5BFF' },
+  public: { name: 'Public', sub: 'clinics & hospitals', color: '#475D70' },
+  private: { name: 'Private', sub: 'practices & hospital groups', color: '#B4573B' },
+  cross: { name: 'Across both', sub: 'public and private', color: '#3D3A36' },
 } as const
 
 // Simplified from published sources; refined in the research pass.

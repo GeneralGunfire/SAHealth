@@ -25,7 +25,7 @@ export function isVisible(n: SysNode, o: LayoutOpts): boolean {
 }
 
 export function layoutLandscape(o: LayoutOpts): LayoutResult {
-  const top = o.view === 'sim' ? 62 : 10, pitch = 130, baseH = 106
+  const top = 10, pitch = 130, baseH = 106
   const colW = o.W / SECTORS.length
   const cap = Math.max(1, Math.floor(colW / pitch))
   const vis = NODES.filter((n) => isVisible(n, o))
