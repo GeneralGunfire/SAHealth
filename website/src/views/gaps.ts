@@ -3,11 +3,11 @@ import type { Confidence, SysNode } from '../types'
 
 /** The five reasons a pair of systems is not connected. The letter keeps each one readable without colour. */
 export const REASONS = [
-  { k: 'paper', t: 'Paper-based', s: 'P', c: '#d6c9a8' },
-  { k: 'owners', t: 'Public–private wall', s: 'W', c: '#cdb6d3' },
-  { k: 'noid', t: 'No shared patient ID', s: 'I', c: '#b4c2d3' },
-  { k: 'std', t: 'Different standards', s: 'S', c: '#c2c9b0' },
-  { k: 'mandate', t: 'No mandate or funding', s: 'M', c: '#dfb7b0' },
+  { k: 'paper', t: 'Paper-based', s: 'P', c: '#7a6f4c' },
+  { k: 'owners', t: 'Public–private wall', s: 'W', c: '#6e5a85' },
+  { k: 'noid', t: 'No shared patient ID', s: 'I', c: '#4f6c8f' },
+  { k: 'std', t: 'Different standards', s: 'S', c: '#4d7a78' },
+  { k: 'mandate', t: 'No mandate or funding', s: 'M', c: '#94554e' },
 ] as const
 export type ReasonKey = (typeof REASONS)[number]['k']
 

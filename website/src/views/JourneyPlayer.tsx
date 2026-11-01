@@ -7,14 +7,17 @@ import { crv, qd, qpt, type Quad } from '../geom'
 import { Icon } from '../components/Icon'
 import { Conf } from '../components/ui'
 import { useIsMobile } from '../hooks'
+import { useNav } from '../nav'
+import { JourneyCompare, SUGGESTED } from './JourneyCompare'
 import type { Journey, JStep } from '../types'
 
 const LANE_H = 290
 const LEFT = 150
 const GAP = 205
 const EASE = [0.22, 1, 0.36, 1] as const
-const BREAK = '#C2371F'
-const INK = '#1F1D1B'
+const BREAK = '#FF6A4D'
+const INK = '#F2EEE6'
+const PAPER = '#171513'
 const reduceMotion = typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches
 
 interface Props { jid: string; setJid: (id: string) => void; sel: string | null; onSelect: (id: string) => void }
@@ -66,6 +69,8 @@ function whyFor(st: JStep) {
 
 export function JourneyPlayer({ jid, setJid, sel, onSelect }: Props) {
   const mobile = useIsMobile()
+  const nav = useNav()
+  const [cmpB, setCmpB] = useState<string | null>(null)
   const j = JOURNEYS.find((x) => x.id === jid)!
   const g = GROUPS[j.g]
   const n = j.steps.length
@@ -83,6 +88,7 @@ export function JourneyPlayer({ jid, setJid, sel, onSelect }: Props) {
     if (prevJid.current === jid) return
     prevJid.current = jid
     setIdx(-1); setProg(0); setPlaying(!reduceMotion)
+    setCmpB((b) => (b === jid ? null : b))
   }, [jid])
   useEffect(() => {
     if (!box.current) return
@@ -173,6 +179,7 @@ export function JourneyPlayer({ jid, setJid, sel, onSelect }: Props) {
           {step && <>
             <div className="jkick">Step {idx + 1} of {n} · <span className={'kind k-' + step.k}><i />{KINDS[step.k]}</span></div>
             <h3>{step.h}</h3><p>{step.p}</p>
+            <div className="jsrc"><small>Sources for these systems</small>{[...new Set([...BY_ID[step.f].src, ...BY_ID[step.t].src])].map((x) => <button key={x} className="srcid" onClick={() => nav.goSource(x)}>{x}</button>)}{BY_ID[step.f].src.length + BY_ID[step.t].src.length === 0 && <em>none recorded yet</em>}</div>
             <div className="jflow"><button onClick={() => onSelect(step.f)}>{BY_ID[step.f].name}</button><b>{step.k === 'break' ? '⊣' : '→'}</b><button onClick={() => onSelect(step.t)}>{BY_ID[step.t].name}</button></div>
             <dl className="jtriad">
               <div><dt>What moves</dt><dd>{step.k === 'break' ? 'Nothing moves on from here.' : step.lbl || '—'}</dd></div>
@@ -200,12 +207,27 @@ export function JourneyPlayer({ jid, setJid, sel, onSelect }: Props) {
     </div>
   )
 
+  const cmp = (
+    <div className="jp-cmp">
+      {cmpB === null ? (
+        <div className="jp-cmp-start">
+          <b>Compare this journey with another</b>
+          <div className="chips">
+            {SUGGESTED.filter((x) => x.a === jid || x.b === jid).map((x) => <button key={x.label} className="chip" onClick={() => setCmpB(x.a === jid ? x.b : x.a)}>{x.label}</button>)}
+            <label className="jp-cmp-sel"><span>Or choose</span><select className="sel" value="" onChange={(e) => { if (e.target.value) setCmpB(e.target.value) }}><option value="">Another journey…</option>{JOURNEYS.filter((x) => x.id !== jid).map((x) => <option key={x.id} value={x.id}>{x.title}</option>)}</select></label>
+          </div>
+        </div>
+      ) : <JourneyCompare aId={jid} bId={cmpB} setB={setCmpB} onClose={() => setCmpB(null)} />}
+    </div>
+  )
+
   if (mobile) {
     return (
       <div className="jp jp-m">
         {picker}
         {narration}
         {controls}
+        {cmp}
         <ol className="jp-steps" data-tour="jp-chap">
           {j.steps.map((st, i) => (
             <li key={i} className={(i === idx ? 'on ' : i < idx ? 'past ' : '') + 'k-' + st.k}>
@@ -227,7 +249,7 @@ export function JourneyPlayer({ jid, setJid, sel, onSelect }: Props) {
       {picker}
       <section className="jp-main" style={{ ['--gc' as string]: g.color }}>
         <div className="jp-stage" ref={box}>
-          <div className="jp-vp" style={{ width: geo.W, height: geo.H, transform: `translate(${ox}px, ${oy}px) scale(${s})` }}>
+          <div className="jp-vp" style={{ width: geo.W, height: geo.H, ['--s' as string]: s, transform: `translate(${Math.round(ox)}px, ${Math.round(oy)}px) scale(${s})` }}>
             {geo.lanes.map((l, i) => (
               <div key={l.id} className={'jp-lane' + (i % 2 ? ' alt' : '')} style={{ top: i * LANE_H, height: LANE_H }}>
                 <div className="jp-lanelabel" style={{ width: LEFT }}><i style={{ background: l.color }} /><b>{l.name}</b><small>{l.sub}</small></div>
@@ -248,19 +270,19 @@ export function JourneyPlayer({ jid, setJid, sel, onSelect }: Props) {
                   )}
                   {step.k === 'break' && mid && (
                     <motion.g initial={{ opacity: 0, scale: 0.4 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 1.2 / speed, type: 'spring', stiffness: 300, damping: 16 }} style={{ transformOrigin: `${mid[0]}px ${mid[1]}px` }}>
-                      <circle cx={mid[0]} cy={mid[1]} r={24} fill="#F3EFE7" stroke={BREAK} strokeWidth={3} />
+                      <circle cx={mid[0]} cy={mid[1]} r={24} fill="#171513" stroke={BREAK} strokeWidth={3} />
                       <path d={`M${mid[0] - 9},${mid[1] - 9} L${mid[0] + 9},${mid[1] + 9} M${mid[0] + 9},${mid[1] - 9} L${mid[0] - 9},${mid[1] + 9}`} stroke={BREAK} strokeWidth={4} strokeLinecap="round" />
                       <text x={mid[0]} y={mid[1] + 46} fill={BREAK} fontSize={15} fontWeight={700} textAnchor="middle" fontFamily="IBM Plex Mono, monospace" letterSpacing="1.5">STOPS HERE</text>
                     </motion.g>
                   )}
                   {step.k !== 'break' && step.lbl && mid && (
                     <motion.g initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9 / speed }}>
-                      <rect x={mid[0] - (step.lbl.length * 5 + 16)} y={mid[1] - 46} width={step.lbl.length * 10 + 32} height={30} rx={2} fill="#F3EFE7" stroke={sc} strokeWidth={1.6} />
+                      <rect x={mid[0] - (step.lbl.length * 5 + 16)} y={mid[1] - 46} width={step.lbl.length * 10 + 32} height={30} rx={2} fill="#171513" stroke={sc} strokeWidth={1.6} />
                       <text x={mid[0]} y={mid[1] - 31} fill={INK} fontSize={15} fontWeight={600} textAnchor="middle" dominantBaseline="central" fontFamily="IBM Plex Mono, monospace">{step.lbl}</text>
                     </motion.g>
                   )}
                   {pk && step.k !== 'break' && (
-                    <motion.circle r={10} fill={sc} stroke="#F3EFE7" strokeWidth={3}
+                    <motion.circle r={10} fill={sc} stroke="#171513" strokeWidth={3}
                       initial={{ cx: pk[0][0], cy: pk[0][1], opacity: 0 }}
                       animate={{ cx: pk.map((p) => p[0]), cy: pk.map((p) => p[1]), opacity: [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0] }}
                       transition={{ duration: 1.5 / speed, ease: 'easeInOut', delay: 0.25 }} />
@@ -276,7 +298,7 @@ export function JourneyPlayer({ jid, setJid, sel, onSelect }: Props) {
               return (
                 <motion.button key={jid + id} className={'jn st-' + nd.status + (active ? ' active' : '') + (sel === id ? ' sel' : '')}
                   style={{ left: p.x - 110, top: p.y - 50, ['--c' as string]: SECTOR[nd.sector].color }}
-                  initial={false} animate={{ opacity: on ? 1 : ghost ? 0.2 : 0, scale: on ? 1 : 0.9 }} transition={{ duration: 0.5, ease: EASE }}
+                  initial={false} animate={{ opacity: on ? 1 : ghost ? 0.38 : 0, scale: on ? 1 : 0.9 }} transition={{ duration: 0.5, ease: EASE }}
                   onClick={() => onSelect(id)} aria-label={nd.name}>
                   <span className="jn-tile"><Icon name={nd.icon} size={32} />{num > 0 && <span className="stepn">{num}</span>}</span>
                   <b>{nd.name}</b>
@@ -289,6 +311,7 @@ export function JourneyPlayer({ jid, setJid, sel, onSelect }: Props) {
         </div>
         {narration}
         {controls}
+        {cmp}
       </section>
       <ol className="jp-chapters" data-tour="jp-chap" aria-label="Chapters">
         <h4 className="jp-h">Chapters</h4>

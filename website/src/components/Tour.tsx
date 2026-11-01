@@ -5,6 +5,7 @@ export interface TourStep { view: string; target?: string; title: string; text: 
 
 export const TOUR: TourStep[] = [
   { view: 'landscape', target: 'nav', title: 'Five views, one landscape', text: 'These move you between the map, step-by-step journeys, provinces, gaps and the simulation. Each opens with a short note you can hide.' },
+  { view: 'landscape', target: 'search', title: 'Search everything', text: 'Press / or Ctrl+K from anywhere. Search finds systems and their short names, journeys, provinces, research sources, connections and glossary terms, and takes you straight there.' },
   { view: 'landscape', target: 'zoomto', title: 'Zoom to a chapter', text: 'Jump to a part of the map: care delivery, registries, labs and medicines, or money and standards. Everything else fades back so you always know where you are.' },
   { view: 'landscape', target: 'plane', title: 'Explore the map', text: 'Drag to move and scroll to zoom. Hover a system for a one-line description and to light up its connections. Click it to open its full record, with sources and a confidence rating.' },
   { view: 'landscape', target: 'rail', title: 'Layers on the left', text: 'Each row is something a system does: identity, registries, clinics, hospitals and so on. Click a layer name to zoom straight to it.' },

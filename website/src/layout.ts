@@ -6,7 +6,7 @@ export interface Pos { x: number; y: number; visible: boolean }
 export interface Row { id: string; name: string; y: number; h: number }
 export interface Col { x: number; w: number; id: string; name: string; sub: string; color: string }
 export interface LayoutResult { pos: Record<string, Pos>; height: number; rows: Row[]; cols: Col[]; note?: { x: number; y: number; w: number } }
-export interface LayoutOpts { W: number; view: 'landscape' | 'sim' | 'journey'; simple: boolean; prov: string; jnodes: Set<string> | null }
+export interface LayoutOpts { W: number; view: 'landscape' | 'sim' | 'journey'; simple: boolean; prov: string; jnodes: Set<string> | null; pred?: (n: SysNode) => boolean; sectors?: string[] }
 
 export const CHAPTERS = [
   { id: 'care', name: 'Care delivery', layers: ['phc', 'hospital', 'programme', 'emergency'] },
@@ -18,6 +18,7 @@ export const CHAPTERS = [
 export type ChapterId = (typeof CHAPTERS)[number]['id']
 
 export function isVisible(n: SysNode, o: LayoutOpts): boolean {
+  if (o.pred && !o.pred(n)) return false
   if (o.view === 'sim') return true
   if (o.view === 'journey') return !!o.jnodes?.has(n.id)
   if (o.prov !== 'all' && n.provs && !n.provs.includes(o.prov)) return false
@@ -26,7 +27,8 @@ export function isVisible(n: SysNode, o: LayoutOpts): boolean {
 
 export function layoutLandscape(o: LayoutOpts): LayoutResult {
   const top = 10, pitch = 130, baseH = 106
-  const colW = o.W / SECTORS.length
+  const SEC = o.sectors && o.sectors.length ? SECTORS.filter((s) => o.sectors!.includes(s.id)) : SECTORS
+  const colW = o.W / SEC.length
   const cap = Math.max(1, Math.floor(colW / pitch))
   const vis = NODES.filter((n) => isVisible(n, o))
   const provNone = o.view === 'landscape' && o.prov !== 'all' && PROV_DATA[o.prov]?.none
@@ -36,15 +38,15 @@ export function layoutLandscape(o: LayoutOpts): LayoutResult {
     const here = vis.filter((n) => n.layer === L.id)
     if (!here.length && !(L.id === 'hospital' && provNone)) continue
     let sub = 1
-    for (const S of SECTORS) sub = Math.max(sub, Math.ceil(here.filter((n) => n.sector === S.id).length / cap))
+    for (const S of SEC) sub = Math.max(sub, Math.ceil(here.filter((n) => n.sector === S.id).length / cap))
     rows.push({ id: L.id, name: L.name, y, h: sub * baseH })
     y += sub * baseH
   }
-  const cols: Col[] = SECTORS.map((s, i) => ({ x: i * colW, w: colW, id: s.id, name: s.name, sub: s.sub, color: s.color }))
+  const cols: Col[] = SEC.map((s, i) => ({ x: i * colW, w: colW, id: s.id, name: s.name, sub: s.sub, color: s.color }))
   const pos: Record<string, Pos> = {}
   for (const n of NODES) pos[n.id] = { x: 0, y: 0, visible: false }
   for (const r of rows) {
-    SECTORS.forEach((S, si) => {
+    SEC.forEach((S, si) => {
       const cell = vis.filter((n) => n.layer === r.id && n.sector === S.id)
       cell.forEach((n, k) => {
         const sr = Math.floor(k / cap), m = Math.min(cap, cell.length - sr * cap), ci = k % cap

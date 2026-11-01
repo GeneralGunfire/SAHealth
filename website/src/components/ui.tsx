@@ -40,12 +40,13 @@ export function Conf({ conf, long = false }: { conf: Confidence; long?: boolean 
 }
 
 export const STATUS_TEXT: Record<Status, string> = { live: 'Live', beta: 'Beta', legacy: 'Legacy', paper: 'Paper' }
+export const STATUS_HELP: Record<Status, string> = { live: 'In use today.', beta: 'Being trialled or rolled out.', legacy: 'Old, but still running.', paper: 'A physical record.' }
 export function StatusTag({ status }: { status: Status }) {
   return <span className={'stag stag-' + status}>{STATUS_TEXT[status]}</span>
 }
 
 /** Source list. Each source keeps its id visible so a claim can be traced. */
-export function Sources({ ids, empty }: { ids: string[]; empty?: string }) {
+export function Sources({ ids, empty, onOpen }: { ids: string[]; empty?: string; onOpen?: (id: string) => void }) {
   const rows = ids.filter((s) => SRC[s])
   if (!rows.length) return <p className="none-note">{empty ?? 'No source recorded yet. This description is awaiting verification.'}</p>
   return (
@@ -53,7 +54,10 @@ export function Sources({ ids, empty }: { ids: string[]; empty?: string }) {
       {rows.map((s) => (
         <li key={s}>
           <code>{s}</code>
-          <a href={SRC[s].url} target="_blank" rel="noreferrer">{SRC[s].title}<span aria-hidden> ↗</span></a>
+          <span>
+            <a href={SRC[s].url} target="_blank" rel="noreferrer">{SRC[s].title}<span aria-hidden> ↗</span></a>
+            {onOpen && <button className="src-use" onClick={() => onOpen(s)}>Where it is used</button>}
+          </span>
         </li>
       ))}
     </ul>

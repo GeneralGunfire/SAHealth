@@ -4,11 +4,12 @@ import { LAYERS, SECTOR } from '../data/meta'
 import { isVisible } from '../layout'
 import { Icon } from '../components/Icon'
 import { ConfGlyph, Soon, StatusTag } from '../components/ui'
-import type { Lens } from '../types'
+import { textMatch } from '../filters'
+import type { Lens, SysNode } from '../types'
 
 /** Small-screen form of the landscape: the same eleven layers as a readable list. */
-export function LayerList({ sim, simple, lens, prov, sel, onSelect }: { sim: boolean; simple: boolean; lens: Lens; prov: string; sel: string | null; onSelect: (id: string) => void }) {
-  const vis = NODES.filter((n) => isVisible(n, { W: 0, view: sim ? 'sim' : 'landscape', simple, prov, jnodes: null }) && (lens === 'all' || n.lens.includes(lens)))
+export function LayerList({ sim, simple, lens, prov, sel, onSelect, pred, q, onReset }: { sim: boolean; simple: boolean; lens: Lens; prov: string; sel: string | null; onSelect: (id: string) => void; pred?: (n: SysNode) => boolean; q?: string; onReset?: () => void }) {
+  const vis = NODES.filter((n) => isVisible(n, { W: 0, view: sim ? 'sim' : 'landscape', simple, prov, jnodes: null, pred }) && (lens === 'all' || n.lens.includes(lens)) && (!q || textMatch(n, q)))
   const links = (id: string) => EDGES.filter((e) => e.a === id || e.b === id).length
   return (
     <div className="layerlist">
@@ -37,7 +38,9 @@ export function LayerList({ sim, simple, lens, prov, sel, onSelect }: { sim: boo
           </section>
         )
       })}
-      {vis.length === 0 && <p className="none-note">No systems match these filters.</p>}
+      {vis.length === 0 && (
+        <div className="empty"><b>No systems match these filters.</b><p>Nothing in the research fits every filter at once.</p>{onReset && <button className="btn primary" onClick={onReset}>Reset filters</button>}</div>
+      )}
     </div>
   )
 }

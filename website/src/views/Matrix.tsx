@@ -5,10 +5,11 @@ import { EDGES } from '../data/flows'
 import { Icon } from '../components/Icon'
 import { Conf, ConfGlyph } from '../components/ui'
 import { useIsMobile } from '../hooks'
+import { useNav } from '../nav'
 import { REASONS, gapFinding, pairState, reasonFor, type ReasonKey } from './gaps'
 import type { SysNode } from '../types'
 
-type Cert = 'all' | 'firm' | 'weak'
+type Cert = 'all' | 'confirmed' | 'likely' | 'uncertain'
 interface Props { simple: boolean; group: 'layer' | 'sector'; showWhy: boolean; onPair: (a: string, b: string) => void }
 
 export function Matrix({ simple, group, showWhy, onPair }: Props) {
@@ -25,7 +26,8 @@ export function Matrix({ simple, group, showWhy, onPair }: Props) {
   const n = ids.length, cs = n > 24 ? 24 : 30
 
   const stats = useMemo(() => {
-    let total = 0, live = 0, other = 0, none = 0, firm = 0
+    let total = 0, live = 0, other = 0, none = 0
+    const byConf = { confirmed: 0, likely: 0, uncertain: 0 }
     const rc: Record<string, number> = {}
     REASONS.forEach((r) => (rc[r.k] = 0))
     ids.forEach((a, i) => ids.forEach((b, j) => {
@@ -33,17 +35,14 @@ export function Matrix({ simple, group, showWhy, onPair }: Props) {
       total++
       const st = pairState(a.id, b.id)
       if (st === 'live') live++
-      else if (st === 'none') { none++; rc[reasonFor(a, b).k]++; if (gapFinding(a, b).conf === 'confirmed') firm++ } else other++
+      else if (st === 'none') { none++; rc[reasonFor(a, b).k]++; byConf[gapFinding(a, b).conf]++ } else other++
     }))
     const idset = new Set(ids.map((x) => x.id))
     const islands = ids.filter((x) => !EDGES.some((e) => (e.a === x.id || e.b === x.id) && idset.has(e.a) && idset.has(e.b)))
-    return { total, live, other, none, firm, rc, islands }
+    return { total, live, other, none, byConf, rc, islands }
   }, [ids])
 
-  const matches = (a: SysNode, b: SysNode) => {
-    const f = gapFinding(a, b).conf === 'confirmed'
-    return cert === 'all' || (cert === 'firm' ? f : !f)
-  }
+  const matches = (a: SysNode, b: SysNode) => cert === 'all' || gapFinding(a, b).conf === cert
   const info = hover ? (() => {
     const A = ids[hover.r], B = ids[hover.c]
     if (!A || !B || A.id === B.id) return null
@@ -80,10 +79,11 @@ export function Matrix({ simple, group, showWhy, onPair }: Props) {
           <label>How firm is the finding</label>
           <div className="seg" role="group" aria-label="Filter by certainty">
             <button aria-pressed={cert === 'all'} onClick={() => setCert('all')}>All</button>
-            <button aria-pressed={cert === 'firm'} onClick={() => setCert('firm')}><ConfGlyph conf="confirmed" /> Both confirmed</button>
-            <button aria-pressed={cert === 'weak'} onClick={() => setCert('weak')}><ConfGlyph conf="uncertain" /> Less certain</button>
+            <button aria-pressed={cert === 'confirmed'} onClick={() => setCert('confirmed')}><ConfGlyph conf="confirmed" /> Confirmed <code>{stats.byConf.confirmed}</code></button>
+            <button aria-pressed={cert === 'likely'} onClick={() => setCert('likely')}><ConfGlyph conf="likely" /> Likely <code>{stats.byConf.likely}</code></button>
+            <button aria-pressed={cert === 'uncertain'} onClick={() => setCert('uncertain')}><ConfGlyph conf="uncertain" /> Uncertain <code>{stats.byConf.uncertain}</code></button>
           </div>
-          <small>{stats.firm} of {stats.none} unconnected pairs involve two confirmed systems. A pair with no recorded link is “not found”, which is weaker than “proven absent”.</small>
+          <small>A pair is only as firm as the weaker of its two systems. “No connection found” is weaker than “proven absent”: it records what the research did not find.</small>
         </div>
         {stats.islands.length > 0 && (
           <div className="gs-islands"><label>Systems with no recorded connection</label>
@@ -91,6 +91,8 @@ export function Matrix({ simple, group, showWhy, onPair }: Props) {
           </div>
         )}
       </section>
+
+      <PairFinder />
 
       {mobile ? (
         <PairList ids={ids} showWhy={showWhy} rf={rf} cert={cert} matches={matches} onPair={onPair} />
@@ -124,7 +126,7 @@ export function Matrix({ simple, group, showWhy, onPair }: Props) {
                     const sepT = i > 0 && key(a) !== key(ids[i - 1])
                     return (
                       <button key={b.id} disabled={self}
-                        className={`mcell ${st} cert-${c}${st === 'none' && !showWhy ? ' plain' : ''}${faded ? ' faded' : ''}${sepL ? ' gsepL' : ''}${sepT ? ' gsepT' : ''}${hover?.r === i || hover?.c === j ? ' xh' : ''}`}
+                        className={`mcell ${st} cert-${c}${st === 'none' && !showWhy ? ' plain cf-' + c : ''}${faded ? ' faded' : ''}${sepL ? ' gsepL' : ''}${sepT ? ' gsepT' : ''}${hover?.r === i || hover?.c === j ? ' xh' : ''}`}
                         style={r && showWhy ? { background: r.c } : undefined}
                         onMouseEnter={() => setHover({ r: i, c: j })} onMouseLeave={() => setHover(null)} onFocus={() => setHover({ r: i, c: j })}
                         onClick={() => onPair(a.id, b.id)}
@@ -145,13 +147,47 @@ export function Matrix({ simple, group, showWhy, onPair }: Props) {
   )
 }
 
+/** Type two words, such as "lab" and "claims" or "HPRS", and see every pair that matches. Works across all systems. */
+function PairFinder() {
+  const nav = useNav()
+  const [q, setQ] = useState('')
+  const t = q.toLowerCase().trim().split(/\s+/).filter(Boolean)
+  const hay = useMemo(() => Object.fromEntries(NODES.map((n) => [n.id, `${n.name} ${n.alias ?? ''}`.toLowerCase()])), [])
+  const hits = useMemo(() => {
+    if (!t.length) return []
+    const out: { a: SysNode; b: SysNode }[] = []
+    for (let i = 0; i < NODES.length && out.length < 8; i++) for (let j = i + 1; j < NODES.length && out.length < 8; j++) {
+      const a = NODES[i], b = NODES[j], h = hay[a.id] + ' | ' + hay[b.id]
+      if (t.every((w) => h.includes(w))) out.push({ a, b })
+    }
+    return out
+  }, [q]) // eslint-disable-line react-hooks/exhaustive-deps
+  return (
+    <section className="pfind" aria-label="Find a pair of systems">
+      <label className="srcx-q"><span>Find a pair of systems</span>
+        <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="For example: hprs lab, or claims hospital" />
+      </label>
+      {t.length > 0 && hits.length === 0 && <p className="none-note">No pair has both words in its names. Try one word.</p>}
+      {hits.length > 0 && (
+        <ul className="pfind-list">
+          {hits.map(({ a, b }) => { const st = pairState(a.id, b.id); return (
+            <li key={a.id + b.id}><button onClick={() => nav.openPair(a.id, b.id)}>
+              <b>{a.name} ↔ {b.name}</b>
+              <span className={'pstate ' + st}><i className={'lk lk-' + st} />{st === 'none' ? 'No connection found' : LINK_LABEL[st]}</span>
+            </button></li>) })}
+        </ul>
+      )}
+    </section>
+  )
+}
+
 function GapKey({ showWhy }: { showWhy: boolean }) {
   return (
     <div className="mkey">
       <span><i className="k live" />Live link</span>
       <span><i className="k batch" />Regular batch</span>
       <span><i className="k manual" />Retyped or carried by hand</span>
-      <span><i className="k none" />{showWhy ? 'Not connected: the letter says why' : 'Not connected'}</span>
+      <span><i className="k none" />{showWhy ? 'Not connected: the letter says why' : 'Not connected: darker means a firmer finding'}</span>
       <span className="mk-cert"><ConfGlyph conf="confirmed" />solid edge: both systems confirmed</span>
       <span className="mk-cert"><ConfGlyph conf="uncertain" />dashed edge: a less certain finding</span>
     </div>

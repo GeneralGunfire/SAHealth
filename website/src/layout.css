@@ -1,0 +1,142 @@
+/* =====================================================================
+   Proportions: one type scale, one gutter, panel and content widths.
+   Loaded last so it settles sizes across every view.
+   Scale: 11 mono annotation · 12.5 metadata · 14 UI · 15 reading · 17 lead · 19-21 section · 22-30 page title
+   ===================================================================== */
+:root {
+  --gutter: clamp(16px, 2.2vw, 32px);
+  --edge: max(var(--gutter), calc((100% - 1760px) / 2 + var(--gutter)));
+  --maxw: 1600px;
+  --panel-w: clamp(380px, 27vw, 450px);
+  --mast: 54px;
+}
+.mast-in { padding: 0 var(--gutter); gap: 24px; }
+.note-in { padding: 8px var(--gutter); }
+.note.open .note-in { padding: 12px var(--gutter) 14px; }
+.toolbar, .strip, .fbar, .simguide { padding-left: var(--edge); padding-right: var(--edge); }
+.note:not(.open) .note-in { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 18px; }
+.note:not(.open) .note-t { flex: 1 1 auto; }
+.crumbs { flex: none; }
+.note h1 { font-size: clamp(18px, 0.9vw + 13px, 23px); line-height: 1.2; letter-spacing: -0.005em; }
+.note.open h1 { font-size: clamp(22px, 1.4vw + 13px, 30px); line-height: 1.15; max-width: 30ch; }
+.note p { font-size: 14.5px; max-width: 72ch; }
+.note-t { gap: 4px 14px; }
+
+/* scroll views share one content width */
+.view-provinces, .view-matrix, .view-journey, .view-sources, .view-glossary, .view-compare { max-width: var(--maxw); width: 100%; margin: 0 auto; padding: 20px var(--gutter) 72px; }
+.view-matrix .toolbar { padding-left: 0; padding-right: 0; }
+.view-sources .srcx, .view-glossary .gls, .view-compare .cmp { max-width: none; }
+
+/* toolbar: labels sit beside their controls so the map gets the height */
+.toolbar { gap: 6px 18px; padding-top: 6px; padding-bottom: 7px; align-items: center; }
+.tgroup { flex-direction: row; align-items: center; gap: 8px; }
+.tgroup > label { white-space: nowrap; }
+.tgroup.grow { flex: 1 1 200px; max-width: 260px; }
+.seg button { padding: 4px 10px; font-size: 12.5px; }
+.sel, .finput { height: 30px; font-size: 13px; }
+.btn { min-height: 32px; }
+.fbtn { min-height: 30px; }
+.fpanel { left: var(--edge); right: var(--edge); }
+
+/* type scale applied */
+.dossier { width: var(--panel-w); padding: 16px 22px 40px; }
+.dossier h2 { font-size: 26px; }
+.dos-pair { font-size: 22px !important; }
+.dos-lede { font-size: 15px; line-height: 1.6; max-width: 62ch; }
+.dos-lede.small { font-size: 13.5px; }
+.dos-facts dd { font-size: 14px; }
+.dossier h3 { margin: 22px 0 9px; }
+.pl-fig b { font-size: clamp(40px, 3.6vw, 58px); }
+.pl-fig span { font-size: 13px; }
+.pc-head h2 { font-size: 28px; }
+.srcx-detail h2 { font-size: 23px; }
+.gs-fig b { font-size: clamp(32px, 3vw, 44px); }
+.jp-text h3 { font-size: clamp(22px, 1.8vw + 6px, 30px); max-width: 30ch; }
+.jp-text > p { font-size: 15px; max-width: 64ch; }
+.counters b { font-size: 38px; }
+.jp-stage { height: clamp(360px, 50vh, 520px); }
+.cover h1 { font-size: clamp(54px, 10vw, 132px); }
+.cover-line { font-size: clamp(19px, 2vw, 28px); }
+.cover-body { font-size: clamp(15px, 1.2vw, 17px); max-width: 60ch; }
+.plate h2 { font-size: clamp(26px, 3vw, 44px); max-width: 24ch; }
+.plate-body p { font-size: clamp(15px, 1.2vw, 17px); max-width: 56ch; }
+.plate-n { font-size: clamp(72px, 10vw, 150px); }
+.tour-card h4 { font-size: 20px; }
+
+/* very wide screens: the map gives the panel its own column instead of sitting under it */
+@media (min-width: 1760px) {
+  .app.has-panel.app-fixed .atlas { margin-right: var(--panel-w); }
+  .app.has-panel.app-fixed .dossier { box-shadow: none; }
+}
+@media (max-width: 1180px) {
+  .jc-sys { grid-template-columns: 1fr; }
+  .srcx-grid { grid-template-columns: 1fr; }
+  .srcx-detail { position: static; }
+}
+
+/* ---------- mobile and tablet: reorganise, do not shrink ---------- */
+@media (max-width: 820px) {
+  :root { --mast: 52px; }
+  .mast-in { gap: 10px; }
+  .mast-act { gap: 4px; margin-left: auto; align-items: center; }
+  .searchbtn { min-width: 0; padding: 0 9px; }
+  .searchbtn span, .searchbtn kbd { display: none; }
+  .menuwrap > .link { font-size: 13px; padding: 6px 6px; }
+  .menu { position: fixed; left: 12px; right: 12px; top: calc(var(--mast) + 6px); width: auto; }
+  .note:not(.open) .note-in { display: block; }
+  .crumbs { margin-bottom: 2px; }
+  .note h1 { font-size: 19px; }
+  .note.open h1 { font-size: 22px; max-width: none; }
+  .note-in, .note.open .note-in { padding: 8px var(--gutter) 10px; }
+  .toolbar, .strip, .fbar, .simguide { padding-left: var(--gutter); padding-right: var(--gutter); }
+  .tgroup { flex-direction: column; align-items: flex-start; gap: 3px; }
+  .tgroup.grow { max-width: none; flex-basis: 100%; }
+  .view-provinces, .view-matrix, .view-journey, .view-sources, .view-glossary, .view-compare { padding: 14px var(--gutter) 40px; }
+  .view-matrix .toolbar { padding-left: 0; padding-right: 0; }
+  .fpanel { position: fixed; left: 8px; right: 8px; top: calc(var(--mast) + 8px); bottom: 70px; max-height: none; z-index: 120; }
+  .focusbar { left: 8px; right: 8px; max-width: none; top: 8px; }
+  .simguide { grid-template-columns: 1fr; border-left-width: 4px; }
+  .sg-n { flex-direction: row; align-items: center; gap: 10px; }
+  .sg-a { justify-content: space-between; }
+  .cmptray { left: 10px; right: 10px; bottom: 70px; max-width: none; padding: 8px 10px; gap: 8px; box-shadow: 4px 4px 0 var(--burg); }
+  .cmptray-n { display: none; }
+  .cmptray > span:first-child { flex: 1; }
+  .srch-wrap { padding: 8px; }
+  .srch { max-height: calc(100dvh - 16px); }
+  .srch-in input { font-size: 16px; }
+  .srcx-grid { grid-template-columns: 1fr; gap: 20px; }
+  .srcx-rows { max-height: 46vh; }
+  .srcx-sum b { font-size: 28px; }
+  .gls-list { grid-template-columns: 1fr; }
+
+  /* comparison tables become stacked: each system's value sits under its name */
+  .cmp-row { grid-template-columns: 1fr; }
+  .cmp-row.cmp-head { grid-template-columns: repeat(var(--n, 2), minmax(0, 1fr)); }
+  .cmp-head .cmp-l { display: none; }
+  .cmp-l { border-right: 0; border-bottom: 1px solid var(--rule2); flex-direction: row; align-items: baseline; gap: 10px; padding: 8px 12px; }
+  .cmp-c { border-right: 0; border-bottom: 1px solid var(--rule); padding: 8px 12px; }
+  .cmp-row:not(.cmp-head) .cmp-c[data-sys]::before { content: attr(data-sys); display: block; font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--burg); margin-bottom: 1px; }
+  .cmp-row:not(.cmp-head) .cmp-c:not([data-sys]) { padding-top: 8px; }
+  .cmp-row.diff .cmp-c { box-shadow: inset 3px 0 0 var(--manual); }
+  .cmp-name { font-size: 15px; }
+  .jc-r { grid-template-columns: 1fr 1fr; }
+  .jc-r > span:first-child { grid-column: 1 / -1; border-right: 0; }
+  .jc-th > span { display: none; }
+  .jc-r > span[data-j]::before { content: attr(data-j); display: block; font-family: var(--mono); font-size: 10px; color: var(--burg); font-weight: 400; }
+  .jc-cols { grid-template-columns: 1fr; }
+  .jc-head h3 { flex-basis: 100%; }
+  .ll-layer ul { display: block; }
+  .legendwrap { left: 8px; }
+}
+@media (min-width: 600px) and (max-width: 820px) {
+  .ll-layer ul { display: grid; grid-template-columns: 1fr 1fr; column-gap: 24px; }
+  .layerlist { padding-left: var(--gutter); padding-right: var(--gutter); }
+}
+@media (max-width: 430px) {
+  .brand-word { font-size: 17px; }
+  .gs-fig { gap: 12px; }
+  .gs-fig b { font-size: 32px; }
+  .pl-fig b { font-size: 38px; }
+  .seg button { padding: 5px 9px; }
+  .tabbar button { font-size: 11px; }
+}
