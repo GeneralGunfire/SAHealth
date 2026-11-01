@@ -1,0 +1,444 @@
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Discovery Health (Pty) Ltd; registration number 1997/013480/07, is an authorised financial services provider and administrator of medical schemes.      
+     
+NAPPI CODE REGISTRATION 
+AND REVIEW PROCESS 2026 
+ 
+ 
+ 
+DISCOVERY HEALTH  
+2026 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+NAPPI CODE REGISTRATION AND REVIEW PROCESS 2026 2 
+ 
+ 
+Discovery Health (Pty) Ltd; registration number 1997/013480/07, is an authorised financial services provider and administrator of medical schemes.     
+ 
+ 
+ ...........................................................................................................................................................................................................2 
+Industry overview ...........................................................................................................................................................................................3 
+Terms and definitions ....................................................................................................................................................................................3 
+NAPPI codes .....................................................................................................................................................................................................4 
+Discovery Health’s NAPPI registration process ........................................................................................................................................4 
+NAPPI review process for surgical products .............................................................................................................................................5 
+The review processes for the various product categories ...........................................................................................................5 
+Health Technology Assessment (HTA process) .........................................................................................................................................5 
+Discovery Health rules for funding new technology ......................................................................................................................5 
+Approval for new equipment .......................................................................................................................................................................6 
+Approval for digital technologies ................................................................................................................................................................6 
+Clinical evidence .......................................................................................................................................................................................6 
+Reliability and national support structure .......................................................................................................................................6 
+Functionality ..............................................................................................................................................................................................6 
+Data protection .........................................................................................................................................................................................7 
+NAPPI review process for ethical products ...............................................................................................................................................7 
+Funding from the Medical Savings Account .........................................................................................................................................7 
+Funding from risk benefits (the Scheme) ..............................................................................................................................................7 
+Annual inflationary price increases: Process for surgical products ....................................................................................................7 
+Price changes for ethical products ..............................................................................................................................................................7 
+Our confidentiality policy .............................................................................................................................................................................7 
+Contact the team ............................................................................................................................................................................................7 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+NAPPI CODE REGISTRATION AND REVIEW PROCESS 2026 3 
+ 
+ 
+Discovery Health (Pty) Ltd; registration number 1997/013480/07, is an authorised financial services provider and administrator of medical schemes.     
+ 
+Industry overview
+A National Pharmaceutical Product Interference (NAPPI) code is a unique product identifier for price adjudication in an 
+electronic environment. The NAPPI is the only accepted code for product identification by all healthcare funders in South 
+Africa. 
+MediKredit Integrated Healthcare Solutions (MediKredit) owns the NAPPI codes in South Africa and is the only organisation 
+that can assign NAPPI codes.  MediKredit created a  stipulation allowing healthcare funders to help govern NAPPI codes by 
+implementing the NAPPI Advisory Board (NAB). This is a non -profit organisation representing hospitals, medical schemes, 
+medical scheme administrators  and medical and dental associations.  
+MediKredit is responsible for managing and maintaining the NAPPI file under the governing  authority of the NAPPI Advisory 
+Board. 
+Terms and definitions
+ 
+Term Definition 
+list price, including VAT  
+This is the price submitted to MediKredit  when applying for a NAPPI code. The list price 
+is the price at which the supplier sells the product to their customers before any 
+discount. 
+max nett acquisition price  
+This is also known as the max net acquisition price or best acquisition price . It is the 
+price at which the supplier sells the product to hospital groups and healthcare 
+professionals after discounts are applied.  
+Global Medical Device 
+Nomenclature (GMDN)  
+These generic names are used to identify all medical devices managed by the GMDN 
+agency. The main purpose of GMDN is to give healthcare authorities, healthcare 
+regulators, healthcare providers and manufacturers a naming system that can be used 
+to exchange medical device information and support patient safety. Visit the GMDN 
+Agency online at www.gmdnagency.org .  
+catalogue number  
+Used by manufacturers and suppliers as unique product and pack -size identifiers in 
+their price catalogues and invoicing to their customers  
+approved product list letter 
+The approved product list letter is the reimbursement letter sent by the Surgical Risk 
+team after their benchmark review process.  
+quality accreditation  
+This is the process where products undergo accreditation and are subsequently 
+assigned quality assurance, such as CE, FDA or ISO.  
+comparator products  
+These are products that are produced by different manufacturers but that have 
+similarities in their core function and use, device material and attribute assortment. 
+They do not have to be the same to be a comparator product.  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+NAPPI CODE REGISTRATION AND REVIEW PROCESS 2026 4 
+ 
+ 
+Discovery Health (Pty) Ltd; registration number 1997/013480/07, is an authorised financial services provider and administrator of medical schemes.     
+ 
+South African Health Products 
+Regulatory Authority 
+(SAHPRA)  
+The South African Health Products Regulatory Authority (SAHPRA) oversees the 
+regulation of health products, including: 
+■ Medicines 
+■ Medical devices 
+■ In-vitro diagnostic tests and devices 
+■ Radiation emitting products 
+■ Devices used in the healthcare industry 
+SAHPRA replaced the Medicine Control Council (MCC) and the Directorate of Radiation 
+Control (DRC). 
+NAPPI codes
+Suppliers or manufacturers  of surgical consumables and devices and of ethical medicine must apply to MediKredit to get 
+NAPPI codes for their product . They need NAPPI codes so that the private healthcare sector can reimburse the p roduct 
+electronically.  
+MediKredit manages their own Product and Price File. Their service comes at a fee. The supplier or manufacturer  must give 
+their product information and list price, including VAT, during the application process.  
+Discovery Health  (Pty) Ltd. has its own internal benefit management system for Discovery Health Medical Scheme and the 
+other medical schemes it administers.  It is called the Pharmacy Benefit Management system. The Product and Price File 
+team manage the product listings and the prices of all products on the system. This aligns with  Discovery’s business 
+strategy of giving the medical schemes we administer a comprehensive suite of managed care  services. 
+Discovery Health’s NAPPI registration process
+Once MediKredit assigns a NAPPI code to a new product, the code is included in the public domain file. Anyone can view the 
+public domain file on the MediKredit website at www.medikredit.co.za . It is updated daily.  
+The Product and Price File  team are notified when new NAPPI codes are added to the public domain file. They then contact 
+the manufacturer or supplier and ask for the following information on the price file template:  
+■ Product information, e.g. active ingredients 
+■ GMDN code for surgical devices and consumables 
+■ List price, including VAT, for products where prices are not regulated by SAHPRA 
+■ Date the price becomes effective 
+■ Max nett acquisition price 
+■ Quality accreditation 
+■ Comparator catalogue number or comparator NAPPI codes 
+Once they have this information, they publish the NAPPI code on the Product and Price  File. This means that providers can 
+claim against the  NAPPI code electronically. The NAPPI  code is then reviewed by the Surgical Risk team (surgical items) or 
+the Drug Risk team (ethical items).  
+It’s important to be aware that even if a NAPPI code is enabled for electronic processing and listed on the Price and Product 
+File, this does not automatically guarantee reimbursement.  
+Discovery Health should be given adequate notice of a new product launch. This helps make sure that the company’s 
+decision whether to fund is made before the product is introduced into the market.  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+NAPPI CODE REGISTRATION AND REVIEW PROCESS 2026 5 
+ 
+ 
+Discovery Health (Pty) Ltd; registration number 1997/013480/07, is an authorised financial services provider and administrator of medical schemes.     
+ 
+NAPPI review process for surgical products
+The Surgical Risk team do an extra review process. Once complete, they send the reimbursement outcome to the supplier 
+in writing. If the product is approved, it will be listed on the approved product list. The review process takes about twenty-
+one working days. The price file template must be fully completed to avoid delays .  
+The review processes for the various product categories 
+Automatic approval 
+■ This applies to ‘Me-too’ technologies where the clinical outcomes and the submitted price are the same or lower than 
+a comparator. 
+■ If the product falls within an existing category of devices and within the reference price band of the category, it will 
+automatically be approved. The supplier will get a confirmation letter from powerbitab@discovery.co.za. 
+ 
+1) Price negotiation for ‘Me-too’ technology where the price is higher than the comparator 
+■ If the product falls into an existing category of devices but is at a premium price compared to all devices within the 
+category, it will be considered ‘pending’. More information is needed about the product to justify the premium price. 
+The supplier will be asked to complete a product information notification (PIN) form with the extra information.  
+■ If there is still a dispute about the premium price, the supplier will need to follow the Health Technology Assessment 
+process. 
+ 
+2) Non-chargeable or Scheme exclusions 
+■ If the product falls into these categories, the supplier will get a letter with the reason it was declined. 
+ 
+3) New technologies 
+■ A new technology is classified as: 
+o An existing product with a new indication, use or function 
+o An existing product that has been enhanced or improved with a premium price request 
+o A product with no existing comparator on the market  
+o An ethical product or medicine with a new active ingredient or molecules. 
+■ The Health Technology Assessment process must be followed for new technologies.  
+■ The supplier must provide published clinical proof of the improved clinical outcomes to justify the price. The 
+outcomes should also be measurable in local claims data. 
+The manufacturer can request the full list of their approved products . They will be able to see  the reimbursement and 
+listing of all their NAPPI codes. The approved product list is shared with all hospital groups monthly.  
+ 
+Note: powerbitab@discovery.co.za  is a no-reply email address. For queries about the review process or reimbursement 
+letters, please email isem@discovery.co.za .  
+Health Technology Assessment (HTA process)
+Discovery Health is committed to giving our members funding for the best quality health care available in South Africa, 
+while making sure that their cover stays affordable and sustainable in the long term.  
+The Centre for Clinical Excellence will review a new technology (medicine, medical and surgical procedures and devices, 
+diagnostics and pathology tests) using a rigorous, evidence -based decision-making process consisting of a clinical and 
+financial filter.  
+The clinical filter uses published evidence -based literature, the opinion of local and international key opinion leaders and 
+current treatment guidelines to make sure that the health technology is safe and clinically effective. The financial filter 
+assesses the health economics and budget impact of the new technology to make sure it is cost-effective and affordable.  
+Discovery Health rules for funding new technology  
+1. Discovery Health decides whether to fund a new technology  based on our clinical and economic review process , which 
+includes the following information:  
+■ Clinical evidence-based data to prove that the technology is safe and effective 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+NAPPI CODE REGISTRATION AND REVIEW PROCESS 2026 6 
+ 
+ 
+Discovery Health (Pty) Ltd; registration number 1997/013480/07, is an authorised financial services provider and administrator of medical schemes.     
+ 
+■ Clinical indications of the proposed treatment 
+■ Details of costs associated with the technology, as well as costs of comparative technologies  
+■ Health economic data to support the cost-effectiveness of the new technology 
+ 
+2. The manufacturer should include this information  in the completed Discovery Health technology evaluation document 
+and send it to the Health Technology Assessment unit or to the Surgical Risk unit. 
+ 
+3. Discovery Health has the right to decline funding for a new technology until it has been assessed through this process. 
+ 
+4. The manufacturer of a new technology must tell Discovery Health that the treatment is going to be introduced to the 
+healthcare market so that it can go through the clinical and economic review process.  
+ 
+5. The Health Technology Assessment clinical review process takes at least six months from the date the relevant clinical 
+information and studies are received to completion. The timeframe is explained in the Health Technology Assessment 
+acknowledgement letter.  
+ 
+6. If more information or studies on the product are submitted after the review is completed, these will be considered for 
+evaluation 12 months after the recommendation letter  is issued. 
+Approval for new equipment
+Equipment used in hospitals or in a healthcare practitioner ’s practice may need a billing code.  
+■ The supplier must find out whether a billing code exists that applies to the new technology or equipment 
+■ If the equipment is to be owned and used by healthcare professionals, the supplier must contact the South African 
+Medical Association or liaise directly with the healthcare practitioner about the right billing code. 
+■ If the equipment is to be owned and used by a hospital, the supplier must contact the relevant private hospital to 
+introduce the equipment and discuss the appropriate tariff codes. 
+■ If a new code is needed, the respective hospital group should initiate this. Suppliers cannot apply for a new code; it 
+must be done through either the hospital or the healthcare practitioner. 
+■ If the equipment is classified as a new technology, it will undergo the relevant Health Technology Assessment 
+process. 
+Approval for digital technologies
+Digital health products include categories such as mobile health , health information technology , wearable devices, 
+telehealth, telemedicine and personalised medicine.  
+When Discovery considers whether to approve a digital device, the Surgical Risk team will do due diligence on the 
+technology and on the supplier or manufacturer. The criteria below will be used to decide whether the product can be 
+reimbursed and incorporated into benefits. The supplier or manufacturer must have a SAHPRA licence.  
+Clinical evidence 
+The product must undergo the Health Technology Assessment process defined above. Should the device pass the clinical 
+and financial assessment, there might be further steps, such as system integration, depending on the underlying business 
+need. Suppliers will be told of the reimbursement outcome  in writing, including the funding recommendation . 
+Reliability and national support structure 
+The team will consider the retail footprint of the supplier or manufacturer to make sure all members and providers have 
+access to it. 
+Functionality 
+The minimum requirements and clinical outcomes of the device must be  explained clearly, including the ease of technical 
+integration. The integration with Discovery Health's clinical data repository lets members share their data with their 
+doctors through a seamless digital process to monitor clinical outcomes.  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+NAPPI CODE REGISTRATION AND REVIEW PROCESS 2026 7 
+ 
+ 
+Discovery Health (Pty) Ltd; registration number 1997/013480/07, is an authorised financial services provider and administrator of medical schemes.     
+ 
+Data protection 
+The supplier or manufacturer must be able to keep the members’ data secure. The team will do a data security and privacy 
+evaluation of devices and platforms . 
+NAPPI review process for ethical products
+Ethical products are reimbursed based on the benefit the product is being claimed from. There are two main categories:  
+Funding from the Medical Savings Account  
+When a member does not have an authorisation for an ethical product from a risk benefit (Chronic Illness, HIV, Oncology or 
+Prescribed Minimum Benefits), the funding will come from the member’s available Medical Savings Account or their own 
+pocket. Reimbursement will depend on the type of product and whether it qualifies for Medical Savings Account funding or 
+a General Scheme Exclusion. If the product qualifies, it will depend on the member’s plan type and whether they still have 
+funds available in their M edical Savings Account. Plans without a Medical Savings Account do not have this option available, 
+and claims will be for the member’s own pocket . 
+Funding from risk benefits (the Scheme) 
+Risk funding depends on whether the member has an authorisation for a product from a risk benefit. Once an 
+authorisation is granted , the level of reimbursement will depend on the type of product.  
+Annual inflationary price increases: Process for surgical products
+The manufacturer must tell Discovery Health in writing if they want to  submit a price change. The Product and Price File 
+team do not automatically get price updates from MediKredit.  
+Prices cannot be automatically adjusted annually. Prices cannot be adjusted by an amount exceeding the Consumer Price 
+Index or the agreed appropriate Scheme Rate for the year. The manufacturer must complete the price increase template 
+and send it to the Surgical Risk team for review. They will confirm that they have received the request, and they will send 
+written acceptance of th e adjustment if it meets the criteria. 
+Price changes for ethical products
+■ Discovery Health updates the single exit price ethicals using the Department of Health files. We get these directly 
+from the Department of Health. 
+■ For other ethical products, we use the MediKredit price. The manufacturer must submit this directly to the Product 
+and Price File team at Price_and_Product_File@discovery.co.za. We do not get price changes from MediKredit. 
+Our confidentiality policy
+We treat information we get from manufacturers in the strictest confidence. We only use the information  for internal 
+product classification,  pricing and reimbursement  purposes. 
+Contact the team
+Price and Product File: PRICE_AND_PRODUCT_FILE@discovery.co.za 
+■ New product information and pricing 
+■ Updated product information and pricing 
+■ Change in contact details 
+■ Notification of company name changes, mergers, etc 
+Surgical risk: ISEM@discovery.co.za 
+■ Approved product list 
+■ Approval for digital technologies 
+■ Annual price adjustments 
+■ Approval for new equipment 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+NAPPI CODE REGISTRATION AND REVIEW PROCESS 2026 8 
+ 
+ 
+Discovery Health (Pty) Ltd; registration number 1997/013480/07, is an authorised financial services provider and administrator of medical schemes.     
+ 
+■ Health Technology Assessment 
+Drug Risk: drm_team@discovery.co.za 
+■ Formulary considerations (only SAHPRA-registered Schedule 3 to 6 products)  
+Health Technology Assessment: cpuwatchlist@discovery.co.za 
+■ New technology review 

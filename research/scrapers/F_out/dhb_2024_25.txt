@@ -1,0 +1,508 @@
+KEY INSIGHTS FROM THE
+District Health Barometer
+2024/25
+Noluthando Ndlovu
+Programme Manager: Research and Implementation Science · Health Systems Trust
+LAUNCH Thursday, 23 April 2026
+PROGRAMME
+What we will cover this morning
+1 The publication at a glanceWhat the 2024/25 edition covers, what's new, and how to read it
+2 RMNCH: women, babies, childrenMaternal mortality, neonatal care, child nutrition, immunisation, 
+reproductive health
+3 Infectious diseases: TB and HIVCase finding, treatment success, viral suppression, ART coverage
+4 Non-communicable diseasesCervical cancer screening and mental health services at PHC
+5 Service capacity, finance, workforceIdeal Clinics, inpatient management, PHC expenditure, nursing and 
+medical HRH, surgical care
+6 The equity story and what it asks of usDistrict-level variation, cross-cutting insights, call to action
+7 Live demo: the DHB interactive dashboarddhb.hst.org.za  how to navigate, filter, and compare your district
+District Health Barometer 2024/25  |  Launch, 23 April 2026 2
+THE PUBLICATION
+The 2024/25 edition at a glance
+~20years
+Tracking district performance
+HST's flagship since 2005
+52districts
+Every district, every indicator
+League tables, maps, and trend lines
+40+authors
+A collective achievement
+NDoH, provinces, universities, MRC, 
+UNICEF, WHO, HST
+4sources
+WebDHIS · BAS · PERSAL · Stats SA
+Service delivery, expenditure, 
+workforce, demographics
+What's inside the 2024/25 edition
+Section A District ranking by indicator: 5 programme areas, ~30 indicators, every district ranked 1–52 with narrative interpretation by subject experts.
+Section B National, provincial and district profiles: trend graphs and composite views, plus indicators aligned to the District Health Plan template.
+Interactive dashboard dhb.hst.org.za:  every indicator explorable by district, province, and year, with downloadable data.
+District Health Barometer 2024/25  |  Launch, 23 April 2026 3
+READING THIS EDITION
+A word on denominators: read before comparing editions
+What changed
+Population estimates have been refreshed in DHIS for the full 
+period 2000/01 – 2028/29, incorporating the latest Stats SA 
+mid-year estimates.
+This matters because every coverage indicator e.g. 
+immunisation, antenatal booking, PHC utilisation per capita, 
+uses population as its denominator.
+Some indicator values in this edition may therefore differ 
+from earlier DHBs even where service volumes have not 
+changed.
+What this means for you
+1 Compare within this edition
+Historical trends in this DHB have been recomputed on the new denominator. 
+2 Don't cross-compare editions
+A value here and a value in the 2023/24 DHB are not on the same baseline.
+3 Service delivery ≠ coverage
+An apparent coverage shift may reflect a denominator change, not a programme change.
+4 See Box 1 in the Introduction
+Full technical note on the update, scope, and interpretation caveats.
+District Health Barometer 2024/25  |  Launch, 23 April 2026 4
+SECTION 1
+Reproductive, maternal,
+newborn and child health
+Where the health system meets women, mothers, babies and children
+SECTION 1.1 · MATERNAL AND NEONATAL
+Progress on early booking yet mortality moving the wrong way
+72.8%
+ANC 1st visit before 20 weeks
+↑ 3.0 pp since 2019/20 · Zululand 89.3% best · Alfred Nzo 54.9% 
+worst
+105.4
+In-facility maternal mortality (per 100 000 live births)
+Up from 100.6 in 2023/24 · SDG target <70 · only 14/52 districts 
+achieve it
+13.0
+Neonatal death in facility (per 1 000 live births)
+Above the SDG target of ≤12 · 15-fold district variation
+54
+68
+89
+103
+108
+112
+118
+128
+163
+0 20 40 60 80 100 120 140 160 180
+WC
+NC
+KZ
+LP
+NW
+MP
+GP
+EC
+FS
+In-facility maternal mortality ratio by province, 2024/25 The signal we cannot miss
+Lejweleputswa (FS) has become the worst-performing district, with 
+iMMR rising from 50.8 to 216.5 per 100 000 which is more than 
+four-fold in a single year.
+Zululand (KZ) stands at 28.1 per 100 000: a seven-fold gap within 
+the same country.
+No districts reported zero maternal deaths in 2024/25.
+District Health Barometer 2024/25  |  Launch, 23 April 2026 6
+SECTION 1.2 – 1.3 · CHILD HEALTH, NUTRITION, IMMUNISATION
+Cracks in our most basic childhood protections
+75.1 %
+Immunisation under 1 year coverage
+↓ from 78.7% · ~298,727 children un-/under-immunised
+76.2 %
+Measles MCV2 at 1 year
+Herd immunity threshold: ≥95% · linked to 2022–2024 outbreak
+6.9 %
+Child under-5 SAM case fatality
+Target <5% · only NW (1.7%) and WC (2.2%) meet it
+70
+72
+74
+76
+78
+80
+82
+84
+86
+88
+90
+2019/20 2020/21 2021/22 2022/23 2023/24 2024/25
+Childhood immunisation coverage is sliding backwards
+Immunisation <1yr coverage MCV2 coverage at 1yr
+Why this matters
+The 2022–2024 measles outbreak was concentrated in districts 
+with poor MCV2 coverage  a foreseeable cost of coverage 
+decline.
+30 of 52 districts are below the national average & the gap is 
+geographic, not random.
+SAM case fatality 'hotspots' persist year after year   EC 11.0%, LP 
+10.7%, FS 8.3%.
+District Health Barometer 2024/25  |  Launch, 23 April 2026 7
+SECTION 1.4 · REPRODUCTIVE HEALTH
+Contraceptive protection improving but target still out of reach
+60.6 %
+Couple year protection rate (CYPR)
+↑ from 54.9% in 2023/24 · Target 75% not met
+14.4 %
+Deliveries to 10–19 year olds
+Johannesburg 8.8% lowest · Alfred Nzo 25.1% highest
+2of 9
+Provinces exceeding CYPR target
+Only Mpumalanga (82.5%) and Free State (77.1%)
+Three stories from the reproductive health data
+The overall trend is positive
+National CYPR rose 5.7 percentage points 
+year-on-year. Male condom distribution is up. 
+The building blocks are strengthening.
+Teen deliveries falling in absolute terms
+Deliveries in 10–14 year olds fell from 4 053 
+(2020/21) to 2 387 (2024/25). Rural-metro gap 
+persists but narrowing.
+Data-quality flags need action
+Districts reporting CYPR > 100% (Sedibeng, 
+Zululand, Nkangala) warrant verification. 
+Female condom distribution remains low.
+District Health Barometer 2024/25  |  Launch, 23 April 2026 8
+SECTION 2
+Infectious disease control
+Tuberculosis and HIV: the backbone of South Africa's clinical programmes
+
+SECTION 2.1 · TUBERCULOSIS
+Case finding strengthening but treatment success under pressure
+98.2 %
+Target tested for TB (2024)
+↑ 6.5 pp from 92.2% in 2023 · 7 provinces improved
+76.2 %
+DS-TB treatment success (2023)
+↓ from 80.2% · Only NW meets 83% target
+64.7 %
+MDR-TB treatment success
+Only NW meets 73% target · 11 districts meet it
+80
+62
+57
+76
+65
+57
+0
+10
+20
+30
+40
+50
+60
+70
+80
+90
+100
+DS-TB MDR-TB Pre-XDR/XDR
+TB treatment success rate by category (%)
+2022 2023
+The TB story in one line
+We are finding more TB  but converting that to treatment 
+success is getting harder.
+TB child under-5 start-on-treatment: 90.8%, up 23 percentage 
+points
+The challenge now is retention, regimen adherence, and 
+drug-resistant disease.
+District Health Barometer 2024/25  |  Launch, 23 April 2026 10
+SECTION 2.2 · HIV AND AIDS
+Strong viral suppression — harder story on effective coverage
+8M+
+People living with HIV in SA
+25% in KZ · 7.6M know status · 5.6M on ART
+92.4 %
+Adult viral load suppression
+Within reach of UNAIDS 95% target
+50.6 %
+Antiretroviral effective coverage
+KZ 60.5% highest · WC 14.6% lowest
+0
+10
+20
+30
+40
+50
+60
+70
+2022 Q1 2023 Q1 2024 Q1 2025 Q1
+Antiretroviral effective coverage: the HIV equity story
+National KwaZulu-Natal Western Cape
+Three things to notice
+1. Treatment works:  92.4% suppression among those on ART is clinical 
+excellence.
+2. The bottleneck is retention: only 69.7% of those ever initiated 
+remain on treatment.
+3. Paediatric VLS sits at 73.5%: children are the gap in an otherwise 
+strong programme.
+District Health Barometer 2024/25  |  Launch, 23 April 2026 11
+03
+SECTION 3
+Non-communicable diseases
+Cervical cancer screening and mental health: where PHC meets prevention
+SECTION 3.1 · CERVICAL CANCER SCREENING
+A preventable cancer and a 40% screening floor
+40.0 %
+National screening coverage
+WHO target: 70% · No province meets it
+7of 9
+Provinces declining
+Between 2023/24 and 2024/25 · NW and MP the exceptions
+6.2×
+District variation
+uMkhanyakude (KZ) 97.2% · Vhembe (LP) 15.7%
+22
+28
+34
+35
+38
+41
+46
+52
+66
+0 10 20 30 40 50 60 70 80
+LP
+EC
+GP
+WC
+FS
+NC
+MP
+NW
+KZ
+Cervical cancer screening coverage by province (%) — WHO target 70% The bright spots
+North West lifted coverage by 31 percentage points in one year: 
+the largest single-year improvement in the edition.
+KZ holds 8 of the 10 best-performing districts.
+These are proof that system-led improvement is possible. 
+The question is why it hasn't happened everywhere.
+District Health Barometer 2024/25  |  Launch, 23 April 2026 13
+SECTION 3.2 · MENTAL HEALTH
+A gap between PHC treatment and involuntary admission
+43 333
+New PHC clients treated for mental health
+Declining since pre-COVID peak · data quality concerns
+56 474
+Mental health involuntary admissions
+Up from 33 351 in 2016/17 = a 69% increase
+7of 9
+Provinces: more admissions than PHC treatments
+System is admitting more than it is catching early
+What the mental health data is telling us
+The ratio is wrong
+Several provinces show implausibly low PHC 
+treatment numbers against high involuntary 
+admissions  a sign that the system is catching 
+people only at crisis, not before.
+Concentration is extreme
+Cape Town alone accounts for 83.6% of WC's 
+involuntary admissions (12 739 cases). Frances Baard 
+accounts for 79.8% of Northern Cape’s.
+Data quality is a priority
+Lejweleputswa reports 1 new PHC client treated; Free 
+State province reports 122 in total. These numbers 
+need verification before policy response.
+District Health Barometer 2024/25  |  Launch, 23 April 2026 14
+04
+SECTION 4
+Service capacity,
+access, and the workforce
+Ideal Clinics, inpatient management, finance, HRH, and surgical care
+
+SECTION 4.1 – 4.2 · INPATIENT MANAGEMENT & IDEAL CLINICS
+Ideal Clinic status edging up - inpatient capacity under-utilised
+80 %
+Ideal Clinic status nationally
+↑ from 78% · 34/52 districts above national average
+61.0 %
+District hospital bed utilisation
+Below 70% recommended minimum for 5 years
+8×
+Gap in Ideal Clinic performance
+Best district >80% · Frances Baard (NC) just 10%
+Ideal Clinic: where the concentration lies
+Top performers
+• uThukela (KZ)
+• King Cetshwayo (KZ)
+• uMzinyathi (KZ)
+• iLembe (KZ)
+• Dr Kenneth Kaunda (NW)
+Most concerning
+• Frances Baard (NC): 10%
+• Namakwa (NC): 28%
+• John Taolo Gaetsewe (NC): 33%
+• Z F Mgcawu (NC): 33%
+• West Coast (WC): 41%
+Inpatient management  efficiency under pressure
+OPD new client not referred 57.5%
+District hospitals absorbing PHC-level work
+Avg. length of stay 4.6 days
+Stable · 2.5 (Namakwa) – 6.3 (Ekurhuleni)
+Expenditure per PDE R3 710
+NW R5 008 highest · FS R2 543 lowest
+Inpatient crude death rate 4.7%
+EC 6.1% highest · WC 3.4% lowest
+District Health Barometer 2024/25  |  Launch, 23 April 2026 16
+SECTION 4.3 · FINANCE
+PHC expenditure under steady budget pressure
+R657– R961
+PHC expenditure per headcount (province range)
+Limpopo lowest · Gauteng highest  a 46% gap
+47 %
+Share of DHS spending on district hospitals
+The single largest driver of district expenditure
+1/3 +
+Share of PHC spending on HIV/AIDS
+Largest single driver of PHC expenditure
+What the financial data signals
+PHC is taking a disproportionate hit
+PHC per capita expenditure has declined since 
+2021/22  and is declining faster than district health 
+services overall. Budget pressures are landing where 
+they shouldn't.
+Allocative equity is improving…maybe
+Variation in PHC per capita spend is narrowing at both 
+provincial and district level. Whether this is equity 
+gains or just tighter budgets across the board is 
+unclear.
+Gauteng's outlier costs are structural
+GP sits at R961 per headcount, which is the highest in 
+the country, largely because patients bypass clinics for 
+hospitals. A demand-side issue, not a supply-side one.
+District Health Barometer 2024/25  |  Launch, 23 April 2026 17
+SECTION 4.4 · HUMAN RESOURCES FOR HEALTH
+A workforce showing its age
+141.3
+Professional nurses per 100 000 uninsured
+EC 173.0 highest · WC 103.6 lowest · 4.8× district gap
+33.2
+Medical practitioners per 100 000 uninsured
+HRH 2030 target: 37.9 · Only NC meets it (40.2)
+9.3×
+Medical practitioner district gap
+Dr Kenneth Kaunda 69.5 · Pixley Ka Seme 7.5
+The workforce warning the DHB is issuing
+An ageing nursing workforce, a thin mid-career layer, and too few early-career entrants in public sector
+Ageing
+Rapid growth in nurses approaching 
+retirement across every province.
+Missing middle
+Mid-career professional nurses declining —
+the most productive cohort.
+Weak inflow
+Severely limited entry of early-career nurses 
+into the public sector.
+Gender concentration
+85% female, 15% male — a 1:6 ratio with its 
+own workforce planning implications.
+District Health Barometer 2024/25  |  Launch, 23 April 2026 18
+SECTION 5 · SURGICAL CARE
+A chapter that says: we do not yet measure what we should
+1/3
+of the global burden of disease could be addressed by 
+surgical care.
+5 billion people globally lack access to safe surgery. Most live in low- and middle-
+income countries.
+Where South Africa stands
+1 WHO mandate
+District hospitals should provide essential and emergency surgical care (EESC) which 
+is a core UHC commitment.
+2 Current reality
+District hospital surgical capacity in SA is limited. Investment in SAO (surgical, 
+anaesthetic, obstetric) staff has historically been thin.
+3 What we measure
+Caesarean section is currently the only routinely-reported indicator of district 
+hospital surgical activity.
+4 What this chapter is asking for
+Routine national surgical indicators because without them we cannot identify service 
+gaps or design policies to close them.
+District Health Barometer 2024/25  |  Launch, 23 April 2026 19
+CROSS- CUTTING
+The equity story — district variation in one country
+National averages conceal more than they reveal.
+15× Neonatal death rate
+Best: Namakwa — 1.5 per 1 000
+Worst: Ngaka Modiri Molema — 22.4 per 1 000
+9.3× Medical practitioners
+Best: Dr Kenneth Kaunda — 69.5 per 100 000
+Worst: Pixley Ka Seme — 7.5 per 100 000
+7.7× Maternal mortality
+Best: Zululand — 28.1 per 100 000 LB
+Worst: Lejweleputswa — 216.5 per 100 000 LB
+6.2× Cervical cancer screening
+Best: uMkhanyakude — 97.2% coverage
+Worst: Vhembe — 15.7% coverage
+4.8× Professional nurses
+Best: Buffalo City — 250.3 per 100,000
+Worst: Z F Mgcawu — 52.3 per 100,000
+8× Ideal Clinics
+Best: Top KZ districts — ~100% status
+Worst: Frances Baard — 10% status
+District Health Barometer 2024/25  |  Launch, 23 April 2026 20
+WHAT THIS MEANS
+Five things to take from this year's DHB
+01
+There is progress and this should be celebrated
+Early ANC booking, TB case finding, adult viral suppression, Ideal Clinic status are all moving in the right direction.
+02
+There are four signals that should not be ignored
+Maternal mortality increased. Immunisation has gone down. Cervical cancer screening at 40%. An ageing nursing workforce.
+03
+Averages hide the truth
+The variation within South Africa is often greater than the variation between South Africa and its peers. District is the unit of change.
+04
+Data quality still needs work
+Mental health, some expenditure indicators, and outlier district values are flags for routine data system strengthening.
+05
+This is a UHC/NHI readiness report
+Quality, equity, workforce, efficiency which are the four pillars of UHC are exactly what the DHB measures district by district.
+THANK YOU
+This edition is the work of 42 authors
+across government, research institutions, universities, and multilateral partners.
+Amilcar Juggernath Brandon Rathinasamy Danita Hingston Deirdre Pansegrouw
+Edwina Mabuela Elizabeth Maseti Gilbert Tshitaudzi Hlengani T. Mathema
+Hyla Kluyts Jaco Murray Jonatan Daven Kathryn Chu
+Kim Jonas Lesley Bamford Livhuwani Mashamba Mags Beksinska
+Makhosazana Khoza Maryam Rumaney Mathilda Ntloana Minenhle Mbanjwa
+Motshedisi Sebitloane Muthuphei Netshinombelo Naomi Massyn Nocawe Ndukula
+Nompumelelo Mbele Nompumelelo Ntshangase-Mpanza Norbert Ndjeka Noxolo Madela
+Priyanka Naidu Roma Ramphal Sadiyya Sheik Sebotse Ngake
+Sicelo Dlamini Sindisiwe Ngobese Tamlyn MacQuene Tebogo Maomela
+Terrance Magoro Thobelani Majola Tshepo Molapo Waasila Jassat
+Zandile Kubeka Zinhle Mtwane
+…and to every district and facility manager, and every health worker, whose daily work makes every number in this book possible.
+District Health Barometer 2024/25  |  Launch, 23 April 2026 24
+Acknowledgements
+• National Department of Health
+• National Treasury
+• Co-editors: Emanuel Dominic, Ntombi Blose, Matome 
+Mokganya & Ashnie Padarath
+• Technical Reviewers & language editors: Naomi 
+Massyn & Sadiyya Sheik
+• Layout & Design: Ink Design Publishing Solutions
+• Wimmy
+
+NOW LIVE
+Let's explore your district.
+The DHB interactive dashboard — live
+https://dhb.hst.org.za/
+What we'll do together
+• Navigate any indicator at national, provincial, district level
+• Compare districts side-by-side
+• Drill into trends over time
+• Download the data behind every number
+District Health Barometer 2024/25  |  Launch, 23 April 2026 23
+BEFORE WE GO LIVE
+A two-minute tour of the dashboard
+A short video overview, then we go live.
+dhb.hst.org.za  ·  approx. 2 minutes
+District Health Barometer 2024/25  |  Launch, 23 April 2026 22
+
+DHB Publication and Dashboard Survey
+We are continuously striving to 
+improve so please complete this 
+short survey so we can get your 
+feedback.
+Scan the QR Code OR Follow this 
+link: 
+https://redcap.hst.org.za/redcap/su
+rveys/?s=9PTPFLAPHJT4W9L3

@@ -48,3 +48,6 @@ sa-health-data-explainer-video/node_modules/
 
 # Test/coverage output
 coverage/
+
+# Website scratch
+website/*.log

@@ -1,0 +1,27 @@
+## hpcsa_iregister https://hpcsaonline.custhelp.com/app/i_register
+ERROR 404 Client Error: Not Found for url: https://hpcsaonline.custhelp.com/app/i_register
+
+## sapc_find https://www.pharmcouncil.co.za/
+title=sapc website - SAPC
+forms=[]
+links=['/registered-persons', '/registered-organizations', '/Media/Default/Documents/Media%20Documents/2026%20National%20Pioneer%20Pharmacy%20Awards%20Winners_excl%20Research.pdf', 'http://interns.pharma.mm3.co.za/SearchRegister', 'https://sapcconference.co.za/registration/', 'https://www.pharmcouncil.co.za/Media/Default/Board%20Notices/Board%20Notice%20-%20BPharm%20Curriculum%20Outline.pdf', 'https://www.sapc.za.org/Media/Default/Documents/BN860_2025_Fees%20payable%20to%20Council%202026.pdf', '/cpdblog/SAPC-registration-app', 'http://interns.pharma.mm3.co.za/SearchRegister', 'http://interns.pharma.mm3.co.za/studentRegistration', 'registered-persons', 'registered-organizations', '/cpdblog/SAPC-registration-app', 'http://interns.pharma.mm3.co.za/SearchRegister/PharmacistSearch', 'http://interns.pharma.mm3.co.za/studentRegistration', '/Media/Default/Terms%20of%20Use/Terms%20of%20Use_SAPC%20Website.pdf', '/Media/Default/Terms%20of%20Use/Privacy%20Notice_SAPC%20Website.pdf']
+
+## sanc_home https://www.sanc.co.za/
+ERROR 403 Client Error: Forbidden for url: https://www.sanc.co.za/
+
+## cms_home https://www.medicalschemes.co.za/
+title=Council for Medical Schemes (CMS) | Home
+forms=[('https://www.medicalschemes.co.za/', ['s']), ('https://www.medicalschemes.co.za/', ['s'])]
+links=['https://www.medicalschemes.co.za/publications/#2009-2010-wpfd-annual-reports', 'https://www.medicalschemes.co.za/policy-research/', 'https://www.medicalschemes.co.za/publications/#2009-2010-wpfd-annual-reports', 'https://www.medicalschemes.co.za/policy-research/', 'https://www.medicalschemes.co.za/cms-annual-report-2023-24/', 'https://www.medicalschemes.co.za/download/3817/industry-report-2024/30561/cms-industry-report-2024_4-dec.pdf', 'https://www.medicalschemes.co.za/cms-annual-report-2023-24/', 'https://www.medicalschemes.co.za/download/3796/2024-25-annual-report/30345/cms-annual-report-2024_25.pdf', 'https://www.medicalschemes.co.za/download/2040/bua-health-magazine/30840/bua-health-member-protection-magazine.pdf', 'https://www.medicalschemes.co.za/download/2324/related-healthcare-regulation/30118/medical-schemes-act-131-of-1998.pdf', 'https://www.medicalschemes.co.za/download/2324/related-healthcare-regulation/30118/medical-schemes-act-131-of-1998.pdf', 'https://www.medicalschemes.co.za/cms-annual-report-2025-26-the-year-of-the-clean-audit/', 'https://www.medicalschemes.co.za/category/annual-reports/', 'https://www.medicalschemes.co.za/cms-annual-report-2025-26-the-year-of-the-clean-audit/', 'https://www.medicalschemes.co.za/cms-annual-report-2025-26-the-year-of-the-clean-audit/', 'https://www.medicalschemes.co.za/latest-publication/circular-32-of-2026-registration-of-mint-medical-scheme/', 'https://www.medicalschemes.co.za/latest-publication/circular-31-of-2026-general-concerns-noted-during-the-analysis-of-the-2025-annual-financial-statements-and-annual-statutory-returns/']
+
+## bhf_home https://www.bhfglobal.com/
+title=
+	
+		Home
+		
+
+forms=[('/search/', ['q']), ('/', ['__EVENTTARGET', '__EVENTARGUMENT', '__VIEWSTATE', '__VIEWSTATEGENERATOR', '__VIEWSTATEENCRYPTED'])]
+links=['/PCNS/How-to-Search-for-Practice-Numbers/']
+
+## ohsc_pubs https://ohsc.org.za/publications-report-2/
+ERROR HTTPSConnectionPool(host='ohsc.org.za', port=443): Max retries exceeded with url: /publications-report-2/ (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1032)')))

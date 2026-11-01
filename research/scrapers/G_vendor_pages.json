@@ -1,0 +1,685 @@
+{
+ "jembi": {
+  "url": "https://www.jembi.org/",
+  "status": 200,
+  "title": "Health In Africa | Jembi Health Systems | South Africa",
+  "desc": "Jembi partners with international aid organizations and governments to build human-centered health information systems in low-resource settings.",
+  "h": [
+   "Strengthening Public Health Through Innovative Technology",
+   "What We Do"
+  ],
+  "p": [
+   "We partner with aid organisations and\u00a0governments, to design\u00a0human-centred, open-sourced health information systems. Extracting insights that empower decision-makers, health-workers and patients in Africa.",
+   "We specialise in digital health information systems for African low-resource settings. We focus on enterprise software and facility hardware. From design to development, then onward to implementation, training and support. And in future, data analysis for the strategic management of those limited resources."
+  ]
+ },
+ "openhim": {
+  "url": "https://openhim.org/",
+  "status": 200,
+  "title": "OpenHIM | OpenHIM",
+  "desc": "Console for administrating the OpenHIM Core",
+  "h": [
+   "About",
+   "Mediators",
+   "Acts as a reverse proxy for web services",
+   "Gain visibility into your SOA",
+   "Extend the OpenHIM's request processing via mediators",
+   "Secure access to your web services",
+   "ATNA: audit repository and node authentication",
+   "Alerting, for when things go wrong"
+  ],
+  "p": [
+   "The Open Health Information Mediator (OpenHIM) is a middleware component designed to ease interoperability between disparate information systems. It provides secure communications and data governance as well as support for routing, orchestrating and translating requests as they flow between systems.",
+   "The OpenHIM allows you to secure and view requests to your web service APIs . It acts as a reverse proxy to your upstream services and while doing so enables visibility into your service-oriented architecture (SOA) by logging each request and by providing metrics about requests hitting your services. It also provides a central entry point into your SOA and allows you to secure access through mutual TLS or basic-auth.",
+   "The OpenHIM is easy to install and can be easily configured to meet your needs through the administration console. You can also extend the OpenHIM to transform or orchestrate requests through the mediator framework."
+  ]
+ },
+ "ohie": {
+  "url": "https://ohie.org/",
+  "status": 200,
+  "title": "Homepage - OpenHIE",
+  "desc": "OpenHIE is a community of individuals who strive to develop health information exchanges that improve patient care, health, and so much more.",
+  "h": [
+   "Improving health outcomes for resource emerging communities",
+   "What We Do",
+   "Partnering Organizations",
+   "Upcoming Events",
+   "OHIE Terminology Service Call",
+   "OHIE Architecture & Standards Call",
+   "eHealth Leaders Forum",
+   "About"
+  ],
+  "p": [
+   "We are a community of people building an open framework to support nations as they develop health information exchanges (HIEs) to improve patient care, public health, and the management of health resources.",
+   "Take a look at how the OpenHIE Community is helping to solve health problems and improve outcomes for resource emerging communities across the globe.",
+   "Establishing health data exchange architectures, interfaces, and standards that enable data to be accessed and shared appropriately and securely across the complete spectrum of care, within all applicable settings and with all relevant stakeholders so the data can be used and interpreted cohesively culminating in the development of the Nigeria National Data Repository (NDR)."
+  ]
+ },
+ "altron_healthtech": {
+  "url": "https://healthtech.altron.com/",
+  "status": 200,
+  "title": "Altron HealthTech Transforming Healthcare Through Technology Solutions",
+  "desc": "For more than 30 years, we've helped keep healthcare moving. Our next chapter is focused on connecting healthcare in new ways through data, insight...",
+  "h": [
+   "Building the future of connected healthcare.",
+   "Powering healthcare,",
+   "across the whole system.",
+   "Connecting healthcare. Improving lives.",
+   "From practice to patient. Connected every step of the way.",
+   "Healthcare is one journey. We help connect it.",
+   "Purpose-built solutions across the healthcare ecosystem",
+   ""
+  ],
+  "p": [
+   "Unleash the power of connected healthcare \u2013 solutions that secure your business\u2019s sustainability and growth in the healthcare ecosystem.",
+   "The future of health is in connected care, supported by innovative technology that promotes a holistic, functional, and patient-centred business environment.",
+   "The future of health is in connected care, supported by innovative technology that promotes a holistic, functional, and patient-centred business environment."
+  ]
+ },
+ "healthbridge": {
+  "url": "https://www.healthbridge.co.za/",
+  "error": "HTTPSConnectionPool(host='www.healthbridge.co.za', port=443): Max retries exceeded with url: / (Caus"
+ },
+ "medikredit": {
+  "url": "https://www.medikredit.co.za/",
+  "status": 403,
+  "title": "Just a moment...",
+  "desc": "",
+  "h": [],
+  "p": []
+ },
+ "dhis2": {
+  "url": "https://dhis2.org/",
+  "status": 200,
+  "title": "Home - DHIS2",
+  "desc": "Collect, visualize and analyze your data with DHIS2, the world's largest health information management system, a global public good.",
+  "h": [
+   "See what you can do with DHIS2!",
+   "Health",
+   "Climate & Health",
+   "Logistics",
+   "Education",
+   "DHIS2 & HISP: Supporting Local Information Systems Worldwide",
+   "Explore DHIS2's global impact",
+   "Could DHIS2 work for you?"
+  ],
+  "p": [
+   "Discover how DHIS2's built-in features and extensible design allow you to collect, manage, analyze, and share data of any kind.",
+   "DHIS2 is an open-source software platform developed and implemented by the HISP network, a global collaboration between the HISP Centre at the University of Oslo and local HISP groups in Africa, Asia, the Middle East, and the Americas. HISP\u2019s work with local stakeholders over 30+ years has supported the adoption of DHIS2 as a locally-owned information system in more than 80 countries.",
+   "Schedule a demo to speak with one of our experts to discuss your use case and how DHIS2 could help you manage your data \u2013 for health programs, disease surveillance, education management, and more."
+  ]
+ },
+ "openmrs": {
+  "url": "https://openmrs.org/",
+  "status": 200,
+  "title": "OpenMRS \u2013 Electronic medical records built by a global community. Write code, save lives.",
+  "desc": "Electronic Medical Records built by a Global Community Coming together to write code, save lives. Because better records support better healthcare. Join Us Learn More 3000+ Community Members 8000+ Facilities Worldwide 70+ Countries 15 million Patient Records Setting the standard for digital patient records Our community builds and maintains the world\u2019s leading open-source medical records\u2026",
+  "h": [
+   "Electronic Medical Records built by a Global Community",
+   "Setting the standard for digital patient records",
+   "A generous, talented global community of contributors",
+   "The world\u2019s leading\u2028open-source EMR system",
+   "#WeAreOpenMRS",
+   "Latest from Our Blog",
+   "Product",
+   "Community"
+  ],
+  "p": [
+   "Coming together to write code, save lives. Because better records support better healthcare.",
+   "Our community builds and maintains the world\u2019s leading open-source medical records system.",
+   "Quickly adapt for any clinical needs, from Primary Care, NCD, MCH /ANC, HIV, TB, Malaria, COVID, and more in your language."
+  ]
+ },
+ "bahmni": {
+  "url": "https://www.bahmni.org/",
+  "status": 200,
+  "title": "Bahmni\u2122 Open Source EMR & Hospital Information System (HMIS)",
+  "desc": "Bahmni is an Award winning free and opensource EMR and Hospital System, designed for Low Resource Environments, Clinics, NGOs and Governments. Adopted in over 50 countries world-wide. ",
+  "h": [
+   "",
+   "Hospital System For Low Resource Settings",
+   "Bahmni is an easy-to-use EMR & hospital system. It combines and enhances existing open source products into a single solution.",
+   "Discover Bahmni",
+   "Clinical, diagnostic and patient management information are all important for effective patient care. The information that Bahmni makes accessible helps health care providers to improve the efficiency and quality of patient care, reduce the margin of error in clinical diagnosis, and advocate for policies related to public health in rural areas.",
+   "implementations",
+   "500+ Sites. 50+ Countries. 4K+ Users. 20M+ Patient Records",
+   "\ud83c\udf89 Bahmni announced as the Winner of the Open Source Creation category at the Future Of Government Awards 2023 !"
+  ],
+  "p": [
+   "Manage patient information across registration, point of care, investigations, and billing",
+   "An article describing how Bahmni is helping in better insights and decision making in low resource environments by Arvind Sethia . Click on the banner above to read the full article.",
+   "Oct-2023 : Announcement on the SNOMED Website about the collaboration initiative with Bahmni EMR, where-in Bahmni is now integrated with Snowstorm terminology server and supports recording data in SNOMED CT, along with various other use-cases. Click the banner above to read the full article and supporting links."
+  ]
+ },
+ "redox": {
+  "url": "https://redoxengine.com/",
+  "status": 200,
+  "title": "Your healthcare data integration problems, solved.",
+  "desc": "Healthcare organizations use Redox to connect once and exchange data anywhere.",
+  "h": [
+   "Your healthcare data integration  problems, solved.",
+   "Interoperability built for the AI era",
+   "Unlock AI-driven insights by getting real time data into your cloud",
+   "Solutions",
+   "For vendors",
+   "For providers",
+   "For payers",
+   "Case studies"
+  ],
+  "p": [
+   "Redox is your interoperability partner, powering intelligent healthcare data exchange at scale.",
+   "Connect, prepare, and activate real-time data from any source with the Redox platform.",
+   "* Redox holds a HITRUST r2 certification for AWS-hosted and GCP-hosted data transactions"
+  ]
+ },
+ "particle": {
+  "url": "https://www.particlehealth.com/",
+  "status": 200,
+  "title": "Particle Health | Actionable Data for Healthcare Innovators",
+  "desc": "Fuel next-gen healthcare solutions with clean, actionable data from 270 million+ patient records.",
+  "h": [
+   "Innov a te better with product-ready insights",
+   "Transform medical records into actionable clinical insights.",
+   "Quickly build. Proactively care. Strategically grow.",
+   "What can we do for you?",
+   "The right data, at the right time in the right place",
+   "Peruse Our Data Solutions",
+   "Peruse Our Data Solutions",
+   "Insights from Data"
+  ],
+  "p": [
+   "Fuel innovative solutions with 320+ million patients\u2019 medical records piped in live from the largest largest healthcare networks and distilled by Particle\u2019s simple, elegant API platform.",
+   "Fuel innovative solutions with 320+ million patients' medical records piped from the largest healthcare networks, distilled by Particle.",
+   "\u2026by gathering their external health data before their first visit with us. Particle Health\u2019s API is a promising solution for us and we look forward to building more innovative solutions together.\u201d"
+  ]
+ },
+ "healthgorilla": {
+  "url": "https://www.healthgorilla.com/",
+  "status": 200,
+  "title": "Health Gorilla | Health Data Network, Infrastructure, & APIs",
+  "desc": "Health Gorilla, a designated Qualified Health Information Network under TEFCA, provides interoperability solutions delivering secure, real-time access to deduplicated, AI-ready health data. Health Gorilla supports EHR vendors, value-based care organizations, and digital health innovators with data-driven workflows that enable more informed, connected, and efficient care.",
+  "h": [
+   "The patient's whole story, one connection away",
+   "Health Gorilla Achieves Federal Designation as a QHIN",
+   "The value we add, in seven steps",
+   "Who we serve",
+   "Universal data access. Compliant at our core.",
+   "Calculate your ROI",
+   "At the forefront of interoperability",
+   "Get started today"
+  ],
+  "p": [
+   "Health Gorilla provides the national network, infrastructure, and APIs to access patient data securely and comply with the CalHHS DxF and TEFCA.",
+   "Health Gorilla becomes the nation\u2019s first dual-designated QHIN TM and QHIO, serving as a government-designated intermediary to participate in both TEFCA SM and the California Data Exchange Framework",
+   "Our value isn't \"we have the data.\" It's the operated pipeline that turns fragmented, duplicated, multi-source data into one trustworthy record."
+  ]
+ },
+ "smilecdr": {
+  "url": "https://www.smilecdr.com/",
+  "error": "HTTPSConnectionPool(host='www.smilecdr.com', port=443): Max retries exceeded with url: / (Caused by "
+ },
+ "hapi": {
+  "url": "https://hapifhir.io/",
+  "status": 200,
+  "title": "HAPI FHIR - The Open Source FHIR API for Java",
+  "desc": "",
+  "h": [
+   "A Free and Open Source Global Good: Powering Interoperability Around the World for 23 Years.",
+   "HAPI FHIR 6.2.0 (Vishwa) \u203a",
+   "Demonstration/Test Page",
+   "Commercial Support",
+   "Some Ways You Can Use HAPI FHIR",
+   "Friends of HAPI FHIR"
+  ],
+  "p": [
+   "HAPI FHIR is a complete implementation of the HL7 FHIR standard for healthcare interoperability in Java.\n\t\t\tWe are an open community developing software licensed under the business-friendly Apache Software License 2.0 .\n         HAPI FHIR is a product of Smile Digital Health .",
+   "The HAPI FHIR Global Atlas is inspired by our friends at the OpenMRS project.\n\t\t\t\t\t\tWe would love to add your project, company, or organization to the map. Learn more about how you can add yourself (or update/remove an existing entry).",
+   "This is the homepage for the HAPI-FHIR library. We are developing an open-source\n\t\t\t\timplementation of the FHIR specification in Java.\u00a0FHIR\u00a0(Fast Healthcare Interoperability Resources) is a\n\t\t\t\tspecification for exchanging healthcare data in a modern and developer friendly way. Note that this is the\n\t\t\t\thome for the FHIR version of HAPI. For HL7 v2 support, see hapi-hl7v2."
+  ]
+ },
+ "medplum": {
+  "url": "https://www.medplum.com/",
+  "status": 200,
+  "title": "Medplum",
+  "desc": "",
+  "h": [
+   "Build and run modern healthcare apps",
+   "A platform built for healthcare complexity",
+   "Solutions for all scopes and scales",
+   "Connect to the healthcare ecosystem",
+   "Trusted infrastructure, to meet any future you build",
+   "What healthcare builders are saying",
+   "Start building with Medplum today"
+  ],
+  "p": [
+   "Medplum is the open source developer platform for shipping clinical software. Start with our production-ready apps, then customize them to fit your needs. Explore the Provider App Build on the Platform Start from CLI or GitHub npm init medplum git clone https://github.com/medplum/medplum.git View Our Docs Learn the fundamentals of building with Medplum",
+   "Build what you need\u2014without rebuilding the foundation. Medplum provides the core primitives required to ship and operate healthcare software in production.",
+   "Integrate with any partner, anywhere, in any way with data share options in a variety of formats."
+  ]
+ },
+ "aidbox": {
+  "url": "https://www.health-samurai.io/aidbox",
+  "status": 200,
+  "title": "Free FHIR Server for Dev, Enterprise-Ready | Aidbox | Health Samurai",
+  "desc": "Certified FHIR R4/R5/R6 server with SMART on FHIR, bulk export, PostgreSQL. Free for development, paid production tier. Trusted by 500+ healthcare vendors.",
+  "h": [
+   "Aidbox \u2014 FHIR Server. Free for Dev, Enterprise-Ready for Prod",
+   "Everything you need to run a FHIR workflow at scale",
+   "See how Aidbox FHIR server powers the system you want to build",
+   "What our customers say",
+   "Deploy Aidbox your way",
+   "Flat pricing with no hidden fees",
+   "Support Plans",
+   "Join the Aidbox Community"
+  ],
+  "p": [
+   "Configurable billing platform shaped around your workflows, payers, and business model",
+   "4medica modernizes clinical data infrastructure with Aidbox, powering next-generation healthcare solutions",
+   "Migrating to Aidbox: How Deep 6 AI enhanced performance of its AI pipeline for clinical trial recruitment"
+  ]
+ },
+ "firely": {
+  "url": "https://fire.ly/",
+  "status": 403,
+  "title": "403 - Forbidden",
+  "desc": "",
+  "h": [
+   "403 - Forbidden"
+  ],
+  "p": []
+ },
+ "metriport": {
+  "url": "https://www.metriport.com/",
+  "status": 200,
+  "title": "Metriport | Healthcare Data Infrastructure",
+  "desc": "Complete real-time patient context from every source that matters - transformed into relevant intelligence for your care teams and their AI agents.",
+  "h": [
+   "Healthcare data infrastructure for next generation care delivery.",
+   "Healthcare data infrastructure for next generation care delivery.",
+   "Make data your advantage. For every healthcare organization, from startup to enterprise.",
+   "Built for the scale of U.S. healthcare",
+   "One platform for every workflow",
+   "Solutions for every healthcare organization",
+   "Build at enterprise scale. Ship at startup speed.",
+   "Open source, with no black boxes: best-in-class trust, transparency, and security."
+  ],
+  "p": [
+   "Complete real-time patient context from every source that matters - transformed into relevant intelligence for your care teams and their AI agents.",
+   "Complete real-time patient context from every source that matters - transformed into relevant intelligence for your care teams and their AI agents.",
+   "AI summaries, suspected conditions, and HEDIS care gaps, read off the whole record."
+  ]
+ },
+ "zus": {
+  "url": "https://zushealth.com/",
+  "status": 200,
+  "title": "Healthcare Data Platform for Longitudinal Care | Zus",
+  "desc": "Connect patient data across the care journey with an always-on patient record that supports faster decisions, care coordination, and clinical workflows.",
+  "h": [
+   "Healthcare information should move at the speed of care.",
+   "Patient data is fragmented, incomplete, unorganized, and chaotic.",
+   "Connect patient data across the healthcare ecosystem.\u200d",
+   "An AI-native data platform that unifies it into one common, continuously updated patient record.",
+   "Surface the right information and insights where healthcare decisions happen.",
+   "Finally bringing information speed to healthcare.",
+   "How Zus improves care",
+   "Put the Zus network and platform to work"
+  ],
+  "p": [
+   "Built for Value-Based Care \u00b7 Digital Health \u00b7 Diagnostics \u00b7 Provider Organizations",
+   "Zus connects fragmented healthcare data through our network, transforms it into a complete, always-on patient record on our platform, and brings the right information into the workflows where healthcare decisions happen.",
+   "Built for Value-Based Care \u00b7 Digital Health \u00b7 Diagnostics \u00b7 Provider Organizations"
+  ]
+ },
+ "verato": {
+  "url": "https://verato.com/",
+  "status": 200,
+  "title": "Verato MDM Cloud\u2122 | Master Data Management & Identity Resolution",
+  "desc": "Fragmented identity creates gaps in customer experiences, growth, and AI readiness. Verato MDM Cloud\u2122 fixes it with identity resolution. See how.",
+  "h": [
+   "Healthcare runs on data. Verato makes it trustworthy.",
+   "Where do you want to start?",
+   "Your systems don\u2019t agree on who they\u2019re talking about. That\u2019s the real problem.",
+   "What the demo\u00a0won\u2019t\u00a0tell you about your MDM vendor.",
+   "AI agents are only as reliable as the identity data beneath them",
+   "Organizations trust\u00a0Verato\u00a0to deliver high-fidelity data",
+   "Explore resources to advance your identity data strategies",
+   "Get identity right from the start"
+  ],
+  "p": [
+   "Your systems of record are only as good as what\u2019s underneath them. Verato MDM Cloud\u2122 provides the governed, reconciled data layer beneath systems of record, insight, and engagement for healthcare, life sciences, and other regulated industries \u2014 the data infrastructure that every application and AI agent depends on.",
+   "Verato and Tech Mahindra partner to improve data quality and support healthcare AI initiatives.",
+   "Verato\u00a0named in\u00a0Enterprise Patient Identity, EMPI, and Patient Matching for RCM in Black Book Research\u2019s 2026 report on Health & Hospital Systems."
+  ]
+ },
+ "nextgate": {
+  "url": "https://nextgate.com/",
+  "error": "HTTPSConnectionPool(host='nextgate.com', port=443): Max retries exceeded with url: / (Caused by SSLE"
+ },
+ "senzing": {
+  "url": "https://senzing.com/",
+  "status": 200,
+  "title": "Senzing Entity Resolution Software: Know Who Is Who in Real Time",
+  "desc": "Senzing entity resolution software resolves identities and reveals relationships in real time. No training, no data science team. Scales to billions of records.",
+  "h": [
+   "Know who\u2019s who",
+   "before it matters.",
+   "Where in your systems can you see everything you know about a person?",
+   "The layer your stack is missing, and the engine that delivers it.",
+   "Agentic AI runs on identity",
+   "Built for the systems that come next.",
+   "Identity intelligence is needed wherever decisions depend on knowing who\u2019s who.",
+   "More data, better intelligence"
+  ],
+  "p": [
+   "Every fraud loss, poor customer experience, and AI hallucination starts the same way: you don\u2019t truly know who you\u2019re dealing with. Senzing fixes that in real time, at any scale.",
+   "Most organizations can\u2019t answer that question. This lack of identity intelligence means identity data is fragmented across CRM, transactions, fraud detection, compliance systems, dozens of sources, each with a partial view.",
+   "What if your fraud system sees multiple customers. The same person opened three accounts last month. Synthetic identities, related bad actors, and duplicate accounts hide in the spaces between systems. Each one is a clean signal in isolation. The pattern only shows up when the identities are resolved."
+  ]
+ },
+ "openempi": {
+  "url": "https://www.openempi.org/",
+  "status": 200,
+  "title": "Enterprise Record Deduplication & Master Patient Index | OpenEMPI",
+  "desc": "OpenEMPI is an enterprise entity-resolution engine that deduplicates and links records at scale \u00e2\u0080\u0094 combining deterministic, probabilistic, and artificial intelligence-based matching. Built as a Master Patient Index for healthcare, proven across any domain.",
+  "h": [
+   "Turn duplicate records into one source of truth .",
+   "OpenEMPI in plain terms",
+   "How identity gets resolved",
+   "An engine built for matching at scale",
+   "Deduplication for every domain",
+   "For executives",
+   "For engineers",
+   "Ready to deduplicate with confidence?"
+  ],
+  "p": [
+   "OpenEMPI is an enterprise entity-resolution engine that deduplicates and links records at scale.\n            Deterministic, probabilistic, and artificial intelligence-based matching in one configurable pipeline \u00e2\u0080\u0094 built as a\n            Master Patient Index for healthcare, proven anywhere identity matters.",
+   "Deterministic, probabilistic, and artificial intelligence-based matching in a single engine.",
+   "The product is built for organizations that need one reliable identity view from many imperfect data sources."
+  ]
+ },
+ "hl7": {
+  "url": "https://www.hl7.org/",
+  "status": 202,
+  "title": "",
+  "desc": "",
+  "h": [],
+  "p": []
+ },
+ "ihe": {
+  "url": "https://www.ihe.net/",
+  "status": 200,
+  "title": "Integrating the Healthcare Enterprise (IHE) - IHE International",
+  "desc": "",
+  "h": [
+   "Integrating the Healthcare Enterprise (IHE)",
+   "Events"
+  ],
+  "p": [
+   "IHE is an initiative by healthcare professionals and industry to improve the way computer systems in healthcare share information. IHE promotes the coordinated use of established standards such as DICOM and HL7 to address specific clinical needs in support of optimal patient care. Systems developed in accordance with IHE communicate with one another better, are easier to implement, and enable care providers to use information more effectively.",
+   "Become an IHE member organization and improve the interoperability of healthcare information systems.",
+   "Read National Portal for Digital Exchange COVID-19 Patient Data in The Netherlands"
+  ]
+ },
+ "digitalsquare": {
+  "url": "https://digitalsquare.org/",
+  "status": 200,
+  "title": "Global Goods Guidebook",
+  "desc": "Connecting the world to open-source digital public goods for sustainable development",
+  "h": [],
+  "p": []
+ },
+ "healthdataglobalgoods": {
+  "url": "https://digitalpublicgoods.net/",
+  "status": 200,
+  "title": "Digital Public Goods Alliance",
+  "desc": "Unlocking the potential of open-source technologies for a more equitable world",
+  "h": [
+   "Unlocking the potential of open-source to drive real-world impact",
+   "Enabling Change Through Technology and Collaboration",
+   "56",
+   "256",
+   "How Digital Public Goods Are Creating a Better World",
+   "Latest News from the DPGA"
+  ],
+  "p": [
+   "The Digital Public Goods Alliance is a multi-stakeholder initiative that brings together governments, multilaterals, and international organisations\u2014both non-profit and for-profit\u2014to advance a shared vision for digital cooperation through digital public goods.",
+   "Through the Digital Public Goods Alliance, technology creators, implementers, and supporters drive real-world change by improving the discovery, development, adoption, and investment in digital public goods.",
+   "Recognised for their leadership in digital transformation, DPGA members commit to activities that advance their own priorities while strengthening the digital public goods ecosystem. Explore the full list of members and their contributions on the DPGA Roadmap."
+  ]
+ },
+ "x-road": {
+  "url": "https://x-road.global/",
+  "status": 200,
+  "title": "X-Road\u00ae",
+  "desc": "X-Road\u00ae is open-source software that provides unified and secure data exchange between organisations in a collaborative ecosystem.",
+  "h": [
+   ""
+  ],
+  "p": [
+   "X-Road\u00ae is open-source software that enables unified, secure data exchange between organisations within a collaborative ecosystem. It streamlines data exchange processes, enhances security, and facilitates interoperability, enabling organisations to derive greater value from their data assets. With the release of X-Road 8 \u201cSpaceship\u201d in 2026, X-Road is expected to become a fully established dataspace solution .",
+   "X-Road\u00ae is a registered trademark of the Estonian Information System Authority (RIA). NIIS\u00ae is a registered trademark of the Nordic Institute for Interoperability Solutions (NIIS). Procedure for the use of data and data processing"
+  ]
+ },
+ "who_dha": {
+  "url": "https://digitalhealthatlas.org/",
+  "status": 200,
+  "title": "Implementome",
+  "desc": "Implementome, a one-stop shop for digital health",
+  "h": [],
+  "p": []
+ },
+ "gdhi": {
+  "url": "https://www.digitalhealthindex.org/",
+  "status": 200,
+  "title": "MAHA168: Situs Game Casino Online dengan Link Aktif & Terpercaya 2026",
+  "desc": "MAHA168 adalah situs game casino online terlengkap dan terpercaya di Indonesia 2026. Nikmati slot online, live casino, poker, dan sports betting dengan bonus menarik, deposit cepat, dan layanan 24 jam.",
+  "h": [
+   "MAHA168: Situs Game Casino Online dengan Link Aktif & Terpercaya 2026",
+   "Testimoni Member MAHA168",
+   "Pertanyaan Umum",
+   "Siap Meraih Jackpot Besar?"
+  ],
+  "p": [
+   "MAHA168 adalah platform game casino online terlengkap dan terpercaya yang telah melayani jutaan pemain di Indonesia. Dengan lisensi resmi internasional dan sistem keamanan berlapis, MAHA168 hadir sebagai pilihan utama bagi para pecinta game online.",
+   "Bergabunglah dengan ribuan member yang telah merasakan kemenangan besar di MAHA168"
+  ]
+ },
+ "africacdc": {
+  "url": "https://africacdc.org/",
+  "status": 200,
+  "title": "Home \u2013 Africa CDC",
+  "desc": "\u200bAfrica CDC strengthens the capacity and capability of Africa\u2019s public health institutions as well as partnerships to detect and respond quickly and effectively to disease threats and outbreaks, based on data-driven interventions and programmes.",
+  "h": [
+   "Africa\u2019s Health Security and Sovereignty (AHSS) Agenda is a practical and transformative framework that empowers African nations to finance, produce, and govern their own health systems and medical countermeasures, strengthening resilience and reducing dependency.",
+   "Africa CDC WhatsApp Channel",
+   "Mental Health Leadership Programme",
+   "Africa CDC Complaint and Suggestion Form",
+   "Africa CDC Youth Website",
+   "Help Desk System",
+   "Institute of Pathogen Genomics\u200b",
+   "Tools and Software"
+  ],
+  "p": [
+   "World Patient Safety Day 2026 \u00b7 17 September 2026\u00a0 Joseph Rukelibuga experienced a stroke at his home in Kigali. His wife took him to the ...",
+   "As Africa undergoes profound epidemiological transition, life expectancy rises and health systems continue to improve, but Non-Communicable Diseases (NCDs) have emerged as a defining public ...",
+   "Africa CDC staff In 2022, 61-year-old Mr Mebrhatu Gebreegziabher received his first dose of the COVID-19 vaccine during the pandemic, and as a pensioner residing ..."
+  ]
+ },
+ "careconnect": {
+  "url": "https://careconnect.co.za/",
+  "status": 200,
+  "title": "careconnect.co.za | fruits",
+  "desc": "The premium domain careconnect.co.za is for sale on fruits.co. Secure the domain now and start your online success story. Safe payment and quick transfer are guaranteed.",
+  "h": [],
+  "p": []
+ },
+ "reach": {
+  "url": "https://www.reachdigitalhealth.org/",
+  "status": 200,
+  "title": "Reach Digital Health | Mobile Healthcare in Africa",
+  "desc": "Reach Digital Health partners with governments, NGOs & tech firms to deliver personalised mobile health via SMS, WhatsApp & USSD across Africa. Contact us",
+  "h": [
+   "Together, we can reach millions and build a healthier future for Africa.",
+   "At Reach we drive real change in healthcare by engaging underserved communities through the power of mobile technology.",
+   "Designed to extend the reach of health systems.",
+   "Why Partner with Us?"
+  ],
+  "p": [
+   "Our platform delivers accessible, personalised health solutions through familiar channels like SMS, WhatsApp, and USSD. Wherever people are, we empower them with the tools and information they need to make critical health decisions, ensuring no one is left behind.",
+   "Don\u2019t forget about your 30 week pregnancy check-up next week. It\u2019s important to keep having your checkups to make sure you and your baby are healthy",
+   "At this visit, the health worker may talk to you about your plan for the birth of your baby. They will weigh you and feel your tummy to make sure your baby is growing well"
+  ]
+ },
+ "carequality": {
+  "url": "https://carequality.org/",
+  "status": 403,
+  "title": "Just a moment...",
+  "desc": "",
+  "h": [
+   "Checking your browser..."
+  ],
+  "p": []
+ },
+ "commonwell": {
+  "url": "https://www.commonwellalliance.org/",
+  "status": 403,
+  "title": "Just a moment...",
+  "desc": "",
+  "h": [],
+  "p": []
+ },
+ "tefca": {
+  "url": "https://rce.sequoiaproject.org/",
+  "status": 200,
+  "title": "RCE Homepage - ONC TEFCA RCE",
+  "desc": "The Recognized Coordinating Entity\u00ae (RCE\u2122) is responsible for developing, implementing, and maintaining the Common Agreement component of the Trusted Exchange Framework and Common Agreement\u2120 (TEFCA\u2120).",
+  "h": [
+   "Advancing Nationwide \nInteroperability of Electronic \nHealth Information with TEFCA\u00ae",
+   "2+",
+   "TEFCA Exchange is Ramping Up!",
+   "TEFCA Milestones & New Documents Released",
+   "Common Agreement v2.0",
+   "21st Century Cures Act (Cures Act)",
+   "About the Recognized Coordinating Entity\u00ae (RCE\u00ae)",
+   "TEFCA Questions?"
+  ],
+  "p": [
+   "There are more than 24,500 organizations live on TEFCA (QHINs, Participants, and Subparticipants) representing over 107,000 unique connections to clinicians, hospitals, clinics, post-acute care/long-term care facilities, public health authorities, and more. See our TEFCA Map .",
+   "The Sequoia Project was awarded the next option year with a more than 15% increase in funding under its existing contract to the Department of Health and Human Services\u2019 Office of the National Coordinator for Health Information Technology (ONC).",
+   "The RCE is responsible for developing, implementing, and maintaining the Common Agreement component of the Trusted Exchange Framework and Common Agreement\u2122 (TEFCA\u00ae). The Common Agreement establishes the baseline technical and legal requirements for health information networks to share electronic health information via TEFCA."
+  ]
+ },
+ "abdm": {
+  "url": "https://abdm.gov.in/",
+  "status": 403,
+  "title": "403 Forbidden",
+  "desc": "",
+  "h": [
+   "403 Forbidden"
+  ],
+  "p": []
+ },
+ "infoway": {
+  "url": "https://www.infoway-inforoute.ca/en/",
+  "status": 200,
+  "title": "Home page | Canada Health Infoway",
+  "desc": "Infoway works with governments, health care organizations, clinicians and patients to make health care more digital and to improve access to virtual care soluti",
+  "h": [
+   "Integrating digital health into the health care experience.",
+   "Healthier Canadians through innovative digital health solutions",
+   "Toolkits & Other Resources",
+   "Who We Are",
+   "Browse by topic Browse by topic",
+   "Who We Serve",
+   "Browse by topic Browse by topic",
+   "Featured Initiatives"
+  ],
+  "p": [
+   "Infoway works with governments, health care organizations, clinicians and patients to make health care more digital in order to facilitate faster, more seamless and secure information sharing. We\u2019re an independent, not-for-profit organization funded by the federal government."
+  ]
+ },
+ "myhealthrecord": {
+  "url": "https://www.digitalhealth.gov.au/initiatives-and-programs/my-health-record",
+  "error": "HTTPSConnectionPool(host='www.digitalhealth.gov.au', port=443): Read timed out. (read timeout=20)"
+ },
+ "ehds": {
+  "url": "https://health.ec.europa.eu/ehealth-digital-health-and-care/european-health-data-space_en",
+  "status": 200,
+  "title": "European Health Data Space Regulation (EHDS) - Public Health",
+  "desc": "EHDS empowers health data control for innovation and cross-border healthcare when travelling. Secure and efficient data use.",
+  "h": [
+   "European Health Data Space Regulation (EHDS)",
+   "What is the EHDS Regulation about",
+   "What is the timeline for the implementation of the EHDS Regulation?",
+   "What does this mean for you?",
+   "Who benefits from EHDS?",
+   "How will the EHDS ensure data protection and security?",
+   "Transforming healthcare through data",
+   "Seamless health data access across borders"
+  ],
+  "p": [
+   "The European Health Data Space (EHDS) is a cornerstone of the European Health Union and the first common EU data space dedicated to a specific sector as part of the European strategy for data .",
+   "The EHDS Regulation aims to establish a common framework for the use and exchange of electronic health data across the EU. It enhances individuals\u2019 access to and control over their personal electronic health data, while also enabling certain data to be reused for public interest, policy support, and scientific research purposes. It fosters a health-specific data environment that supports a single market for digital health services and products. Additionally, the regulation establishes a harmonised legal and technical framework for electronic health record (EHR) systems, fostering interoperability, innovation, and the smooth functioning of the internal market.",
+   "By doing so, the EHDS will enable the EU to benefit from the full potential offered by a safe and secure exchange, use and reuse of health data to benefit patients, health professionals, researchers, regulators, and innovators. The EHDS regulation was discussed in a series of webinars ."
+  ]
+ },
+ "intersystems_za": {
+  "url": "https://www.intersystems.com/za/",
+  "status": 200,
+  "title": "Data Management & Healthcare Information Systems| InterSystems",
+  "desc": "InterSystems is the leading provider of data management solutions for industries with complex challenges. Unlock the potential of your data and move your business forward.",
+  "h": [
+   "Built to Solve Complex Challenges",
+   "Accelerate your enterprise data initiatives with a smart data fabric",
+   "The InterSystems Difference",
+   "Learn how customers across the globe are implementing our technologies to achieve business goals.",
+   "Trusted by Global Leaders",
+   "Healthy data matters",
+   "News and Updates",
+   "Contact Us"
+  ],
+  "p": [
+   "Millions of people around the world trust InterSystems with their livelihoods and even their lives. We are here to ensure that our clients have reliable, real-time access to the data they need to do their jobs - data they can connect to, share, and draw insights from.",
+   "Main Office: +27 11 324.1800 Product Support: +1-617-621-0700 (US) +44 (0) 808 175 8763 (UK)"
+  ]
+ },
+ "rhapsody": {
+  "url": "https://rhapsody.health/",
+  "status": 200,
+  "title": "Healthcare Interoperability for the Agentic Era | Rhapsody",
+  "desc": "Rhapsody connects healthcare systems across HL7, FHIR, and APIs \u2014 so healthcare teams, analytics, and AI tools have the data they need. Trusted by 1,900+ organizations in 33 countries.",
+  "h": [
+   "Integrate. Govern. Automate.",
+   "Connect what you have.\u00a0Support what\u2019s next.",
+   "Trusted to keep healthcare connected",
+   "Trusted by 1,900+ healthcare organizations worldwide",
+   "Built for the way you work"
+  ],
+  "p": [
+   "See how Axon troubleshoots issues, diagnoses code, and takes on integration work while you stay in control.",
+   "Do more with the team you have. Rhapsody enables healthcare data exchange by connecting systems, governing agent and API access, and putting AI to work on interoperability tasks.",
+   "Connect the systems you run and the products you deliver. Improve data quality, govern access, and reduce the manual work of building and managing integrations."
+  ]
+ },
+ "nextgen_mirth": {
+  "url": "https://www.nextgen.com/solutions/interoperability/mirth-integration-engine",
+  "status": 200,
+  "title": "Healthcare Integration Engine | Mirth\u00ae Connect by NextGen Healthcare",
+  "desc": "Optimize interoperability capabilities with a seamless healthcare integration engine and advanced administration tools via Mirth\u00ae Connect.",
+  "h": [
+   "Unlock the power of true interoperability",
+   "Seamless, Integrated, and Patient-Centered Data Exchange",
+   "Experience the benefits of Mirth Connect",
+   "Advancing interoperability globally",
+   "Learn more about Mirth Connect",
+   "Mirth Connect FAQs",
+   "What is Mirth Connect Enterprise?",
+   "What's the difference between Mirth Connect and Mirth Fully Managed?"
+  ],
+  "p": [
+   "NextGen\u00ae Closed Loop\u00ae Patient & Practice Experience",
+   "A seamless experience for patients, providers, and staff.",
+   "Unlock your practice\u2019s full financial potential with industry-leading RCM services. Prevent denials, accelerate collections, and reduce days in A/R with innovative technology and expert-level strategies."
+  ]
+ }
+}

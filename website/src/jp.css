@@ -1,0 +1,49 @@
+/* ===== Journey player: swimlanes + caption + controls ===== */
+.jp { flex: 1; min-height: 0; display: grid; grid-template-columns: 290px 1fr; gap: 12px; }
+.jp-side { display: flex; flex-direction: column; gap: 10px; min-height: 0; overflow-y: auto; padding-right: 2px; }
+.jp-h { margin: 12px 4px 2px; font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mute); }
+.jp-chapters { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.jp-chapters button { width: 100%; display: flex; gap: 10px; align-items: flex-start; text-align: left; padding: 7px 10px; border-radius: 8px; font-size: 12.5px; line-height: 1.35; color: var(--ink2); }
+.jp-chapters button:hover { background: var(--surface); }
+.jp-chapters button i { font-style: normal; flex: none; width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--line2); display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; font-family: var(--mono); }
+.jp-chapters button.past i { background: var(--blue); border-color: var(--blue); color: #fff; }
+.jp-chapters button.on { background: var(--surface2); color: var(--ink); font-weight: 600; }
+.jp-chapters button.on i { background: var(--ink); border-color: var(--ink); color: #fff; }
+.jp-main { min-width: 0; min-height: 0; display: flex; flex-direction: column; gap: 10px; }
+.jp-stage { flex: 1; min-height: 0; position: relative; overflow: hidden; border: 1px solid var(--line); border-radius: 14px; background: #fff; box-shadow: var(--shadow); user-select: none; -webkit-user-select: none; }
+.jp-vp { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+.jp-lane { position: absolute; left: 0; right: 0; border-top: 1px solid var(--line); }
+.jp-lane:first-child { border-top: 0; }
+.jp-lanelabel { position: absolute; left: 0; top: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-align: center; border-right: 1px solid var(--line); padding: 0 12px; }
+.jp-lanelabel i { width: 12px; height: 12px; border-radius: 50%; }
+.jp-lanelabel b { font-size: 17px; letter-spacing: 0.04em; text-transform: uppercase; }
+.jp-lanelabel small { font-size: 13px; color: var(--mute); line-height: 1.3; }
+.jp-svg { position: absolute; left: 0; top: 0; pointer-events: none; overflow: visible; }
+.jp-node { position: absolute; width: 220px; display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; }
+.jp-node .ico { width: 100px; height: 100px; border-radius: 50%; background: #fff; border: 4px solid var(--c); color: var(--c); display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 20px rgba(11, 27, 54, 0.12); transition: box-shadow 0.3s, background 0.3s; }
+.jp-node.active .ico { box-shadow: 0 0 0 8px color-mix(in srgb, var(--c) 22%, transparent), 0 6px 20px rgba(11, 27, 54, 0.14); background: color-mix(in srgb, var(--c) 8%, #fff); }
+.jp-node.sel .ico { box-shadow: 0 0 0 4px #fff, 0 0 0 7px var(--ink); }
+.jp-node b { font-size: 21px; line-height: 1.2; margin-top: 8px; font-weight: 700; color: var(--ink); }
+.jp-node i { font-style: normal; font-family: var(--mono); font-size: 14px; color: var(--mute); }
+.jp-node em { font-style: normal; font-size: 12px; color: var(--mute); letter-spacing: 0.06em; text-transform: uppercase; }
+.jp-cap { position: relative; display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; border: 1px solid var(--line); border-left: 6px solid var(--gc); border-radius: 12px; background: #fff; padding: 16px 20px 14px; box-shadow: var(--shadow); min-height: 138px; }
+.jp-bar { position: absolute; left: 0; right: 0; top: 0; height: 3px; background: var(--surface2); border-radius: 12px 12px 0 0; overflow: hidden; }
+.jp-bar i { display: block; height: 100%; background: var(--gc); }
+.jp-text .jkick { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mute); }
+.jp-text h3 { margin: 4px 0 4px; font-family: var(--disp); font-size: 24px; letter-spacing: -0.02em; line-height: 1.15; }
+.jp-text p { margin: 0 0 8px; font-size: 15px; line-height: 1.55; color: var(--ink2); max-width: 760px; }
+.jflow { display: inline-block; font-size: 13px; font-weight: 600; background: var(--surface); border-radius: 8px; padding: 6px 12px; }
+.jflow b { color: var(--blue); margin: 0 4px; }
+.kind { font-weight: 700; }
+.kind.k-live, .kind.k-batch, .kind.k-manual { color: var(--ink); }
+.kind.k-break { color: var(--red); }
+.jp-side2 .counters div { min-width: 120px; }
+.jp-ctl { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.jp-ctl .btn { padding: 8px 14px; }
+.jp-ctl .playb { min-width: 92px; }
+.jp-ctl .dots { display: flex; gap: 6px; margin: 0 8px; }
+.jp-ctl .dots button { width: 12px; height: 12px; border-radius: 50%; background: var(--line2); padding: 0; }
+.jp-ctl .dots button.on { background: var(--ink); transform: scale(1.25); }
+.jp-ctl .dots button.past { background: var(--blue); }
+.jp-ctl .seg { margin-left: auto; }
+@media (max-width: 960px) { .jp { grid-template-columns: 1fr; } .jp-cap { grid-template-columns: 1fr; } }
