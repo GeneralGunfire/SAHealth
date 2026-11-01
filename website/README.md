@@ -43,7 +43,7 @@ Vite 5, React 18, TypeScript, framer-motion 11. Plain CSS variables (no Tailwind
 
 - SANBS hospital-facing ordering interface: not found.
 - Military hospital and prison health record systems: nothing public found.
-- Limpopo "PHIS" attribution is `likely`, not confirmed.
+- Limpopo "PHIS": the 2023 attribution is confirmed (NW3319 names Limpopo). Linking it to the 1997 system in the 2014 article rests on that article's headline and dateline only.
 - Thin nodes: SAMHS, DCS, NGO clinics, donors.
 - Journey arrows were re-routed to clear labels; check by eye in every journey.
 - `../research/research_master.md` and the Master/Timeline docs are partly stale.
