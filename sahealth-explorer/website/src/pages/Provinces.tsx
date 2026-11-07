@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { PROVINCES, PROV_DATA } from '../data/meta'
+import { Link, useSearchParams } from 'react-router-dom'
+import { PGRID, PROVINCES, PROV_DATA } from '../data/meta'
 import { PageHead, SourceList } from '../components/ui'
 import type { ProvinceInfo } from '../types'
 
@@ -12,9 +12,19 @@ const ROWS: { k: string; label: string; get: (p: ProvinceInfo) => string }[] = [
 ]
 
 export default function Provinces() {
-  const [a, setA] = useState('Western Cape')
-  const [b, setB] = useState('Eastern Cape')
-  const none = PROVINCES.filter((p) => PROV_DATA[p].none)
+  const [params, setParams] = useSearchParams()
+  const asked = params.get('select') ?? ''
+  const sel = PROVINCES.includes(asked) ? asked : 'Western Cape'
+  const [other, setOther] = useState<string | null>(null)
+  const [hover, setHover] = useState<string | null>(null)
+
+  const choose = (p: string) => {
+    const next = new URLSearchParams(params)
+    next.set('select', p)
+    setParams(next, { replace: true })
+  }
+  const p = PROV_DATA[sel]
+  const none = PROVINCES.filter((x) => PROV_DATA[x].none)
 
   return (
     <div className="pg">
@@ -24,77 +34,89 @@ export default function Provinces() {
         blurb="National registries, labs and reporting work the same way everywhere. The hospital and clinic systems underneath are different in each province, and some provinces report no hospital record system at all."
       />
 
-      <div className="callout callout--warn">
-        <strong>{none.length} of {PROVINCES.length} provinces report no hospital record system:</strong> {none.join(', ')}.
-      </div>
+      <div className="pmap">
+        <div className="pmap__tiles" role="group" aria-label="Choose a province">
+          {PGRID.flat().map((name) => {
+            const d = PROV_DATA[name]
+            return (
+              <button
+                key={name} type="button"
+                className={`ptile${d.none ? ' is-none' : ''}${sel === name ? ' is-sel' : ''}${other === name ? ' is-other' : ''}`}
+                aria-pressed={sel === name}
+                onClick={() => choose(name)}
+                onMouseEnter={() => setHover(name)} onMouseLeave={() => setHover(null)}
+              >
+                <b>{name}</b>
+                <small>{d.none ? 'No hospital system' : 'Hospital system'}</small>
+                {d.beta > 0 && <span className="ptile__beta">{d.beta} EMR trial clinics</span>}
+              </button>
+            )
+          })}
+          <p className="pmap__legend">
+            <span><i className="k-ok" />Hospital record system reported</span>
+            <span><i className="k-none" />No hospital record system reported ({none.length} of {PROVINCES.length})</span>
+          </p>
+        </div>
 
-      <div className="cards cards--wide" style={{ marginTop: 16 }}>
-        {PROVINCES.map((name) => {
-          const p = PROV_DATA[name]
-          return (
-            <article className={`card pcard${p.none ? ' pcard--none' : ''}`} key={name}>
-              <div className="card__row">
-                <h3>{name}</h3>
-                {p.none && <span className="chip chip--break">No hospital system</span>}
+        <article className="pdetail" key={sel} aria-live="polite">
+          <div className="pdetail__head">
+            <h2>{sel}</h2>
+            {p.none && <span className="chip chip--break">No hospital system</span>}
+          </div>
+          <dl className="facts">
+            {ROWS.map((r) => (
+              <div key={r.k}>
+                <dt>{r.label}</dt>
+                <dd className={r.k === 'hosp' && p.none ? 'absent' : undefined}>{r.get(p)}</dd>
               </div>
-              <dl className="facts">
-                {ROWS.slice(0, 3).map((r) => (
-                  <div key={r.k}>
-                    <dt>{r.label}</dt>
-                    <dd className={r.k === 'hosp' && p.none ? 'absent' : undefined}>{r.get(p)}</dd>
-                  </div>
-                ))}
-              </dl>
-              {p.beta > 0 && <p className="chip">{p.beta} clinics in the National EMR trial</p>}
-              <details className="more-details">
-                <summary>More detail and sources</summary>
-                <dl className="facts">
-                  <div><dt>Patient registry roll-out</dt><dd>{p.hprs}</dd></div>
-                  {p.other && <div><dt>Other</dt><dd>{p.other}</dd></div>}
-                </dl>
-                <SourceList ids={p.src} />
-              </details>
-              <Link to={`/map?province=${encodeURIComponent(name)}`} className="more">See {name} on the map →</Link>
-            </article>
-          )
-        })}
+            ))}
+            {p.other && <div><dt>Other</dt><dd>{p.other}</dd></div>}
+          </dl>
+          {p.beta > 0 && <p className="chip">{p.beta} clinics in the National EMR trial</p>}
+          <div className="pdetail__acts">
+            <Link to={`/map?province=${encodeURIComponent(sel)}`} className="btn btn--dark btn--sm">See {sel} on the map</Link>
+          </div>
+          <details className="more-details">
+            <summary>Sources</summary>
+            <SourceList ids={p.src} />
+          </details>
+          {hover && hover !== sel && <p className="pdetail__hover">Hovering: {hover}. Select it to read the detail.</p>}
+        </article>
       </div>
 
       <section className="sec" aria-labelledby="cmp-t">
         <div className="sec__head">
           <div>
-            <h2 id="cmp-t">Compare two provinces</h2>
-            <p>Differences are highlighted.</p>
+            <h2 id="cmp-t">Compare with another province</h2>
+            <p>{sel} against any other. Differences are highlighted.</p>
           </div>
-          <div className="bar" style={{ margin: 0 }}>
-            <select className="select" value={a} onChange={(e) => setA(e.target.value)} aria-label="First province">
-              {PROVINCES.map((p) => <option key={p}>{p}</option>)}
-            </select>
-            <select className="select" value={b} onChange={(e) => setB(e.target.value)} aria-label="Second province">
-              {PROVINCES.map((p) => <option key={p}>{p}</option>)}
-            </select>
+          <select className="select" value={other ?? ''} onChange={(e) => setOther(e.target.value || null)} aria-label="Compare with">
+            <option value="">Choose a province</option>
+            {PROVINCES.filter((x) => x !== sel).map((x) => <option key={x}>{x}</option>)}
+          </select>
+        </div>
+        {other ? (
+          <div className="tablewrap">
+            <table className="cmp">
+              <thead><tr><th /><th>{sel}</th><th>{other}</th></tr></thead>
+              <tbody>
+                {ROWS.map((r) => {
+                  const x = r.get(PROV_DATA[sel])
+                  const y = r.get(PROV_DATA[other])
+                  return (
+                    <tr key={r.k} className={x !== y ? 'diff' : undefined}>
+                      <th scope="row">{r.label}</th>
+                      <td>{x}</td>
+                      <td>{y}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
           </div>
-        </div>
-        <div className="tablewrap">
-          <table className="cmp">
-            <thead>
-              <tr><th /><th>{a}</th><th>{b}</th></tr>
-            </thead>
-            <tbody>
-              {ROWS.map((r) => {
-                const x = r.get(PROV_DATA[a])
-                const y = r.get(PROV_DATA[b])
-                return (
-                  <tr key={r.k} className={x !== y ? 'diff' : undefined}>
-                    <th scope="row">{r.label}</th>
-                    <td>{x}</td>
-                    <td>{y}</td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
+        ) : (
+          <p className="callout">Choose a second province to see the two side by side.</p>
+        )}
       </section>
 
       <p className="callout" style={{ marginTop: 24 }}>

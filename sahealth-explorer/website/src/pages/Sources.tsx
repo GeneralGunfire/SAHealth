@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { SOURCES } from '../data/meta'
 import { CONF, NODE, confCounts, sourceUsage } from '../lib/model'
 import { PageHead } from '../components/ui'
@@ -12,7 +12,8 @@ const RULES = [
 ]
 
 export default function Sources() {
-  const [q, setQ] = useState('')
+  const [params] = useSearchParams()
+  const [q, setQ] = useState(params.get('q') ?? '')
   const counts = confCounts()
   const usage = useMemo(sourceUsage, [])
   const list = SOURCES.filter((s) => s.title.toLowerCase().includes(q.trim().toLowerCase()))

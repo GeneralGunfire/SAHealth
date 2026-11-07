@@ -16,7 +16,9 @@ export default function MapPage() {
   const prov = PROVINCES.includes(params.get('province') ?? '') ? (params.get('province') as string) : 'all'
   const [lens, setLens] = useState<Lens>('all')
   const [keyOnly, setKeyOnly] = useState(false)
+  const [find, setFind] = useState('')
   const [sel, setSel] = useState<string | null>(null)
+  const [hover, setHover] = useState<string | null>(null)
   const [lines, setLines] = useState<Line[]>([])
 
   const gridRef = useRef<HTMLDivElement>(null)
@@ -30,17 +32,25 @@ export default function MapPage() {
     [lens, keyOnly, prov],
   )
   const ids = useMemo(() => new Set(visible.map((n) => n.id)), [visible])
+  const matches = useMemo(() => {
+    const t = find.trim().toLowerCase()
+    if (!t) return null
+    return new Set(visible.filter((n) => `${n.name} ${n.alias ?? ''}`.toLowerCase().includes(t)).map((n) => n.id))
+  }, [find, visible])
+
   const provNone = prov !== 'all' && PROV_DATA[prov]?.none
-  const links = sel ? neighbours(sel).filter((x) => ids.has(x.other.id)) : []
+  const focus = sel ?? hover // hovering previews; selecting pins
+  const links = focus ? neighbours(focus).filter((x) => ids.has(x.other.id)) : []
   const related = new Set(links.map((x) => x.other.id))
   const current = sel ? NODE[sel] : null
+  const panelLinks = sel ? neighbours(sel).filter((x) => ids.has(x.other.id)) : []
 
   useEffect(() => { if (sel && !ids.has(sel)) setSel(null) }, [ids, sel])
 
-  // draw lines from the selected system to the ones it connects to
+  // draw the lines for the focused system
   useLayoutEffect(() => {
     const g = gridRef.current
-    if (!g || !sel) { setLines([]); return }
+    if (!g || !focus) { setLines([]); return }
     const draw = () => {
       const gr = g.getBoundingClientRect()
       const centre = (id: string) => {
@@ -49,10 +59,10 @@ export default function MapPage() {
         const r = el.getBoundingClientRect()
         return { x: r.left - gr.left + r.width / 2, y: r.top - gr.top + r.height / 2 }
       }
-      const a = centre(sel)
+      const a = centre(focus)
       if (!a) { setLines([]); return }
       const out: Line[] = []
-      for (const { other, edge } of neighbours(sel)) {
+      for (const { other, edge } of neighbours(focus)) {
         const b = centre(other.id)
         if (!b) continue
         const my = (a.y + b.y) / 2
@@ -69,7 +79,7 @@ export default function MapPage() {
     const ro = new ResizeObserver(draw)
     ro.observe(g)
     return () => ro.disconnect()
-  }, [sel, visible])
+  }, [focus, visible])
 
   const setProvince = (p: string) => {
     const next = new URLSearchParams(params)
@@ -77,12 +87,17 @@ export default function MapPage() {
     setParams(next, { replace: true })
   }
 
+  const pickFirstMatch = () => {
+    const first = visible.find((n) => matches?.has(n.id))
+    if (first) setSel(first.id)
+  }
+
   return (
     <div className="pg">
       <PageHead
         eyebrow="Map"
         title="Every system, in one picture"
-        blurb="Rows show what a system does. Columns show who runs it. Select any system to see exactly what it connects to, and how."
+        blurb="Rows show what a system does. Columns show who runs it. Hover any system to preview what it connects to; select it to pin the connections and read the detail."
       />
 
       <div className="bar">
@@ -99,6 +114,13 @@ export default function MapPage() {
             {PROVINCES.map((p) => <option key={p}>{p}</option>)}
           </select>
         </div>
+        <div className="bar__group">
+          <input
+            className="input input--find" type="search" placeholder="Find a system" aria-label="Find a system on the map"
+            value={find} onChange={(e) => setFind(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter') pickFirstMatch() }}
+          />
+        </div>
         <div className="bar__group bar__grow">
           <div className="seg" role="group" aria-label="Detail">
             <button type="button" aria-pressed={!keyOnly} onClick={() => setKeyOnly(false)}>All systems</button>
@@ -110,7 +132,7 @@ export default function MapPage() {
       {prov !== 'all' && (
         <div className={`callout${PROV_DATA[prov].none ? ' callout--warn' : ''}`} style={{ marginBottom: 14 }}>
           <strong>{prov}.</strong> Hospitals: {PROV_DATA[prov].hosp ?? 'no hospital record system reported'}. Clinics: {PROV_DATA[prov].phc}.{' '}
-          <Link to="/provinces" className="inline">Compare provinces</Link>
+          <Link to={`/provinces?select=${encodeURIComponent(prov)}`} className="inline">See the province</Link>
         </div>
       )}
 
@@ -119,7 +141,7 @@ export default function MapPage() {
           <div className="lmap" ref={gridRef}>
             <svg className="lmap__lines" aria-hidden="true">
               {lines.map((l) => (
-                <path key={l.id} d={l.d} fill="none" stroke={l.color} strokeWidth={2.4} strokeLinecap="round" strokeDasharray={l.dash} />
+                <path key={l.id + focus} className="lmap__line" d={l.d} fill="none" stroke={l.color} strokeWidth={2.4} strokeLinecap="round" strokeDasharray={l.dash} />
               ))}
             </svg>
 
@@ -147,19 +169,24 @@ export default function MapPage() {
                         {showNote && s.id === 'public' && !cell.length && (
                           <div className="nobox">No hospital record system reported</div>
                         )}
-                        {cell.map((n) => (
-                          <button
-                            key={n.id} type="button"
-                            ref={(el) => { pills.current[n.id] = el }}
-                            className={`pill${sel === n.id ? ' is-sel' : ''}${sel && related.has(n.id) ? ' is-rel' : ''}${sel && sel !== n.id && !related.has(n.id) ? ' is-dim' : ''}`}
-                            aria-pressed={sel === n.id}
-                            title={n.alias ? `${n.name} (${n.alias})` : n.name}
-                            onClick={() => setSel(sel === n.id ? null : n.id)}
-                          >
-                            <SysIcon node={n} size="sm" />
-                            <span>{n.name}</span>
-                          </button>
-                        ))}
+                        {cell.map((n) => {
+                          const dim = (focus && focus !== n.id && !related.has(n.id)) || (!focus && matches && !matches.has(n.id))
+                          return (
+                            <button
+                              key={n.id} type="button"
+                              ref={(el) => { pills.current[n.id] = el }}
+                              className={`pill${sel === n.id ? ' is-sel' : ''}${focus && related.has(n.id) ? ' is-rel' : ''}${dim ? ' is-dim' : ''}${!focus && matches?.has(n.id) ? ' is-hit' : ''}`}
+                              aria-pressed={sel === n.id}
+                              title={n.alias ? `${n.name} (${n.alias})` : n.name}
+                              onMouseEnter={() => setHover(n.id)} onMouseLeave={() => setHover(null)}
+                              onFocus={() => setHover(n.id)} onBlur={() => setHover(null)}
+                              onClick={() => setSel(sel === n.id ? null : n.id)}
+                            >
+                              <SysIcon node={n} size="sm" />
+                              <span>{n.name}</span>
+                            </button>
+                          )
+                        })}
                       </div>
                     )
                   })}
@@ -167,9 +194,10 @@ export default function MapPage() {
               )
             })}
           </div>
-          <p className="lmap__count">
+          <p className="lmap__count" aria-live="polite">
+            {matches ? `${matches.size} match${matches.size === 1 ? '' : 'es'} for “${find.trim()}”. ` : ''}
             Showing {visible.length} of {NODES.length} systems.
-            {!sel && ' Select a system to draw its connections.'}
+            {!focus && !matches && ' Hover a system to preview its connections.'}
           </p>
         </div>
 
@@ -191,14 +219,15 @@ export default function MapPage() {
             <p className="lpanel__sum clamp4">{current.summary}</p>
             <Link to={`/systems/${current.id}`} className="btn btn--dark btn--sm">Open full details</Link>
 
-            <h3 className="lpanel__h">Connections ({links.length})</h3>
-            {links.length === 0 ? (
+            <h3 className="lpanel__h">Connections ({panelLinks.length})</h3>
+            {panelLinks.length === 0 ? (
               <p className="callout">No connection is documented between this system and any other shown here.</p>
             ) : (
               <ul className="conns">
-                {links.map(({ other, edge }) => (
+                {panelLinks.map(({ other, edge }) => (
                   <li key={other.id}>
-                    <button type="button" className="conn" onClick={() => setSel(other.id)}>
+                    <button type="button" className="conn" onClick={() => setSel(other.id)}
+                      onMouseEnter={() => setHover(other.id)} onMouseLeave={() => setHover(null)}>
                       <SysIcon node={other} size="sm" />
                       <span className="conn__main">
                         <b>{other.name}</b>

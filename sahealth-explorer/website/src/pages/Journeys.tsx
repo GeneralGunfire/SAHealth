@@ -1,47 +1,62 @@
+import { useMemo, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { GROUPS, JOURNEYS } from '../data/flows'
 import { JOURNEY, LINK_COLOR, LINK_NAME, NODE } from '../lib/model'
-import { PageHead, SysLink } from '../components/ui'
+import { Empty, PageHead, SysLink } from '../components/ui'
+import JourneyPlayer from '../components/JourneyPlayer'
 import type { Journey } from '../types'
 
 const breaks = (j: Journey) => j.steps.filter((s) => s.k === 'break').length
 const byHand = (j: Journey) => j.steps.filter((s) => s.k === 'manual').length
 
 export function Journeys() {
+  const [g, setG] = useState<'all' | Journey['g']>('all')
+  const [q, setQ] = useState('')
+  const list = useMemo(() => JOURNEYS.filter((j) =>
+    (g === 'all' || j.g === g) && (!q.trim() || `${j.title} ${j.intro}`.toLowerCase().includes(q.trim().toLowerCase()))), [g, q])
+  const count = (k: 'all' | Journey['g']) => JOURNEYS.filter((j) => k === 'all' || j.g === k).length
+
   return (
     <div className="pg">
       <PageHead
         eyebrow="Journeys"
         title="Follow the data"
-        blurb={'A patient’s information is created at every visit, but it rarely travels with them. Pick a situation and step through it to see where the data goes, who retypes it, and where it stops.'}
+        blurb={'A patient’s information is created at every visit, but it rarely travels with them. Pick a situation and watch it play out: where the data goes, who retypes it, and where it stops.'}
       />
-      {(['public', 'private', 'cross'] as const).map((g) => {
-        const list = JOURNEYS.filter((j) => j.g === g)
-        if (!list.length) return null
-        return (
-          <section className="sec sec--tight" key={g} aria-labelledby={`g-${g}`}>
-            <div className="sec__head">
-              <div>
-                <h2 id={`g-${g}`}><i className="gdot" style={{ background: GROUPS[g].color }} />{GROUPS[g].name}</h2>
-                <p>{GROUPS[g].sub}</p>
+
+      <div className="bar">
+        <input className="input input--search" type="search" placeholder="Search journeys" aria-label="Search journeys" value={q} onChange={(e) => setQ(e.target.value)} />
+        <div className="schips" role="group" aria-label="Sector" style={{ margin: 0 }}>
+          {(['all', 'public', 'private', 'cross'] as const).map((k) => (
+            <button key={k} type="button" className="schip" aria-pressed={g === k} style={{ ['--c' as string]: k === 'all' ? '#0b0d12' : GROUPS[k].color }} onClick={() => setG(k)}>
+              {k !== 'all' && <i />}{k === 'all' ? 'All' : GROUPS[k].name}<b>{count(k)}</b>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {list.length === 0 ? (
+        <Empty title="No journeys match." text="Try a different search." action={<button type="button" className="btn" onClick={() => { setQ(''); setG('all') }}>Clear</button>} />
+      ) : (
+        <div className="cards">
+          {list.map((j, i) => (
+            <Link key={j.id} to={`/journeys/${j.id}`} className="card jcard card--in" style={{ animationDelay: `${Math.min(i, 12) * 30}ms` }}>
+              <span className="jcard__group"><i style={{ background: GROUPS[j.g].color }} />{GROUPS[j.g].name}</span>
+              <h3>{j.title}</h3>
+              <p className="clamp3">{j.intro}</p>
+              <div className="jdots" aria-hidden="true">
+                {j.steps.map((s, k) => <i key={k} className={s.k === 'break' ? 'is-break' : ''} style={{ background: LINK_COLOR[s.k] }} />)}
               </div>
-            </div>
-            <div className="cards">
-              {list.map((j) => (
-                <Link key={j.id} to={`/journeys/${j.id}`} className="card jcard" style={{ ['--gc' as string]: GROUPS[g].color }}>
-                  <h3>{j.title}</h3>
-                  <p className="clamp3">{j.intro}</p>
-                  <div className="card__tags">
-                    <span className="chip">{j.steps.length} steps</span>
-                    {byHand(j) > 0 && <span className="chip">{byHand(j)} by hand</span>}
-                    {breaks(j) > 0 && <span className="chip chip--break">{breaks(j)} {breaks(j) === 1 ? 'break' : 'breaks'}</span>}
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </section>
-        )
-      })}
+              <div className="card__tags">
+                <span className="chip">{j.steps.length} steps</span>
+                {byHand(j) > 0 && <span className="chip">{byHand(j)} by hand</span>}
+                {breaks(j) > 0 && <span className="chip chip--break">{breaks(j)} {breaks(j) === 1 ? 'break' : 'breaks'}</span>}
+              </div>
+              <span className="card__go">Watch →</span>
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
@@ -49,6 +64,8 @@ export function Journeys() {
 export function JourneyDetail() {
   const { id = '' } = useParams()
   const j = JOURNEY[id]
+  const [active, setActive] = useState(0)
+  const [jump, setJump] = useState<number | null>(null)
   if (!j) return <Navigate to="/journeys" replace />
   const i = JOURNEYS.findIndex((x) => x.id === j.id)
   const prev = JOURNEYS[i - 1]
@@ -56,9 +73,11 @@ export function JourneyDetail() {
   const g = GROUPS[j.g]
 
   return (
-    <div className="pg pg--narrow">
+    <div className="pg">
       <Link to="/journeys" className="back">← All journeys</Link>
       <PageHead eyebrow={`${g.name} · ${g.sub}`} title={j.title} blurb={j.intro} />
+
+      <JourneyPlayer key={`${j.id}-${jump ?? ''}`} journey={j} startAt={jump ?? 0} onStep={setActive} />
 
       <div className="jstats">
         <div><strong>{j.steps.length}</strong><span>steps</span></div>
@@ -66,28 +85,35 @@ export function JourneyDetail() {
         <div className="jstats__hot"><strong>{breaks(j)}</strong><span>{breaks(j) === 1 ? 'place it stops' : 'places it stops'}</span></div>
       </div>
 
-      <ol className="steps">
-        {j.steps.map((s, k) => {
-          const from = NODE[s.f]
-          const to = NODE[s.t]
-          return (
-            <li key={k} className={`step${s.k === 'break' ? ' step--break' : ''}`} style={{ ['--lc' as string]: LINK_COLOR[s.k] }}>
-              <span className="step__num">{k + 1}</span>
-              <div className="step__body">
-                <div className="step__route">
-                  {from && <SysLink node={from} />}
-                  <span className="step__arrow" aria-hidden="true">→</span>
-                  {to && <SysLink node={to} />}
-                  <span className="conn__type"><i />{LINK_NAME[s.k]}</span>
+      <section className="sec sec--tight" aria-labelledby="tr-t">
+        <div className="sec__head">
+          <div>
+            <h2 id="tr-t">The full story</h2>
+            <p>The same steps as text. Select one to replay from there.</p>
+          </div>
+        </div>
+        <ol className="tsteps">
+          {j.steps.map((s, k) => {
+            const from = NODE[s.f]
+            const to = NODE[s.t]
+            return (
+              <li key={k} className={`tstep${k === active ? ' is-on' : ''}${s.k === 'break' ? ' is-break' : ''}`}>
+                <button type="button" className="tstep__num" onClick={() => { setJump(k); window.scrollTo({ top: 0 }); document.getElementById('main')?.scrollTo({ top: 0, behavior: 'smooth' }) }} aria-label={`Replay from step ${k + 1}`}>{k + 1}</button>
+                <div className="tstep__body">
+                  <div className="tstep__route">
+                    {from && <SysLink node={from} />}
+                    <span aria-hidden="true">→</span>
+                    {to && <SysLink node={to} />}
+                    <span className="conn__type" style={{ ['--lc' as string]: LINK_COLOR[s.k] }}><i />{LINK_NAME[s.k]}</span>
+                  </div>
+                  <h3>{s.h}</h3>
+                  <p>{s.p}</p>
                 </div>
-                <h3>{s.h}</h3>
-                <p>{s.p}</p>
-                {s.lbl && <span className="chip">What travels: {s.lbl}</span>}
-              </div>
-            </li>
-          )
-        })}
-      </ol>
+              </li>
+            )
+          })}
+        </ol>
+      </section>
 
       <nav className="jnav" aria-label="Other journeys">
         {prev ? <Link to={`/journeys/${prev.id}`} className="btn">← {prev.title}</Link> : <span />}

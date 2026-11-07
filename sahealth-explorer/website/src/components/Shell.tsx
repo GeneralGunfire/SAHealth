@@ -1,61 +1,110 @@
-import type { ReactNode } from 'react'
-import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
-import { useEffect, useRef } from 'react'
-
-const ico = (d: ReactNode) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{d}</svg>
-)
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { Link, Outlet, useLocation } from 'react-router-dom'
+import Palette from './Palette'
 
 const NAV = [
-  { to: '/', label: 'Overview', end: true, icon: ico(<><path d="M4 11l8-7 8 7" /><path d="M6 10v10h12V10" /><path d="M10 20v-5h4v5" /></>) },
-  { to: '/map', label: 'Map', icon: ico(<><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M3 9h18M3 14h18M9 4v16M15 4v16" /></>) },
-  { to: '/systems', label: 'Systems', icon: ico(<><path d="M8 6h12M8 12h12M8 18h12" /><circle cx="4" cy="6" r="1" /><circle cx="4" cy="12" r="1" /><circle cx="4" cy="18" r="1" /></>) },
-  { to: '/journeys', label: 'Journeys', icon: ico(<><circle cx="5" cy="18" r="2" /><circle cx="19" cy="6" r="2" /><path d="M7 18h6a3 3 0 0 0 0-6h-2a3 3 0 0 1 0-6h6" /></>) },
-  { to: '/provinces', label: 'Provinces', icon: ico(<><path d="M12 21s7-6 7-11a7 7 0 0 0-14 0c0 5 7 11 7 11z" /><circle cx="12" cy="10" r="2.5" /></>) },
-  { to: '/gaps', label: 'Gaps', icon: ico(<><path d="M9 7H7a4 4 0 0 0 0 8h2M15 7h2a4 4 0 0 1 0 8h-2" /><path d="M8 11h2M14 11h2" strokeDasharray="1 3" /></>) },
-]
-const REF = [
-  { to: '/sources', label: 'Sources and method', icon: ico(<><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z" /><path d="M5 17a3 3 0 0 1 3-3h11" /></>) },
+  { to: '/', label: 'Overview', end: true },
+  { to: '/map', label: 'Map' },
+  { to: '/systems', label: 'Systems' },
+  { to: '/journeys', label: 'Journeys' },
+  { to: '/provinces', label: 'Provinces' },
+  { to: '/gaps', label: 'Gaps' },
+  { to: '/sources', label: 'Sources' },
 ]
 
 export default function Shell() {
-  const main = useRef<HTMLElement>(null)
   const { pathname } = useLocation()
-  // each page starts at the top of the panel
-  useEffect(() => { main.current?.scrollTo({ top: 0 }); window.scrollTo({ top: 0 }) }, [pathname])
+  const main = useRef<HTMLElement>(null)
+  const nav = useRef<HTMLElement>(null)
+  const items = useRef<(HTMLAnchorElement | null)[]>([])
+  const [ind, setInd] = useState({ left: 0, width: 0, on: false })
+  const [scrolled, setScrolled] = useState(false)
+  const [menu, setMenu] = useState(false)
+  const [search, setSearch] = useState(false)
 
-  const link = (n: { to: string; label: string; icon: ReactNode; end?: boolean }) => (
-    <NavLink key={n.to} to={n.to} end={n.end} className={({ isActive }) => `ex__link${isActive ? ' is-active' : ''}`}>
-      {n.icon}
-      <span>{n.label}</span>
-    </NavLink>
-  )
+  const active = NAV.findIndex((n) => (n.end ? pathname === '/' : pathname.startsWith(n.to)))
+
+  // slide the active indicator under the current page
+  useLayoutEffect(() => {
+    const place = () => {
+      const el = items.current[active]
+      if (!el) { setInd((s) => ({ ...s, on: false })); return }
+      setInd({ left: el.offsetLeft, width: el.offsetWidth, on: true })
+    }
+    place()
+    const ro = new ResizeObserver(place)
+    if (nav.current) ro.observe(nav.current)
+    return () => ro.disconnect()
+  }, [active])
+
+  // each page starts at the top; the mobile menu closes
+  useEffect(() => { main.current?.scrollTo({ top: 0 }); window.scrollTo({ top: 0 }); setMenu(false) }, [pathname])
+
+  // Ctrl+K, Cmd+K or "/" opens search
+  useEffect(() => {
+    const k = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement | null
+      const typing = !!t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable)
+      if ((e.key === 'k' || e.key === 'K') && (e.ctrlKey || e.metaKey)) { e.preventDefault(); setSearch((v) => !v) }
+      else if (e.key === '/' && !typing) { e.preventDefault(); setSearch(true) }
+    }
+    addEventListener('keydown', k)
+    return () => removeEventListener('keydown', k)
+  }, [])
 
   return (
     <div className="ex">
-      <aside className="ex__side">
-        <div className="ex__sidein">
+      <header className={`ex__top${scrolled ? ' is-scrolled' : ''}`}>
+        <div className="ex__bar">
           <Link to="/" className="ex__logo" aria-label="SAHealth by DEXA, overview">
             <img src="/dexa-logo-navy.png" alt="DEXA" />
             <span>SAHealth</span>
           </Link>
 
-          <p className="ex__group">Explore</p>
-          <nav className="ex__nav" aria-label="Explore">{NAV.map(link)}</nav>
+          <nav className="ex__nav" aria-label="Pages" ref={nav}>
+            <span className={`ex__ind${ind.on ? ' is-on' : ''}`} style={{ transform: `translateX(${ind.left}px)`, width: ind.width }} aria-hidden="true" />
+            {NAV.map((n, i) => (
+              <Link
+                key={n.to} to={n.to} ref={(el) => { items.current[i] = el }}
+                className={`ex__link${i === active ? ' is-active' : ''}`} aria-current={i === active ? 'page' : undefined}
+              >{n.label}</Link>
+            ))}
+          </nav>
 
-          <p className="ex__group ex__group--gap">Reference</p>
-          <nav className="ex__nav" aria-label="Reference">{REF.map(link)}</nav>
+          <button type="button" className="ex__search" onClick={() => setSearch(true)} aria-label="Search the explorer">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5" /><path d="M16 16l4 4" /></svg>
+            <span>Search</span>
+            <kbd>Ctrl K</kbd>
+          </button>
 
-          <div className="ex__foot">
-            <strong>A DEXA project</strong>
-            <p>Describes how South African health data systems exist today, with sources. It does not describe what DEXA will build.</p>
-          </div>
+          <button type="button" className="ex__burger" onClick={() => setMenu((v) => !v)} aria-expanded={menu} aria-label="Menu">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+              {menu ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
+            </svg>
+          </button>
         </div>
-      </aside>
 
-      <main className="ex__main" id="main" ref={main}>
-        <Outlet />
+        {menu && (
+          <nav className="ex__sheet" aria-label="Pages (mobile)">
+            {NAV.map((n, i) => (
+              <Link key={n.to} to={n.to} className={`ex__sheetlink${i === active ? ' is-active' : ''}`}>{n.label}</Link>
+            ))}
+            <button type="button" className="ex__sheetlink" onClick={() => { setMenu(false); setSearch(true) }}>Search</button>
+          </nav>
+        )}
+      </header>
+
+      <main className="ex__main" id="main" ref={main} onScroll={(e) => setScrolled((e.currentTarget as HTMLElement).scrollTop > 6)}>
+        <div className="page" key={pathname}>
+          <Outlet />
+        </div>
+        <footer className="ex__foot">
+          <span><b>A DEXA project.</b> Describes how South African health data systems exist today, with sources. It does not describe what DEXA will build.</span>
+          <Link to="/sources">Sources and method</Link>
+        </footer>
       </main>
+
+      <Palette open={search} onClose={() => setSearch(false)} />
     </div>
   )
 }
