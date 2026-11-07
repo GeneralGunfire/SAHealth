@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import Palette from './Palette'
+import Feedback from './Feedback'
 
 const NAV = [
   { to: '/', label: 'Overview', end: true },
@@ -21,6 +22,7 @@ export default function Shell() {
   const [scrolled, setScrolled] = useState(false)
   const [menu, setMenu] = useState(false)
   const [search, setSearch] = useState(false)
+  const [feedback, setFeedback] = useState(false)
 
   const active = NAV.findIndex((n) => (n.end ? pathname === '/' : pathname.startsWith(n.to)))
 
@@ -71,6 +73,11 @@ export default function Shell() {
             ))}
           </nav>
 
+          <div className="ex__tools">
+          <button type="button" className="ex__fb" onClick={() => setFeedback(true)} aria-label="Send feedback">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4V5z" /></svg>
+            <span>Feedback</span>
+          </button>
           <button type="button" className="ex__search" onClick={() => setSearch(true)} aria-label="Search the explorer">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5" /><path d="M16 16l4 4" /></svg>
             <span>Search</span>
@@ -82,6 +89,7 @@ export default function Shell() {
               {menu ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
             </svg>
           </button>
+          </div>
         </div>
 
         {menu && (
@@ -100,11 +108,12 @@ export default function Shell() {
         </div>
         <footer className="ex__foot">
           <span><b>A DEXA project.</b> Describes how South African health data systems exist today, with sources. It does not describe what DEXA will build.</span>
-          <Link to="/sources">Sources and method</Link>
+          <span className="ex__footlinks"><button type="button" onClick={() => setFeedback(true)}>Send feedback</button><Link to="/sources">Sources and method</Link></span>
         </footer>
       </main>
 
       <Palette open={search} onClose={() => setSearch(false)} />
+      <Feedback open={feedback} onClose={() => setFeedback(false)} />
     </div>
   )
 }
