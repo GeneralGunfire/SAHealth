@@ -378,3 +378,5 @@ a.card:hover { background: #fff; box-shadow: 0 0 0 1.5px var(--ink), var(--shado
 @media (max-width: 640px) {
   .pjx__node { width: clamp(92px, 30cqw, 130px); }
 }
+
+.dmain { min-width: 0; }
