@@ -7,7 +7,7 @@ import type { Journey } from '../types'
 type P = { x: number; y: number }
 const STEP_MS = 5600     // length of one step at 1x
 const TRAVEL = 0.68      // share of each step spent travelling; the rest is a pause to read
-const BREAK_AT = 0.64    // how far along a path a broken link gets before it stops
+const BREAK_AT = 0.62    // how far along a path a broken link gets before it stops
 
 const lerp = (a: P, b: P, u: number): P => ({ x: a.x + (b.x - a.x) * u, y: a.y + (b.y - a.y) * u })
 const bez = (a: P, c: P, b: P, u: number): P => {
@@ -16,24 +16,30 @@ const bez = (a: P, c: P, b: P, u: number): P => {
 }
 const ease = (u: number) => (u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2)
 
+/**
+ * A journey played like a short film. The systems involved sit evenly around an ellipse, so a
+ * straight path between any two of them can never pass through a third. A data packet travels
+ * along each step; where the data stops, it halts at a barrier. A chapter list on the side jumps
+ * to any step.
+ */
 export default function JourneyPlayer({ journey, onStep, startAt = 0 }: { journey: Journey; onStep?: (i: number) => void; startAt?: number }) {
   const steps = journey.steps
   const n = steps.length
 
-  const [i, setI] = useState(Math.max(0, Math.min(journey.steps.length - 1, startAt)))
+  const [i, setI] = useState(Math.max(0, Math.min(n - 1, startAt)))
   const [t, setT] = useState(() => (reducedMotion() ? 1 : 0)) // 0..1 within the current step
   const [playing, setPlaying] = useState(() => !reducedMotion())
   const [speed, setSpeed] = useState(1)
   const [portrait, setPortrait] = useState(false)
-  const wrap = useRef<HTMLDivElement>(null)
+  const stageWrap = useRef<HTMLDivElement>(null)
 
   useEffect(() => { onStep?.(i) }, [i, onStep])
 
-  // layout depends on the width of the stage
+  // the stage switches to a tall layout when it is narrow
   useEffect(() => {
-    const el = wrap.current
+    const el = stageWrap.current
     if (!el) return
-    const ro = new ResizeObserver(([e]) => setPortrait(e.contentRect.width < 620))
+    const ro = new ResizeObserver(([e]) => setPortrait(e.contentRect.width < 560))
     ro.observe(el)
     return () => ro.disconnect()
   }, [])
@@ -46,27 +52,30 @@ export default function JourneyPlayer({ journey, onStep, startAt = 0 }: { journe
   }, [steps])
   const firstSeen = useMemo(() => Object.fromEntries(order.map((id) => [id, steps.findIndex((s) => s.f === id || s.t === id)])), [order, steps])
 
-  const W = portrait ? 400 : 1000
-  const H = portrait ? Math.max(430, order.length * 112) : 430
+  const W = portrait ? 360 : 760
+  const H = portrait ? 440 : 500
   const pos: Record<string, P> = useMemo(() => {
     const m = order.length
+    const cx = W / 2, cy = H / 2
+    const rx = portrait ? 112 : 280
+    const ry = portrait ? 158 : 188
     return Object.fromEntries(order.map((id, k) => {
-      if (portrait) return [id, { x: k % 2 === 0 ? 105 : 295, y: m === 1 ? H / 2 : 70 + k * ((H - 150) / (m - 1)) }]
-      return [id, { x: m === 1 ? W / 2 : 95 + k * ((W - 190) / (m - 1)), y: k % 2 === 0 ? 150 : 270 }]
+      if (m === 1) return [id, { x: cx, y: cy }]
+      const a = -Math.PI / 2 + (2 * Math.PI * k) / m
+      return [id, { x: cx + rx * Math.cos(a), y: cy + ry * Math.sin(a) }]
     }))
-  }, [order, portrait, W, H])
+  }, [order, W, H, portrait])
 
-  // each step's curve
+  // each step's path: a gentle curve, bowed to opposite sides for opposite directions
   const curves = useMemo(() => steps.map((s) => {
     const a = pos[s.f], b = pos[s.t]
     if (!a || !b) return null
     const dx = b.x - a.x, dy = b.y - a.y
     const dist = Math.hypot(dx, dy) || 1
-    const side = order.indexOf(s.f) < order.indexOf(s.t) ? -1 : 1
-    const off = Math.min(86, Math.max(28, dist * 0.22)) * side
+    const side = order.indexOf(s.f) < order.indexOf(s.t) ? 1 : -1
+    const off = Math.min(26, dist * 0.08) * side
     const mid = lerp(a, b, 0.5)
-    const c = { x: mid.x + (-dy / dist) * off, y: mid.y + (dx / dist) * off }
-    return { a, b, c }
+    return { a, b, c: { x: mid.x + (-dy / dist) * off, y: mid.y + (dx / dist) * off } }
   }), [steps, pos, order])
 
   /* ---------- playback ---------- */
@@ -90,8 +99,7 @@ export default function JourneyPlayer({ journey, onStep, startAt = 0 }: { journe
   }, [t, i, n])
 
   const go = useCallback((k: number, play?: boolean) => {
-    const c = Math.max(0, Math.min(n - 1, k))
-    setI(c)
+    setI(Math.max(0, Math.min(n - 1, k)))
     setT(reducedMotion() ? 1 : 0)
     if (play !== undefined) setPlaying(play)
   }, [n])
@@ -100,7 +108,7 @@ export default function JourneyPlayer({ journey, onStep, startAt = 0 }: { journe
   const toggle = () => { if (ended) go(0, true); else setPlaying((p) => !p) }
 
   const onKey = (e: React.KeyboardEvent) => {
-    if (e.key === ' ' ) { e.preventDefault(); toggle() }
+    if (e.key === ' ') { e.preventDefault(); toggle() }
     else if (e.key === 'ArrowRight') { e.preventDefault(); go(i + 1) }
     else if (e.key === 'ArrowLeft') { e.preventDefault(); go(i - 1) }
     else if (e.key === 'Home') { e.preventDefault(); go(0) }
@@ -114,8 +122,8 @@ export default function JourneyPlayer({ journey, onStep, startAt = 0 }: { journe
   const along = ease(travel) * (broken ? BREAK_AT : 1)
   const packet = curve ? bez(curve.a, curve.c, curve.b, along) : null
   const stopped = broken && travel >= 1
-  const barrier = curve && broken ? bez(curve.a, curve.c, curve.b, BREAK_AT + 0.05) : null
-  // the part of the curve drawn so far (exact sub-curve, so the trail and the packet always agree)
+  const barrier = curve && broken ? bez(curve.a, curve.c, curve.b, BREAK_AT + 0.06) : null
+  // the part of the path drawn so far (an exact sub-curve, so the trail and the packet always agree)
   const trail = curve ? (() => {
     const c2 = lerp(curve.a, curve.c, along)
     const p2 = bez(curve.a, curve.c, curve.b, along)
@@ -125,91 +133,113 @@ export default function JourneyPlayer({ journey, onStep, startAt = 0 }: { journe
   const pct = (p: P) => ({ left: `${(p.x / W) * 100}%`, top: `${(p.y / H) * 100}%` })
 
   return (
-    <section className="pj" aria-label={`${journey.title}, interactive journey`} tabIndex={0} onKeyDown={onKey}>
-      <div className="pj__frame" ref={wrap}>
-        <div className="pj__stage" style={{ aspectRatio: `${W} / ${H}` }}>
-          <svg className="pj__svg" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-            {steps.map((st, k) => {
-              const c = curves[k]
-              if (!c || k > i) return null
-              const dashed = st.k === 'batch' ? '8 6' : st.k === 'manual' ? '2 7' : st.k === 'break' ? '5 7' : undefined
+    <section className="pjx" aria-label={`${journey.title}, interactive journey`} tabIndex={0} onKeyDown={onKey}>
+      <div className="pjx__main">
+        <div className="pjx__frame" ref={stageWrap}>
+          <div className="pjx__stage" style={{ aspectRatio: `${W} / ${H}` }}>
+            <svg className="pjx__svg" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+              {steps.map((st, k) => {
+                const c = curves[k]
+                if (!c || k > i) return null
+                const dashed = st.k === 'batch' ? '8 6' : st.k === 'manual' ? '2 7' : st.k === 'break' ? '5 7' : undefined
+                return (
+                  <path key={k} d={`M ${c.a.x} ${c.a.y} Q ${c.c.x} ${c.c.y} ${c.b.x} ${c.b.y}`} fill="none" stroke={LINK_COLOR[st.k]}
+                    strokeWidth={2} strokeLinecap="round" strokeDasharray={dashed} opacity={k < i ? 0.4 : 0.25} />
+                )
+              })}
+              {trail && <path d={trail} fill="none" stroke={color} strokeWidth={3.5} strokeLinecap="round" />}
+            </svg>
+
+            {order.map((id) => {
+              const nd = NODE[id]
+              const appeared = firstSeen[id] <= i
+              const active = id === s.f || id === s.t
+              const ghost = steps.slice(0, i + 1).some((st) => st.k === 'break' && st.t === id) && !steps.slice(0, i + 1).some((st) => st.k !== 'break' && (st.f === id || st.t === id))
               return (
-                <path key={k} d={`M ${c.a.x} ${c.a.y} Q ${c.c.x} ${c.c.y} ${c.b.x} ${c.b.y}`} fill="none" stroke={LINK_COLOR[st.k]}
-                  strokeWidth={2.2} strokeLinecap="round" strokeDasharray={dashed} opacity={k < i ? 0.45 : 0.28} />
+                <div key={id} className={`pjx__node${appeared ? ' is-seen' : ''}${active ? ' is-active' : ''}${ghost ? ' is-ghost' : ''}`} style={pct(pos[id])}>
+                  <SysIcon node={nd} size="sm" />
+                  <span>{nd.name}</span>
+                </div>
               )
             })}
-            {trail && <path d={trail} fill="none" stroke={color} strokeWidth={4} strokeLinecap="round" />}
-          </svg>
 
-          {order.map((id) => {
-            const nd = NODE[id]
-            const appeared = firstSeen[id] <= i
-            const active = id === s.f || id === s.t
-            const ghost = steps.slice(0, i + 1).some((st) => st.k === 'break' && st.t === id) && !steps.slice(0, i + 1).some((st) => st.k !== 'break' && (st.f === id || st.t === id))
-            return (
-              <div key={id} className={`pj__node${appeared ? ' is-in' : ''}${active ? ' is-active' : ''}${ghost ? ' is-ghost' : ''}`} style={pct(pos[id])}>
-                <SysIcon node={nd} size="lg" />
-                <span>{nd.name}</span>
+            {barrier && travel > 0.9 && (
+              <div className="pjx__barrier" style={pct(barrier)} aria-hidden="true"><span>×</span></div>
+            )}
+
+            {packet && (
+              <div className={`pjx__packet${stopped ? ' is-stopped' : ''}`} style={{ ...pct(packet), background: color }} aria-hidden="true">
+                {s.lbl && <span>{s.lbl}</span>}
               </div>
-            )
-          })}
-
-          {barrier && travel > 0.9 && (
-            <div className="pj__barrier" style={pct(barrier)} aria-hidden="true"><span>×</span><small>Stops here</small></div>
-          )}
-
-          {packet && (
-            <div className={`pj__packet${stopped ? ' is-stopped' : ''}`} style={{ ...pct(packet), background: color }} aria-hidden="true">
-              {s.lbl && <span>{s.lbl}</span>}
-            </div>
-          )}
-
-        </div>
-
-        <div className="pj__cap" key={i} aria-live="polite">
-          <span className="pj__capnum" style={{ background: color }}>{i + 1}</span>
-          <div>
-            <div className="pj__captype" style={{ color }}><i style={{ background: color }} />{LINK_NAME[s.k]}</div>
-            <h3>{s.h}</h3>
-            <p>{s.p}</p>
+            )}
           </div>
         </div>
-      </div>
 
-      <div className="pj__bar">
-        <div className="pj__btns">
-          <button type="button" className="pj__btn" onClick={() => go(i - 1)} disabled={i === 0} aria-label="Previous step">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M7 6h2v12H7zM20 6v12L10 12z" /></svg>
-          </button>
-          <button type="button" className="pj__btn pj__btn--play" onClick={toggle} aria-label={ended ? 'Replay' : playing ? 'Pause' : 'Play'}>
-            {ended ? (
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 3-6.2M4 4v4h4" /></svg>
-            ) : playing ? (
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z" /></svg>
-            ) : (
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
-            )}
-          </button>
-          <button type="button" className="pj__btn" onClick={() => go(i + 1)} disabled={i === n - 1} aria-label="Next step">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M15 6h2v12h-2zM4 6l10 6-10 6z" /></svg>
-          </button>
-        </div>
-
-        <div className="pj__scrub" role="group" aria-label="Steps">
-          {steps.map((st, k) => (
-            <button key={k} type="button" className={`pj__seg${st.k === 'break' ? ' is-break' : ''}${k === i ? ' is-on' : ''}`} aria-label={`Step ${k + 1}: ${st.h}`}
-              aria-current={k === i ? 'step' : undefined} onClick={() => go(k)} title={st.h}>
-              <i style={{ width: `${k < i ? 100 : k === i ? Math.min(100, t * 100) : 0}%` }} />
+        <div className="pjx__bar">
+          <div className="pjx__btns">
+            <button type="button" className="pj__btn" onClick={() => go(i - 1)} disabled={i === 0} aria-label="Previous step">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M7 6h2v12H7zM20 6v12L10 12z" /></svg>
             </button>
-          ))}
+            <button type="button" className="pj__btn pj__btn--play" onClick={toggle} aria-label={ended ? 'Replay' : playing ? 'Pause' : 'Play'}>
+              {ended ? (
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 3-6.2M4 4v4h4" /></svg>
+              ) : playing ? (
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z" /></svg>
+              ) : (
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+              )}
+            </button>
+            <button type="button" className="pj__btn" onClick={() => go(i + 1)} disabled={i === n - 1} aria-label="Next step">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M15 6h2v12h-2zM4 6l10 6-10 6z" /></svg>
+            </button>
+          </div>
+
+          <div className="pj__scrub" role="group" aria-label="Steps">
+            {steps.map((st, k) => (
+              <button key={k} type="button" className={`pj__seg${st.k === 'break' ? ' is-break' : ''}${k === i ? ' is-on' : ''}`} aria-label={`Step ${k + 1}: ${st.h}`}
+                aria-current={k === i ? 'step' : undefined} onClick={() => go(k)} title={st.h}>
+                <i style={{ width: `${k < i ? 100 : k === i ? Math.min(100, t * 100) : 0}%` }} />
+              </button>
+            ))}
+          </div>
+
+          <span className="pj__count">Step {i + 1} of {n}</span>
+          <div className="seg pj__speed" role="group" aria-label="Speed">
+            {[1, 1.5, 2].map((v) => <button key={v} type="button" aria-pressed={speed === v} onClick={() => setSpeed(v)}>{v}×</button>)}
+          </div>
         </div>
 
-        <span className="pj__count">Step {i + 1} of {n}</span>
-        <div className="seg pj__speed" role="group" aria-label="Speed">
-          {[1, 1.5, 2].map((v) => <button key={v} type="button" aria-pressed={speed === v} onClick={() => setSpeed(v)}>{v}×</button>)}
+        <div className="pjx__cap" key={i} aria-live="polite">
+          <div className="pjx__captop">
+            <span className="pjx__capnum" style={{ background: color }}>{i + 1}</span>
+            <span className="pjx__captype" style={{ color }}><i style={{ background: color }} />{LINK_NAME[s.k]}</span>
+          </div>
+          <h3>{s.h}</h3>
+          <p>{s.p}</p>
         </div>
+        <p className="pj__hint">Space to play or pause. Arrow keys to step.</p>
       </div>
-      <p className="pj__hint">Space to play or pause. Arrow keys to step. Click a segment to jump.</p>
+
+      <aside className="chapters" aria-label="Chapters">
+        <h3>Chapters</h3>
+        <ol>
+          {steps.map((st, k) => {
+            const from = NODE[st.f], to = NODE[st.t]
+            return (
+              <li key={k}>
+                <button type="button" className={`chapter${k === i ? ' is-on' : ''}${k < i ? ' is-done' : ''}${st.k === 'break' ? ' is-break' : ''}`} onClick={() => go(k)} aria-current={k === i ? 'step' : undefined}>
+                  <span className="chapter__num">{k + 1}</span>
+                  <span className="chapter__body">
+                    <b>{st.h}</b>
+                    <small>{from?.name} → {to?.name}</small>
+                  </span>
+                  <i className="chapter__dot" style={{ background: LINK_COLOR[st.k] }} title={LINK_NAME[st.k]} />
+                </button>
+              </li>
+            )
+          })}
+        </ol>
+      </aside>
     </section>
   )
 }

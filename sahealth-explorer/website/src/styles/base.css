@@ -3,34 +3,39 @@
    white panel on a soft grey page, bold black type, Inter, pill chips.
    ===================================================================== */
 :root {
-  --ink: #0b0d12;
-  --ink-2: #4b5563;
-  --ink-3: #8a919c;
-  --line: #d3d8df;
-  --line-2: #e6eaf0;
-  --soft: #f2f5f9;
-  --soft-2: #e8edf4;
+  /* brand: DEXA navy + one blue accent */
+  --ink: #0b1733;
+  --ink-2: #44506b;
+  --ink-3: #8390a8;
+  --accent: #2f5bff;
+  --accent-soft: #e9eeff;
+  /* surfaces */
   --bg: #ffffff;
-  --page: #e8ecf2;
+  --soft: #f1f5fc;
+  --soft-2: #e3eaf6;
+  --page: #0a1630;
+  --line: #d3dcec;
+  --line-2: #dde5f2;
   --gap: 20px;
   --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* data colours */
   --live: #2f5bff;
   --batch: #7c9bff;
   --manual: #c08a1e;
   --break: #dc2626;
-  --shadow-panel: 0 26px 69px -34px rgba(6, 20, 64, 0.35);
-  --shadow-card: 0 22px 40px -26px rgba(6, 20, 64, 0.35);
+  --shadow-panel: 0 30px 80px -30px rgba(0, 0, 0, 0.55);
+  --shadow-card: 0 22px 40px -26px rgba(11, 23, 51, 0.4);
 }
 
-* { box-sizing: border-box; scrollbar-width: thin; scrollbar-color: #c6cdd7 transparent; }
+* { box-sizing: border-box; scrollbar-width: thin; scrollbar-color: #b9c6de transparent; }
 html, body, #root { height: 100%; }
-body { margin: 0; background: var(--page); color: var(--ink); font-family: var(--font); font-size: 14px; -webkit-font-smoothing: antialiased; }
+body { margin: 0; background: radial-gradient(900px 520px at 12% -8%, rgba(47, 91, 255, 0.38), transparent 70%), radial-gradient(800px 520px at 100% 112%, rgba(20, 160, 140, 0.24), transparent 70%), var(--page); background-attachment: fixed; color: var(--ink); font-family: var(--font); font-size: 14px; -webkit-font-smoothing: antialiased; }
 @media (min-width: 901px) { html, body { overflow: hidden; } }
 button, select, input { font: inherit; color: inherit; }
 button { cursor: pointer; }
 a { color: inherit; }
 h1, h2, h3, h4, p { margin: 0; }
-:focus-visible { outline: 3px solid rgba(11, 13, 18, 0.35); outline-offset: 2px; border-radius: 6px; }
+:focus-visible { outline: 3px solid rgba(47, 91, 255, 0.5); outline-offset: 2px; border-radius: 6px; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* ---------- page chrome ---------- */
@@ -60,7 +65,7 @@ h1, h2, h3, h4, p { margin: 0; }
 .btn:hover { border-color: var(--ink); }
 .btn:active { transform: translateY(1px); }
 .btn--dark { background: var(--ink); border-color: var(--ink); color: #fff; }
-.btn--dark:hover { background: #20263a; border-color: #20263a; }
+.btn--dark:hover { background: #1a2b57; border-color: #1a2b57; }
 .btn--sm { height: 30px; padding: 0 11px; font-size: 12px; border-radius: 8px; }
 .chip { display: inline-flex; align-items: center; gap: 6px; padding: 2px 9px; border-radius: 999px; border: 1px solid var(--line); background: #fff; color: var(--ink-2); font-size: 11.5px; font-weight: 600; white-space: nowrap; }
 .chip--on { background: var(--ink); border-color: var(--ink); color: #fff; }
@@ -69,7 +74,7 @@ h1, h2, h3, h4, p { margin: 0; }
 .bar__group { display: flex; align-items: center; gap: 8px; }
 .bar__label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
 .bar__grow { margin-left: auto; }
-.seg { display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #eef1f5; }
+.seg { display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: #e6edf8; }
 .seg button { height: 28px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent; color: var(--ink-2); font-size: 12.5px; font-weight: 600; transition: background .15s ease, color .15s ease; }
 .seg button:hover { color: var(--ink); }
 .seg button[aria-pressed='true'] { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgba(6, 20, 64, 0.14); }
@@ -80,7 +85,7 @@ h1, h2, h3, h4, p { margin: 0; }
 .select { padding-right: 30px; appearance: none; -webkit-appearance: none;
   background-image: linear-gradient(45deg, transparent 50%, var(--ink-3) 50%), linear-gradient(135deg, var(--ink-3) 50%, transparent 50%);
   background-position: calc(100% - 16px) 15px, calc(100% - 11px) 15px; background-size: 5px 5px; background-repeat: no-repeat; }
-.input:focus-visible, .select:focus-visible { outline: none; border-color: var(--ink); box-shadow: 0 0 0 3px rgba(11, 13, 18, 0.1); }
+.input:focus-visible, .select:focus-visible { outline: none; border-color: var(--ink); box-shadow: 0 0 0 3px rgba(11, 23, 51, 0.1); }
 .input--search { min-width: 240px; }
 
 /* ---------- badges for confidence and status ---------- */
@@ -101,7 +106,7 @@ h1, h2, h3, h4, p { margin: 0; }
 /* ---------- cards ---------- */
 .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
 .card { display: flex; flex-direction: column; gap: 10px; padding: 18px; border: 1px solid var(--line-2); border-radius: 16px; background: #fff; text-decoration: none; color: inherit; transition: border-color .15s ease, box-shadow .2s ease, transform .2s ease; }
-a.card:hover, button.card:hover { border-color: #cfd6e0; box-shadow: var(--shadow-card); transform: translateY(-2px); }
+a.card:hover, button.card:hover { border-color: #c5d0e4; box-shadow: var(--shadow-card); transform: translateY(-2px); }
 .card--soft { background: var(--soft); border-color: transparent; }
 .card h3 { font-size: 15.5px; letter-spacing: -0.01em; font-weight: 700; }
 .card p { color: var(--ink-2); font-size: 13.5px; line-height: 1.5; }
@@ -109,7 +114,7 @@ a.card:hover, button.card:hover { border-color: #cfd6e0; box-shadow: var(--shado
 .card__tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
 .clamp2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-.empty { display: grid; justify-items: center; gap: 6px; padding: 44px 20px; text-align: center; border: 1.5px dashed #cfd6e0; border-radius: 18px; background: #f7f9fb; }
+.empty { display: grid; justify-items: center; gap: 6px; padding: 44px 20px; text-align: center; border: 1.5px dashed #c5d0e4; border-radius: 18px; background: #f4f7fd; }
 .empty p { font-weight: 600; font-size: 15px; }
 .empty small { color: var(--ink-3); font-size: 13px; }
 .callout { padding: 14px 16px; border-radius: 12px; background: var(--soft); font-size: 13.5px; line-height: 1.55; color: var(--ink-2); }

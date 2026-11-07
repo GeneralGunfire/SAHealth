@@ -1,75 +1,11 @@
-import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { SECTORS } from '../data/meta'
-import { CONF, JOURNEY, LINK_COLOR, LINK_NAME, NODE, headline } from '../lib/model'
-import { CountUp, Reveal, reducedMotion } from '../components/Dynamic'
-import { SysLink } from '../components/ui'
-
-/** Rotating one-line facts in the hero. Decorative: the same numbers appear below as real content. */
-function FactTicker({ facts }: { facts: string[] }) {
-  const [i, setI] = useState(0)
-  useEffect(() => {
-    if (reducedMotion()) return
-    const t = setInterval(() => setI((n) => (n + 1) % facts.length), 4200)
-    return () => clearInterval(t)
-  }, [facts.length])
-  return (
-    <div className="ticker" aria-hidden="true">
-      <span className="ticker__dot" />
-      <span key={i} className="ticker__text">{facts[i]}</span>
-    </div>
-  )
-}
-
-/** A short auto-playing preview of one journey, with a link to the full player. */
-function JourneyTeaser() {
-  const j = JOURNEY.lab
-  const [i, setI] = useState(0)
-  const [hold, setHold] = useState(false)
-  useEffect(() => {
-    if (hold || reducedMotion()) return
-    const t = setInterval(() => setI((n) => (n + 1) % j.steps.length), 4800)
-    return () => clearInterval(t)
-  }, [hold, j.steps.length])
-  const s = j.steps[i]
-  const from = NODE[s.f], to = NODE[s.t]
-  return (
-    <div className="teaser" onMouseEnter={() => setHold(true)} onMouseLeave={() => setHold(false)} onFocus={() => setHold(true)} onBlur={() => setHold(false)}>
-      <div className="teaser__head">
-        <span className="teaser__kick">Journey</span>
-        <h3>{j.title}</h3>
-        <p>{j.intro}</p>
-        <Link to="/journeys/lab" className="btn btn--dark">Watch the full journey</Link>
-      </div>
-      <div className="teaser__stage" key={i} style={{ ['--lc' as string]: LINK_COLOR[s.k] }}>
-        <div className="teaser__route">
-          {from && <SysLink node={from} />}
-          <span className="teaser__arrow" aria-hidden="true">→</span>
-          {to && <SysLink node={to} />}
-        </div>
-        <span className="conn__type"><i />{LINK_NAME[s.k]}</span>
-        <h4>{s.h}</h4>
-        <p>{s.p}</p>
-      </div>
-      <div className="teaser__dots" role="tablist" aria-label="Steps">
-        {j.steps.map((st, k) => (
-          <button key={k} type="button" role="tab" aria-selected={k === i} aria-label={`Step ${k + 1}`}
-            className={`teaser__dot${k === i ? ' is-on' : ''}${st.k === 'break' ? ' is-break' : ''}`} onClick={() => setI(k)} />
-        ))}
-      </div>
-    </div>
-  )
-}
+import { CONF, JOURNEY, LINK_COLOR, LINK_NAME, headline } from '../lib/model'
+import { CountUp, Reveal } from '../components/Dynamic'
 
 export default function Overview() {
   const h = headline()
-
-  const facts = [
-    `${h.noHospital} of ${h.provinces} provinces report no hospital record system`,
-    `Only ${h.liveLinks} of ${h.links} known connections are live links`,
-    `${h.paper} of the ${h.systems} systems mapped are still paper`,
-    `${h.keyGapPct}% of key-system pairs are not connected`,
-  ]
+  const featured = JOURNEY.lab
 
   const stats = [
     { n: h.systems, l: 'systems mapped', s: 'across public, private and community care' },
@@ -98,7 +34,6 @@ export default function Overview() {
     <>
       <section className="hero" aria-label="Introduction">
         <div className="hero__content">
-          <FactTicker facts={facts} />
           <p className="hero__kicker">SAHealth by DEXA</p>
           <h1>How health data works in South Africa, today.</h1>
           <p className="hero__sub">
@@ -142,11 +77,26 @@ export default function Overview() {
             <div className="sec__head">
               <div>
                 <h2 id="watch-t">See it happen</h2>
-                <p>{'A patient’s information is created at every visit, but it rarely travels with them.'}</p>
+                <p>A patient{'’'}s information is created at every visit, but it rarely travels with them.</p>
               </div>
               <Link to="/journeys" className="more">All {h.journeys} journeys →</Link>
             </div>
-            <JourneyTeaser />
+            <Link to="/journeys/lab" className="feat">
+              <div className="feat__text">
+                <span className="feat__kick">Featured journey</span>
+                <h3>{featured.title}</h3>
+                <p>{featured.intro}</p>
+                <span className="btn btn--dark feat__btn">Watch it play</span>
+              </div>
+              <ol className="feat__steps" aria-label="The steps">
+                {featured.steps.map((s, k) => (
+                  <li key={k} className={s.k === 'break' ? 'is-break' : ''}>
+                    <i style={{ background: LINK_COLOR[s.k] }} title={LINK_NAME[s.k]} />
+                    <span>{s.h}</span>
+                  </li>
+                ))}
+              </ol>
+            </Link>
           </section>
         </Reveal>
 

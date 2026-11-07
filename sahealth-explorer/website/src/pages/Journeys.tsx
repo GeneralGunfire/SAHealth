@@ -28,7 +28,7 @@ export function Journeys() {
         <input className="input input--search" type="search" placeholder="Search journeys" aria-label="Search journeys" value={q} onChange={(e) => setQ(e.target.value)} />
         <div className="schips" role="group" aria-label="Sector" style={{ margin: 0 }}>
           {(['all', 'public', 'private', 'cross'] as const).map((k) => (
-            <button key={k} type="button" className="schip" aria-pressed={g === k} style={{ ['--c' as string]: k === 'all' ? '#0b0d12' : GROUPS[k].color }} onClick={() => setG(k)}>
+            <button key={k} type="button" className="schip" aria-pressed={g === k} style={{ ['--c' as string]: k === 'all' ? '#0b1733' : GROUPS[k].color }} onClick={() => setG(k)}>
               {k !== 'all' && <i />}{k === 'all' ? 'All' : GROUPS[k].name}<b>{count(k)}</b>
             </button>
           ))}
@@ -64,8 +64,6 @@ export function Journeys() {
 export function JourneyDetail() {
   const { id = '' } = useParams()
   const j = JOURNEY[id]
-  const [active, setActive] = useState(0)
-  const [jump, setJump] = useState<number | null>(null)
   if (!j) return <Navigate to="/journeys" replace />
   const i = JOURNEYS.findIndex((x) => x.id === j.id)
   const prev = JOURNEYS[i - 1]
@@ -77,7 +75,7 @@ export function JourneyDetail() {
       <Link to="/journeys" className="back">← All journeys</Link>
       <PageHead eyebrow={`${g.name} · ${g.sub}`} title={j.title} blurb={j.intro} />
 
-      <JourneyPlayer key={`${j.id}-${jump ?? ''}`} journey={j} startAt={jump ?? 0} onStep={setActive} />
+      <JourneyPlayer key={j.id} journey={j} />
 
       <div className="jstats">
         <div><strong>{j.steps.length}</strong><span>steps</span></div>
@@ -85,20 +83,15 @@ export function JourneyDetail() {
         <div className="jstats__hot"><strong>{breaks(j)}</strong><span>{breaks(j) === 1 ? 'place it stops' : 'places it stops'}</span></div>
       </div>
 
-      <section className="sec sec--tight" aria-labelledby="tr-t">
-        <div className="sec__head">
-          <div>
-            <h2 id="tr-t">The full story</h2>
-            <p>The same steps as text. Select one to replay from there.</p>
-          </div>
-        </div>
+      <details className="textstory">
+        <summary>Read the whole journey as text</summary>
         <ol className="tsteps">
           {j.steps.map((s, k) => {
             const from = NODE[s.f]
             const to = NODE[s.t]
             return (
-              <li key={k} className={`tstep${k === active ? ' is-on' : ''}${s.k === 'break' ? ' is-break' : ''}`}>
-                <button type="button" className="tstep__num" onClick={() => { setJump(k); window.scrollTo({ top: 0 }); document.getElementById('main')?.scrollTo({ top: 0, behavior: 'smooth' }) }} aria-label={`Replay from step ${k + 1}`}>{k + 1}</button>
+              <li key={k} className={`tstep${s.k === 'break' ? ' is-break' : ''}`}>
+                <span className="tstep__num">{k + 1}</span>
                 <div className="tstep__body">
                   <div className="tstep__route">
                     {from && <SysLink node={from} />}
@@ -113,7 +106,7 @@ export function JourneyDetail() {
             )
           })}
         </ol>
-      </section>
+      </details>
 
       <nav className="jnav" aria-label="Other journeys">
         {prev ? <Link to={`/journeys/${prev.id}`} className="btn">← {prev.title}</Link> : <span />}

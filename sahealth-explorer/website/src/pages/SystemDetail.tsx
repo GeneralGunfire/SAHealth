@@ -1,12 +1,14 @@
+import type { ReactNode } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { NODE, LINK_COLOR, LINK_NAME, journeysFor, layerName, neighbours } from '../lib/model'
+import { LAYER_DESC, detailDepth, detailFields, factSheet, related } from '../lib/facts'
 import { ConfBadge, SectorChip, SourceList, StatusBadge, SysIcon, SysLink } from '../components/ui'
 
-function Block({ title, children }: { title: string; children: React.ReactNode }) {
+function Block({ title, children, missing }: { title: string; children?: ReactNode; missing?: boolean }) {
   return (
-    <section className="dblock">
+    <section className={`dblock${missing ? ' dblock--missing' : ''}`}>
       <h3>{title}</h3>
-      {children}
+      {missing ? <p>Not documented in public sources.</p> : children}
     </section>
   )
 }
@@ -18,6 +20,10 @@ export default function SystemDetail() {
 
   const conns = neighbours(n.id)
   const journeys = journeysFor(n.id)
+  const facts = factSheet(n)
+  const depth = detailDepth(n)
+  const missing = detailFields(n).filter((f) => !f.has).map((f) => f.k)
+  const more = related(n)
 
   return (
     <div className="pg">
@@ -37,9 +43,22 @@ export default function SystemDetail() {
         </div>
       </header>
 
+      <p className="dlead">{n.summary}</p>
+
+      <section className="fsheet" aria-label="Fact sheet">
+        {facts.map((f) => (
+          <div key={f.label} title={f.hint}>
+            <dt>{f.label}</dt>
+            <dd>{f.value}</dd>
+          </div>
+        ))}
+      </section>
+
       <div className="dgrid">
         <div className="dmain">
-          <p className="dlead">{n.summary}</p>
+          <Block title="What this kind of system does">
+            <p>{LAYER_DESC[n.layer]}</p>
+          </Block>
 
           {(n.holds || n.notHolds) && (
             <div className="dpair">
@@ -57,6 +76,27 @@ export default function SystemDetail() {
               <p className="callout callout--warn">{n.why}</p>
             </Block>
           )}
+
+          {missing.length > 0 && (
+            <section className="dblock dblock--gaps">
+              <h3>Not yet documented</h3>
+              <p>
+                No public source was found for: {detailFields(n).filter((f) => !f.has).map((f) => f.label.toLowerCase()).join(', ')}.
+                We list what is missing rather than guess.
+              </p>
+            </section>
+          )}
+
+          <Block title="Evidence">
+            <div className="evid">
+              <ConfBadge conf={n.conf} />
+              <span>{factSheet(n).find((f) => f.label === 'Evidence')?.hint}</span>
+            </div>
+            <div className="meter" role="img" aria-label={`${depth.have} of ${depth.total} detail fields documented`}>
+              <div className="meter__bar"><i style={{ width: `${(depth.have / depth.total) * 100}%` }} /></div>
+              <small>{depth.have} of {depth.total} detail fields documented</small>
+            </div>
+          </Block>
         </div>
 
         <aside className="dside">
@@ -93,6 +133,20 @@ export default function SystemDetail() {
           </section>
         </aside>
       </div>
+
+      {more.length > 0 && (
+        <section className="sec" aria-labelledby="rel-t">
+          <div className="sec__head"><div><h2 id="rel-t">Related systems</h2><p>Same layer or run by the same kind of organisation.</p></div></div>
+          <div className="relgrid">
+            {more.map((m) => (
+              <Link key={m.id} to={`/systems/${m.id}`} className="rel">
+                <SysIcon node={m} />
+                <span><b>{m.name}</b><small>{layerName(m)}</small></span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   )
 }

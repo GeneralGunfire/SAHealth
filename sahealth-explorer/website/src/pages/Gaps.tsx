@@ -41,6 +41,8 @@ export default function Gaps() {
   const detail = A && B && A.id !== B.id ? { A, B, st: pairState(A.id, B.id), why: reasonFor(A, B) } : null
 
   // grid columns: a narrow gap before each new group
+  const gsize: Record<string, number> = {}
+  items.forEach((it) => { gsize[it.group] = (gsize[it.group] ?? 0) + 1 })
   const cols: (Item | 'gap')[] = []
   items.forEach((it, i) => { if (it.groupStart && i > 0) cols.push('gap'); cols.push(it) })
   const template = `190px ${cols.map((c) => (c === 'gap' ? '10px' : `${cs}px`)).join(' ')}`
@@ -122,7 +124,7 @@ export default function Gaps() {
             <div />
             {cols.map((c, ci) => {
               if (c === 'gap') return <span key={`g${ci}`} />
-              return c.groupStart ? <div key={c.node.id} className="mgl"><span>{c.group}</span></div> : <span key={c.node.id} />
+              return c.groupStart ? <div key={c.node.id} className="mgl" style={{ gridColumn: `span ${gsize[c.group]}` }} title={c.group}><span>{c.group}</span></div> : null
             })}
             {/* column heads */}
             <div />
@@ -136,7 +138,7 @@ export default function Gaps() {
               <Fragment2 key={a.node.id}>
                 {a.groupStart && i > 0 && <div className="mrowgap" />}
                 <div className={'mrow' + (focus?.r === i ? ' hl' : '')}>
-                  <SysIcon node={a.node} size="sm" /><span>{a.node.name}</span>
+                  <SysIcon node={a.node} size="sm" /><span title={a.node.name}>{a.node.name}</span>
                 </div>
                 {cols.map((c, ci) => {
                   if (c === 'gap') return <span key={`${a.node.id}g${ci}`} />

@@ -51,8 +51,8 @@ export const EDGES: Edge[] = [
 const S = (f: string, t: string, k: Journey['steps'][number]['k'], h: string, p: string, lbl = '') => ({ f, t, k, h, p, lbl })
 
 export const GROUPS = {
-  public: { name: 'Public', sub: 'clinics & hospitals', color: '#0D9488' },
-  private: { name: 'Private', sub: 'practices & hospital groups', color: '#EA580C' },
+  public: { name: 'Public', sub: 'clinics & hospitals', color: '#0F9D8A' },
+  private: { name: 'Private', sub: 'practices & hospital groups', color: '#F08A24' },
   cross: { name: 'Across both', sub: 'public and private', color: '#2F5BFF' },
 } as const
 

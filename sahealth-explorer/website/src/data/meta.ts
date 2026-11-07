@@ -16,11 +16,11 @@ export const LAYERS: { id: LayerId; name: string }[] = [
 export const LAYER_NAME = Object.fromEntries(LAYERS.map((l) => [l.id, l.name])) as Record<LayerId, string>
 
 export const SECTORS: { id: SectorId; name: string; sub: string; color: string }[] = [
-  { id: 'public', name: 'Public', sub: 'provincial health', color: '#0D9488' },
-  { id: 'other', name: 'Other state', sub: 'municipal · military · prisons', color: '#8B5CF6' },
+  { id: 'public', name: 'Public', sub: 'provincial health', color: '#0F9D8A' },
+  { id: 'other', name: 'Other state', sub: 'municipal · military · prisons', color: '#7C5CE0' },
   { id: 'shared', name: 'National / shared', sub: 'run for everyone', color: '#2F5BFF' },
-  { id: 'private', name: 'Private', sub: 'practices · hospitals · insurers', color: '#EA580C' },
-  { id: 'ngo', name: 'NGO & donor', sub: 'programme partners', color: '#65A30D' },
+  { id: 'private', name: 'Private', sub: 'practices · hospitals · insurers', color: '#F08A24' },
+  { id: 'ngo', name: 'NGO & donor', sub: 'programme partners', color: '#5FA83F' },
 ]
 export const SECTOR = Object.fromEntries(SECTORS.map((s) => [s.id, s])) as Record<SectorId, (typeof SECTORS)[number]>
 

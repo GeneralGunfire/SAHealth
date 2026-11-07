@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { NODES } from '../data/nodes'
-import { LAYERS, SECTORS } from '../data/meta'
+import { ICON_LABEL, LAYERS, SECTOR, SECTORS, SRC } from '../data/meta'
 import { layerName, neighbours } from '../lib/model'
 import { ConfBadge, Empty, PageHead, SectorChip, StatusBadge, SysIcon } from '../components/ui'
 import type { Confidence, SectorId } from '../types'
@@ -81,7 +81,7 @@ export default function Systems() {
 
       <div className="schips" role="group" aria-label="Who runs it">
         {([{ id: 'all', name: 'Everyone', color: '' }, ...SECTORS] as { id: SectorId | 'all'; name: string; color: string }[]).map((s) => (
-          <button key={s.id} type="button" className="schip" aria-pressed={sector === s.id} style={{ ['--c' as string]: s.color || '#0b0d12' }} onClick={() => setSector(s.id)}>
+          <button key={s.id} type="button" className="schip" aria-pressed={sector === s.id} style={{ ['--c' as string]: s.color || '#0b1733' }} onClick={() => setSector(s.id)}>
             {s.color && <i />}{s.name}<b>{sectorCount(s.id)}</b>
           </button>
         ))}
@@ -104,13 +104,20 @@ export default function Systems() {
                 </div>
               </div>
               <p className="clamp3">{n.summary}</p>
+              <dl className="cmeta">
+                <div><dt>Run by</dt><dd>{n.who ?? SECTOR[n.sector].name}</dd></div>
+                <div><dt>Type</dt><dd>{ICON_LABEL[n.icon]}</dd></div>
+                <div><dt>Used in</dt><dd>{n.provs?.length ? n.provs.join(', ') : 'Nationally, or varies'}</dd></div>
+              </dl>
               <div className="card__tags">
                 <SectorChip node={n} />
                 <span className="chip">{layerName(n)}</span>
                 <StatusBadge status={n.status} />
                 <ConfBadge conf={n.conf} />
               </div>
-              <span className="card__foot">{linkCount[n.id]} {linkCount[n.id] === 1 ? 'connection' : 'connections'}</span>
+              <span className="card__foot">
+                {linkCount[n.id]} {linkCount[n.id] === 1 ? 'connection' : 'connections'} · {n.src.filter((s) => SRC[s]).length} {n.src.filter((s) => SRC[s]).length === 1 ? 'source' : 'sources'}
+              </span>
             </Link>
           ))}
         </div>
