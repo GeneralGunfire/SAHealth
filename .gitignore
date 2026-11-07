@@ -1,65 +1,8 @@
-# Dependencies
 node_modules/
-
-# Build output
 dist/
-
-# Environment / secrets
 .env
 .env.local
-
-# Databases (SQLite, incl. WAL/SHM sidecar files)
-*.sqlite
-*.sqlite-shm
-*.sqlite-wal
-
-# Logs
 *.log
-npm-debug.log*
-
-# Python (sidecar-probabilistic-matching)
-__pycache__/
-*.pyc
-.venv/
-
-# Editor/OS
-.vscode/
+*.tsbuildinfo
 .DS_Store
 Thumbs.db
-
-# Large media files
-*.mp4
-*.mov
-*.avi
-*.mp3
-*.wav
-*.m4a
-*.png
-*.jpg
-*.jpeg
-*.webp
-
-# ...but the explorer site needs its own images (logos, hero) in the repo
-!sahealth-explorer/website/public/*.png
-!sahealth-explorer/website/public/*.jpg
-
-# Remotion render output
-sahealth-explorer/video/sa-health-data-explainer-video/out/
-sahealth-explorer/video/sa-health-data-explainer-video/node_modules/
-
-# Claude session scratch
-.claude/
-
-# Test/coverage output
-coverage/
-
-# Local-only material: never pushed to the public repo
-# simulated source databases (hundreds of MB)
-sahealth-explorer/sources/
-# internal per-database documents (these belong in Forged, not here)
-sahealth-explorer/partner-docs/
-sahealth-explorer/assets/
-filestructure.txt
-
-# DEXA Forged is its own repository
-dexa-forged/

@@ -7,11 +7,14 @@ Built for partners, funders and officials first, and for the general public too.
 ## Run it
 
 ```bash
-cd website
 npm install
 npm run dev        # http://127.0.0.1:5173
-npm run build      # type check + production build
+npm run build      # type check + production build (output in dist/)
 ```
+
+## Deploy (Vercel)
+
+Import this repository in Vercel. It is detected as a Vite project, so the defaults are right: build command `npm run build`, output directory `dist`. No environment variables are needed. `vercel.json` already carries the single-page routing and the security headers.
 
 ## Pages
 
@@ -40,7 +43,6 @@ Press **Ctrl+K** (or **/**) on any page to search systems, journeys, provinces, 
 | `src/components/Palette.tsx`, `src/lib/search.ts` | Global search |
 | `src/pages/` | One file per page |
 | `src/styles/` | `base.css` (brand tokens, shared), `pages.css`, `dynamic.css` (navigation, search, motion, player, tiles, matrix) |
-| `../research/` | Raw research by phase |
 
 Every number on the overview is computed from the data files, so editing the data updates the site.
 
