@@ -39,9 +39,13 @@ Thumbs.db
 *.jpeg
 *.webp
 
+# ...but the explorer site needs its own images (logos, hero) in the repo
+!sahealth-explorer/website/public/*.png
+!sahealth-explorer/website/public/*.jpg
+
 # Remotion render output
-sa-health-data-explainer-video/out/
-sa-health-data-explainer-video/node_modules/
+sahealth-explorer/video/sa-health-data-explainer-video/out/
+sahealth-explorer/video/sa-health-data-explainer-video/node_modules/
 
 # Claude session scratch
 .claude/
@@ -49,5 +53,13 @@ sa-health-data-explainer-video/node_modules/
 # Test/coverage output
 coverage/
 
-# Website scratch
-website/*.log
+# Local-only material: never pushed to the public repo
+# simulated source databases (hundreds of MB)
+sahealth-explorer/sources/
+# internal per-database documents (these belong in Forged, not here)
+sahealth-explorer/partner-docs/
+sahealth-explorer/assets/
+filestructure.txt
+
+# DEXA Forged is its own repository
+dexa-forged/
